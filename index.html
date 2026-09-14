@@ -3144,7 +3144,7 @@ function buildTorii() {
     m.position.set(x, y, z); m.rotation.y = ry; m.renderOrder = 4; g.add(m);
     WORLD.signs = WORLD.signs || []; WORLD.signs.push(m); return m;
   };
-  board('GATE 01 · SIMPLES · NO. 1 YUMEN ST.', 9.6, 1.2, 0, H - .75, .48, 0);
+  board('GATE 01 · SIMPLES', 9.6, 1.2, 0, H - .75, .48, 0);
   board('CIT · CENTER FOR INNOVATION TAIPEI', 9.6, 1.2, 0, H - .75, -.48, Math.PI);
   const lamp = new THREE.PointLight(0x22e6ff, 2.0, 13, 2);
   lamp.position.set(0, H - 1.6, 0); g.add(lamp);
@@ -5112,7 +5112,7 @@ const JOBS = [
     document.fonts.load('900 320px Orbitron', 'SIMPLESCIT'),
     document.fonts.load('700 156px "Noto Sans TC"', '簡單行銷'),
     document.fonts.load('500 132px "Noto Sans TC"', '讓每個好點子都可以落地圓山'),
-    document.fonts.load('500 118px "JetBrains Mono"', 'GATE01·SIMPLESNO.1YUMENST.YUANSHANCENTERFORINNOVATIONTAIPEI')
+    document.fonts.load('500 118px "JetBrains Mono"', 'GATE01·SIMPLESYUANSHANCENTERFORINNOVATIONTAIPEI')
   ])],
   ['Pouring the ground', () => { initGL(); WORLD.uT = { value: 0 }; buildRig(); buildLights(); }],
   ['Laying the plaza', () => buildShell()],
