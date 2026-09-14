@@ -558,10 +558,9 @@ body[data-layout-hero="b"] .peek{
 body[data-layout-hero="b"] .peek-cap b.jp{ font-size:clamp(20px,2.2vw,34px); letter-spacing:.18em; }
 /* The Japanese title reads down the right edge, hung under the navigation —
    the one mark on that side of the frame now that the romanization has gone. */
-body[data-layout-hero="b"] .hero-side{
-  left:auto; right:var(--pad); top:calc(var(--nav-h) + clamp(150px,22vh,200px));
-  bottom:auto; transform:none; display:block;
-}
+/* the vertical name gave way to the skyline: Taipei 101 stands in that
+   corner of the frame now */
+body[data-layout-hero="b"] .hero-side{ display:none; }
 body[data-layout-hero="b"] .hero-side .v{
   position:static; transform:none;
   font-size:clamp(30px,3.2vw,54px); letter-spacing:.12em; color:rgba(230,239,255,.62);
@@ -973,7 +972,7 @@ body[data-layout-hero="b"] .hero-side .v{ font-family:'Noto Sans TC',sans-serif;
 
 /* ---- the HUD in the hero: coordinates, local time, a live dot */
 .hud{
-  position:absolute; z-index:2; right:var(--pad); top:calc(var(--nav-h) + 10px);
+  position:absolute; z-index:2; right:calc(var(--pad) + clamp(200px,20vw,330px)); top:calc(var(--nav-h) + 10px);
   display:grid; grid-template-columns:auto auto; gap:7px 14px; align-items:center;
   font-size:9.5px; letter-spacing:.18em; text-transform:uppercase; color:var(--muted);
   padding:14px 16px; border:1px solid var(--line-soft); background:rgba(5,4,14,.42);
@@ -2730,10 +2729,11 @@ function buildShell() {
      nothing encloses the frame but the night, the ridge and the fog. */
 
   /* the sky, hung far enough back that the whole frustum sits inside it */
-  const sky = new THREE.Mesh(new THREE.PlaneGeometry(360, 190),
+  /* pushed back to z = -172 so the far landmarks have room to stand in front of it */
+  const sky = new THREE.Mesh(new THREE.PlaneGeometry(600, 320),
     new THREE.MeshBasicMaterial({ color: hdr(.72, .70, .92), map: tx(texSky()),
       depthWrite: false, fog: false, toneMapped: false }));
-  sky.position.set(0, 62, -108); sky.renderOrder = 0; scene.add(sky);
+  sky.position.set(0, 100, -172); sky.renderOrder = 0; scene.add(sky);
   WORLD.sky = sky;
 
   /* the wooded ridge that closes the valley — three-quarters eaten by fog,
@@ -3042,7 +3042,7 @@ function buildTemple() {
   WORLD.train = train;
 
   /* ---- the towers behind: Yuanshan's skyline brought in closer ------------ */
-  [[-44, -84, 12, 48], [-27, -92, 9, 34], [-10, -98, 14, 58], [14, -90, 10, 40], [36, -86, 12, 52], [56, -94, 9, 30]].forEach((t, i) => {
+  [[-44, -84, 12, 48], [-27, -92, 9, 34], [-10, -98, 14, 58], [14, -90, 10, 40], [28, -86, 10, 20], [50, -94, 8, 14]].forEach((t, i) => {
     const fr = facade(61 + i, Math.round(t[2] * 1.1), Math.round(t[3] * 1.4));
     const m = new THREE.Mesh(new THREE.BoxGeometry(t[2], t[3], t[2] * .8), [fr, fr, dark, dark, fr, fr]);
     m.position.set(t[0], t[3] / 2, t[1]); g.add(m);
@@ -3054,6 +3054,79 @@ function buildTemple() {
       mm.position.set(t[0], t[3] + 2.2, t[1]); g.add(mm);
     }
   });
+
+  /* ---- Taipei 101, off to the right behind the stand ----------------------
+     Far enough that the exponential fog would swallow it, so its materials
+     carry no fog and are dimmed by hand toward the night instead: a tapered
+     pedestal, eight segments that flare outward like bamboo joints, a strip
+     of light on every rim, the coin medallions on the base, and the spire. */
+  const HAZE = hdr(.50, .55, .72);
+  const distFacade = (seed, cols, rows, tint) => new THREE.MeshBasicMaterial({ map: tx(texFacade(seed, cols, rows), { aniso: 8 }), color: tint || HAZE, fog: false });
+  const GLASS = hdr(.78, .92, 1.12);                 /* 101's green glass reads a shade brighter than the rest */
+  const distDark = new THREE.MeshBasicMaterial({ color: 0x0a0c18, fog: false });
+  const distNeon = new THREE.MeshBasicMaterial({ color: hdr(.40, 2.6, 3.0), fog: false, toneMapped: false });
+  const distCoral = new THREE.MeshBasicMaterial({ color: hdr(2.2, .8, .6), fog: false, toneMapped: false });
+  const T = new THREE.Group();
+  const TX = 62, TZ = -140;
+  /* the pedestal: a square taper, four radial segments turned to sit flat */
+  const ped = new THREE.Mesh(new THREE.CylinderGeometry(5.8, 8.2, 22, 4, 1), distFacade(71, 14, 36, GLASS));
+  ped.position.set(0, 11, 0); ped.rotation.y = Math.PI / 4; T.add(ped);
+  const pedRim = new THREE.Mesh(new THREE.TorusGeometry(5.8, .16, 6, 4), distCoral);
+  pedRim.position.set(0, 22, 0); pedRim.rotation.x = Math.PI / 2; pedRim.rotation.z = Math.PI / 4; T.add(pedRim);
+  /* the coin medallions, one on each face */
+  [0, 1, 2, 3].forEach(k => {
+    const a = k * Math.PI / 2, r = 7.0;
+    const coin = new THREE.Mesh(new THREE.RingGeometry(1.0, 1.4, 24), distCoral);
+    coin.position.set(Math.sin(a) * r, 16, Math.cos(a) * r); coin.rotation.y = a; T.add(coin);
+  });
+  /* the eight joints, each wider at the top than the bottom */
+  let ty = 22;
+  for (let i = 0; i < 8; i++) {
+    const seg = new THREE.Mesh(new THREE.CylinderGeometry(8.4, 6.0, 7, 4, 1), distFacade(81 + i, 12, 12, GLASS));
+    seg.position.set(0, ty + 3.5, 0); seg.rotation.y = Math.PI / 4; T.add(seg);
+    const rim = new THREE.Mesh(new THREE.TorusGeometry(8.4, .18, 6, 4), distNeon);
+    rim.position.set(0, ty + 7, 0); rim.rotation.x = Math.PI / 2; rim.rotation.z = Math.PI / 4; T.add(rim);
+    const lip = new THREE.Mesh(new THREE.TorusGeometry(6.0, .10, 6, 4), distNeon);
+    lip.position.set(0, ty + .1, 0); lip.rotation.x = Math.PI / 2; lip.rotation.z = Math.PI / 4; T.add(lip);
+    ty += 7;
+  }
+  /* the crown and the spire */
+  const crown = new THREE.Mesh(new THREE.CylinderGeometry(2.6, 5.2, 5, 4, 1), distFacade(91, 8, 8, GLASS));
+  crown.position.set(0, ty + 2.5, 0); crown.rotation.y = Math.PI / 4; T.add(crown);
+  const spire = new THREE.Mesh(new THREE.CylinderGeometry(.18, .8, 18, 8), distDark);
+  spire.position.set(0, ty + 5 + 9, 0); T.add(spire);
+  const spireL = new THREE.Mesh(new THREE.BoxGeometry(.22, 16, .22), distNeon);
+  spireL.position.set(0, ty + 5 + 8, 0); T.add(spireL);
+  const tip = new THREE.Mesh(new THREE.SphereGeometry(.6, 8, 6), beaconMat);
+  tip.position.set(0, ty + 23.4, 0); T.add(tip);
+  /* two Xinyi neighbours at its feet */
+  [[-14, 2, 9, 26, 101], [12, 6, 8, 20, 102]].forEach(n => {
+    const m = new THREE.Mesh(new THREE.BoxGeometry(n[2], n[3], n[2] * .9), distFacade(n[4], Math.round(n[2] * 1.1), Math.round(n[3] * 1.4)));
+    m.position.set(n[0], n[3] / 2, n[1]); T.add(m);
+  });
+  /* six kilometres off, the whole profile has to fit under the hero's top
+     edge, so the tower is scaled down to the size it actually reads at */
+  T.scale.setScalar(.56);
+  T.position.set(TX, 0, TZ); g.add(T); WORLD.t101 = T;
+
+  /* ---- the Grand Hotel on its hill to the left: red columns under a great
+     tiled roof, lit warm the way it is every night above the river ------- */
+  const GH = new THREE.Group(), GX = -66, GZ = -126;
+  const hill = new THREE.Mesh(new THREE.CylinderGeometry(22, 34, 10, 10), distDark);
+  hill.position.set(0, 5, 0); GH.add(hill);
+  const body = new THREE.Mesh(new THREE.BoxGeometry(30, 12, 14), new THREE.MeshBasicMaterial({ map: tx(texFacade(111, 30, 12), { aniso: 8 }), color: hdr(.9, .42, .34), fog: false }));
+  body.position.set(0, 16, 0); GH.add(body);
+  for (let i = 0; i < 9; i++) {
+    const c = new THREE.Mesh(new THREE.BoxGeometry(.7, 12, .7), distCoral);
+    c.position.set(-14 + i * 3.5, 16, 7.2); GH.add(c);
+  }
+  const ghRoof = new THREE.Mesh(roofGeo(19, 10.5, 9, 6.5, 1.0, .30), new THREE.MeshBasicMaterial({ color: 0x2a1a12, fog: false }));
+  ghRoof.position.set(0, 22, 0); GH.add(ghRoof);
+  const ghEave = new THREE.Mesh(new THREE.BoxGeometry(38, .16, .16), distCoral);
+  ghEave.position.set(0, 22.4, 10.6); GH.add(ghEave);
+  const ghRidge = new THREE.Mesh(new THREE.BoxGeometry(18.4, .3, 1.2), distDark);
+  ghRidge.position.set(0, 28.7, 0); GH.add(ghRidge);
+  GH.position.set(GX, 0, GZ); g.add(GH); WORLD.grandHotel = GH;
 
   scene.add(g); WORLD.temple = g;
 
