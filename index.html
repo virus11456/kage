@@ -3062,9 +3062,9 @@ function buildTemple() {
      of light on every rim, the coin medallions on the base, and the spire. */
   const HAZE = hdr(.50, .55, .72);
   const distFacade = (seed, cols, rows, tint) => new THREE.MeshBasicMaterial({ map: tx(texFacade(seed, cols, rows), { aniso: 8 }), color: tint || HAZE, fog: false });
-  const GLASS = hdr(.78, .92, 1.12);                 /* 101's green glass reads a shade brighter than the rest */
+  const GLASS = hdr(1.05, 1.22, 1.45);                 /* 101's green glass reads a shade brighter than the rest */
   const distDark = new THREE.MeshBasicMaterial({ color: 0x0a0c18, fog: false });
-  const distNeon = new THREE.MeshBasicMaterial({ color: hdr(.40, 2.6, 3.0), fog: false, toneMapped: false });
+  const distNeon = new THREE.MeshBasicMaterial({ color: hdr(.55, 3.4, 3.9), fog: false, toneMapped: false });
   const distCoral = new THREE.MeshBasicMaterial({ color: hdr(2.2, .8, .6), fog: false, toneMapped: false });
   const T = new THREE.Group();
   const TX = 62, TZ = -140;
@@ -3084,7 +3084,7 @@ function buildTemple() {
   for (let i = 0; i < 8; i++) {
     const seg = new THREE.Mesh(new THREE.CylinderGeometry(8.4, 6.0, 7, 4, 1), distFacade(81 + i, 12, 12, GLASS));
     seg.position.set(0, ty + 3.5, 0); seg.rotation.y = Math.PI / 4; T.add(seg);
-    const rim = new THREE.Mesh(new THREE.TorusGeometry(8.4, .18, 6, 4), distNeon);
+    const rim = new THREE.Mesh(new THREE.TorusGeometry(8.4, .26, 6, 4), distNeon);
     rim.position.set(0, ty + 7, 0); rim.rotation.x = Math.PI / 2; rim.rotation.z = Math.PI / 4; T.add(rim);
     const lip = new THREE.Mesh(new THREE.TorusGeometry(6.0, .10, 6, 4), distNeon);
     lip.position.set(0, ty + .1, 0); lip.rotation.x = Math.PI / 2; lip.rotation.z = Math.PI / 4; T.add(lip);
@@ -3095,7 +3095,7 @@ function buildTemple() {
   crown.position.set(0, ty + 2.5, 0); crown.rotation.y = Math.PI / 4; T.add(crown);
   const spire = new THREE.Mesh(new THREE.CylinderGeometry(.18, .8, 18, 8), distDark);
   spire.position.set(0, ty + 5 + 9, 0); T.add(spire);
-  const spireL = new THREE.Mesh(new THREE.BoxGeometry(.22, 16, .22), distNeon);
+  const spireL = new THREE.Mesh(new THREE.BoxGeometry(.34, 16, .34), distNeon);
   spireL.position.set(0, ty + 5 + 8, 0); T.add(spireL);
   const tip = new THREE.Mesh(new THREE.SphereGeometry(.6, 8, 6), beaconMat);
   tip.position.set(0, ty + 23.4, 0); T.add(tip);
