@@ -1,25 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-TW">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Kage — Where stillness reveals the unseen</title>
-<meta name="description" content="A five-chapter night walk through a Kyoto mountain temple. Charred cypress, lantern light and a vermilion moon, rendered live in WebGL.">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%2305070a'/%3E%3Ccircle cx='16' cy='17' r='8' fill='%23e0231c'/%3E%3Crect x='4' y='8' width='24' height='2.6' fill='%23dfe7e0'/%3E%3Crect x='7' y='13' width='18' height='2' fill='%23dfe7e0'/%3E%3C/svg%3E">
+<title>簡單行銷 Simples｜讓每個好點子都可以落地</title>
+<meta name="description" content="簡單行銷 Simples：用 AI 與系統思維做行銷的顧問公司。不賣曝光，不談流量，把「為什麼客戶會買」變成可以被理解、被複製、被放大的系統。台北、東京、胡志明。">
+<meta property="og:title" content="簡單行銷 Simples｜讓每個好點子都可以落地">
+<meta property="og:description" content="用 AI 與系統思維做行銷的顧問公司。策略、搜尋、投放、聲量、AI 部署。">
+<meta property="og:locale" content="zh_TW">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%2305040e'/%3E%3Cpath d='M16 3l12 7v13l-12 7-12-7V10z' fill='none' stroke='%2322e6ff' stroke-width='1.6'/%3E%3Ccircle cx='24' cy='8' r='2.2' fill='%23e5745c'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="secret-pathways-assets/fonts.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Orbitron:wght@500;700;900&family=JetBrains+Mono:wght@400;500&display=swap">
 <style>
 /* ============================================================= tokens */
 :root{
-  --ink:#05070a;          /* page black */
-  --ink-2:#0a0e12;        /* raised black */
-  --bone:#dfe7e0;         /* the pale sage white of the wordmark */
-  --bone-dim:#aab4ad;
-  --muted:#78837c;
-  --line:rgba(223,231,224,.13);
-  --line-soft:rgba(223,231,224,.07);
-  --vermilion:#e0231c;
-  --ember:#ff5a3c;
-  --gold:#c9a24a;
+  --ink:#05040e;          /* page black, a shade of violet in it */
+  --ink-2:#0b0918;        /* raised black */
+  --bone:#e6efff;         /* the cold white of the wordmark */
+  --bone-dim:#a9b6cc;
+  --muted:#6f7a92;
+  --line:rgba(230,239,255,.13);
+  --line-soft:rgba(230,239,255,.07);
+  --neon:#22e6ff;         /* the cyan every tube on the page burns */
+  --neon-dim:#0fb3c9;
+  --coral:#e5745c;        /* the signage colour, carried over from the brand */
+  --coral-hot:#ff8a66;
+  --vermilion:#e5745c;    /* legacy names, kept so the grammar above still reads */
+  --ember:#ff8a66;
+  --gold:#22e6ff;
   --pad:clamp(20px, 3.4vw, 56px);
   --nav-h:84px;
   --ease:cubic-bezier(.22,.61,.36,1);
@@ -30,13 +40,13 @@
 html{ -webkit-text-size-adjust:100%; scroll-behavior:auto; }
 body{
   margin:0; background:var(--ink); color:var(--bone);
-  font-family:'Onest',system-ui,-apple-system,'Helvetica Neue',sans-serif;
+  font-family:'Onest','Noto Sans TC','PingFang TC','Microsoft JhengHei',system-ui,sans-serif;
   font-weight:300; font-size:16px; line-height:1.6;
   -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
   overflow-x:hidden;
 }
 body.is-locked{ overflow:hidden; height:100vh; }
-::selection{ background:var(--vermilion); color:#fff; }
+::selection{ background:var(--neon); color:var(--ink); }
 img{max-width:100%;display:block}
 a{color:inherit;text-decoration:none}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
@@ -44,7 +54,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 /* ============================================================= layers */
 #gl{
   position:fixed; inset:0; width:100%; height:100%;
-  display:block; z-index:0; background:#05070a;
+  display:block; z-index:0; background:#05040e;
 }
 #grain{
   position:fixed; inset:-1px; z-index:60; pointer-events:none;
@@ -53,25 +63,25 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 }
 #vignette{
   position:fixed; inset:0; z-index:55; pointer-events:none;
-  background:radial-gradient(125% 95% at 50% 42%, transparent 40%, rgba(2,4,6,.55) 100%);
+  background:radial-gradient(125% 95% at 50% 42%, transparent 40%, rgba(3,2,9,.55) 100%);
 }
 .page{ position:relative; z-index:10; }
 
 /* ============================================================= type */
 .eyebrow{
   font-size:10px; font-weight:500; letter-spacing:.22em; text-transform:uppercase;
-  color:var(--bone-dim); text-shadow:0 1px 16px rgba(3,6,8,.9);
+  color:var(--bone-dim); text-shadow:0 1px 16px rgba(4,3,12,.9);
 }
-.jp{ font-family:'NotoJP','Onest',sans-serif; font-weight:400; }
+.jp{ font-family:'Noto Sans TC','NotoJP','Onest',sans-serif; font-weight:400; }
 h1,h2,h3{ font-weight:400; margin:0; letter-spacing:-.005em; }
 .display{
   text-transform:uppercase; line-height:1.055; letter-spacing:-.012em;
-  font-weight:400; text-shadow:0 2px 34px rgba(3,6,8,.72);
+  font-weight:400; text-shadow:0 2px 34px rgba(4,3,12,.72);
 }
 .h-hero{ font-size:clamp(26px,3.05vw,46px); }
 .h-sec{ font-size:clamp(30px,4.0vw,60px); }
-.body-lg{ font-size:clamp(14px,1.02vw,17px); line-height:1.72; color:#b4bfb7; font-weight:300; text-shadow:0 1px 20px rgba(3,6,8,.88); }
-.body{ font-size:14px; line-height:1.68; color:#9aa5a0; font-weight:300; text-shadow:0 1px 18px rgba(3,6,8,.85); }
+.body-lg{ font-size:clamp(14px,1.02vw,17px); line-height:1.72; color:#b4bfb7; font-weight:300; text-shadow:0 1px 20px rgba(4,3,12,.88); }
+.body{ font-size:14px; line-height:1.68; color:#9aa5a0; font-weight:300; text-shadow:0 1px 18px rgba(4,3,12,.85); }
 .num{ font-size:clamp(26px,2.5vw,36px); font-weight:300; letter-spacing:-.02em; color:var(--bone); font-variant-numeric:tabular-nums; }
 
 /* ============================================================= reveal */
@@ -91,10 +101,11 @@ h1,h2,h3{ font-weight:400; margin:0; letter-spacing:-.005em; }
   transition-delay:var(--word-delay,0ms);
 }
 .word-reveal.rv-in .word{ opacity:1; transform:none; }
+.ph{ white-space:nowrap; }
 
 /* ============================================================= preloader */
 #pre{
-  position:fixed; inset:0; z-index:100; background:#05070a;
+  position:fixed; inset:0; z-index:100; background:#05040e;
   display:flex; align-items:center; justify-content:center;
   transition:opacity .8s var(--ease), visibility .8s;
 }
@@ -103,7 +114,7 @@ h1,h2,h3{ font-weight:400; margin:0; letter-spacing:-.005em; }
 .pre-mark{ margin:0 auto 26px; width:44px; height:44px; opacity:.9; }
 .pre-mark svg{ width:100%; height:100%; display:block; }
 .pre-jp{ font-size:12px; letter-spacing:.5em; color:var(--bone-dim); margin-bottom:20px; }
-.pre-bar{ position:relative; height:1px; background:rgba(223,231,224,.14); overflow:hidden; }
+.pre-bar{ position:relative; height:1px; background:rgba(230,239,255,.14); overflow:hidden; }
 .pre-bar i{ position:absolute; inset:0 100% 0 0; background:var(--bone); transition:right .35s linear; }
 .pre-meta{ display:flex; justify-content:space-between; margin-top:12px;
   font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); }
@@ -127,7 +138,7 @@ h1,h2,h3{ font-weight:400; margin:0; letter-spacing:-.005em; }
    frame, for as long as the blur took to fade. */
 .nav::before{
   content:''; position:absolute; inset:0; z-index:-1; pointer-events:none;
-  background:rgba(5,7,10,.62);
+  background:rgba(5,4,14,.62);
   backdrop-filter:blur(14px) saturate(1.1); -webkit-backdrop-filter:blur(14px) saturate(1.1);
   opacity:0; transition:opacity .5s linear;
 }
@@ -164,12 +175,12 @@ h1,h2,h3{ font-weight:400; margin:0; letter-spacing:-.005em; }
 /* ============================================================= hero */
 .hero{ position:relative; min-height:100svh; padding:0 var(--pad); display:flex; flex-direction:column; }
 .hero::before{ content:''; position:absolute; left:0; right:0; top:0; height:46%; pointer-events:none;
-  background:linear-gradient(rgba(3,6,9,.72), rgba(3,6,9,.34) 46%, transparent); }
+  background:linear-gradient(rgba(4,3,13,.72), rgba(4,3,13,.34) 46%, transparent); }
 .hero-top{ padding-top:calc(var(--nav-h) + clamp(12px,2.6vh,34px)); max-width:min(560px,46vw); position:relative; z-index:2; }
 .hero-top .eyebrow{ display:flex; align-items:center; gap:10px; margin-bottom:20px; }
 .hero-top .eyebrow .dot{ width:5px; height:5px; border-radius:50%; background:var(--vermilion); box-shadow:0 0 10px var(--vermilion); }
 .hero h1{ margin-bottom:18px; }
-.hero-sub{ max-width:322px; text-shadow:0 1px 26px rgba(3,6,8,.95); }
+.hero-sub{ max-width:322px; text-shadow:0 1px 26px rgba(4,3,12,.95); }
 .hero-spacer{ flex:1 1 auto; min-height:clamp(140px,26vh,300px); }
 .hero-foot{ padding-bottom:clamp(22px,4.2vh,42px); position:relative; z-index:2; }
 .hero-cue{ display:flex; align-items:center; justify-content:flex-end; gap:12px; margin-bottom:14px;
@@ -186,7 +197,7 @@ h1,h2,h3{ font-weight:400; margin:0; letter-spacing:-.005em; }
 .chip .tx{ min-width:0; padding-top:3px; }
 .chip b{ display:block; font-size:10px; font-weight:500; letter-spacing:.2em; text-transform:uppercase;
   color:var(--bone-dim); margin-bottom:6px; transition:color .4s;
-  text-shadow:0 1px 16px rgba(3,6,8,.9); }
+  text-shadow:0 1px 16px rgba(4,3,12,.9); }
 .chip p{ margin:0; font-size:11px; line-height:1.5; color:#7d8781; max-width:22ch;
   transition:color .4s; }
 .chip:hover .num{ color:var(--ember); transform:translate3d(0,-2px,0); }
@@ -201,12 +212,12 @@ h1,h2,h3{ font-weight:400; margin:0; letter-spacing:-.005em; }
   transition:transform .8s var(--ease-out);
 }
 .peek-fr{ display:block; aspect-ratio:16/10;
-  background:linear-gradient(180deg, rgba(3,6,9,.04) 24%, rgba(3,6,9,.48) 100%),
+  background:linear-gradient(180deg, rgba(4,3,13,.04) 24%, rgba(4,3,13,.48) 100%),
     url('secret-pathways-assets/generated/kage-sanmon-preview.webp') center / cover no-repeat;
-  outline:1px solid rgba(223,231,224,.16); outline-offset:-1px;
+  outline:1px solid rgba(230,239,255,.16); outline-offset:-1px;
   box-shadow:0 34px 70px -30px rgba(0,0,0,.9); transition:outline-color .5s; }
 .peek:hover{ transform:translate3d(0,-5px,0); }
-.peek:hover .peek-fr{ outline-color:rgba(223,231,224,.42); }
+.peek:hover .peek-fr{ outline-color:rgba(230,239,255,.42); }
 .peek-play{ position:absolute; top:0; right:0; left:0; bottom:auto; aspect-ratio:16/10;
   display:grid; place-items:center; pointer-events:none; }
 .peek-play svg{ width:clamp(30px,3.2vw,46px); height:auto; filter:drop-shadow(0 2px 12px rgba(0,0,0,.7));
@@ -221,14 +232,14 @@ h1,h2,h3{ font-weight:400; margin:0; letter-spacing:-.005em; }
   position:absolute; z-index:2; right:var(--pad); top:50%; transform:translateY(-50%);
   display:flex; flex-direction:column; align-items:center; gap:14px; pointer-events:none;
 }
-.hero-side .v{ writing-mode:vertical-rl; font-size:13px; letter-spacing:.62em; color:rgba(223,231,224,.5); }
+.hero-side .v{ writing-mode:vertical-rl; font-size:13px; letter-spacing:.62em; color:rgba(230,239,255,.5); }
 @keyframes cue{ 0%{transform:scaleX(0)} 42%{transform:scaleX(1)} 100%{transform:scaleX(1) translateX(100%)} }
 
 /* ============================================================= sections */
 .sec{ position:relative; padding:clamp(88px,15vh,190px) var(--pad); }
 .sec::before{
   content:''; position:absolute; inset:-22% -4%; z-index:-1; pointer-events:none;
-  background:radial-gradient(110% 62% at 30% 50%, rgba(4,7,10,.88), rgba(4,7,10,.62) 42%, rgba(4,7,10,.18) 74%, rgba(4,7,10,0));
+  background:radial-gradient(110% 62% at 30% 50%, rgba(5,4,15,.88), rgba(5,4,15,.62) 42%, rgba(5,4,15,.18) 74%, rgba(5,4,15,0));
   /* A chapter's scrim is there to hold its own copy off the sanctuary, and it
      is inset -22% so its edges never land as a seam. That overshoot, plus the
      section's top padding, means it was washing most of a screen of scene
@@ -238,11 +249,11 @@ h1,h2,h3{ font-weight:400; margin:0; letter-spacing:-.005em; }
   -webkit-mask-image:linear-gradient(transparent, #000 44%);
           mask-image:linear-gradient(transparent, #000 44%);
 }
-#pathways::before{ background:radial-gradient(108% 64% at 50% 50%, rgba(4,7,10,.70), rgba(4,7,10,.44) 50%, rgba(4,7,10,0)); }
-#eternity::before{ background:radial-gradient(82% 58% at 50% 46%, rgba(4,7,10,.26), rgba(4,7,10,.66) 56%, rgba(4,7,10,.90) 82%, rgba(4,7,10,0)); }
+#pathways::before{ background:radial-gradient(108% 64% at 50% 50%, rgba(5,4,15,.70), rgba(5,4,15,.44) 50%, rgba(5,4,15,0)); }
+#eternity::before{ background:radial-gradient(82% 58% at 50% 46%, rgba(5,4,15,.26), rgba(5,4,15,.66) 56%, rgba(5,4,15,.90) 82%, rgba(5,4,15,0)); }
 .foot::before{
   content:''; position:absolute; inset:0; z-index:-1; pointer-events:none;
-  background:linear-gradient(rgba(4,7,10,.55), rgba(4,7,10,.94) 40%, rgba(4,7,10,.98));
+  background:linear-gradient(rgba(5,4,15,.55), rgba(5,4,15,.94) 40%, rgba(5,4,15,.98));
 }
 .sec-head{ display:flex; align-items:baseline; gap:16px; margin-bottom:clamp(30px,5vh,66px); }
 .sec-head .k{ font-size:10px; font-weight:500; letter-spacing:.24em; text-transform:uppercase; color:var(--muted); }
@@ -253,7 +264,7 @@ h1,h2,h3{ font-weight:400; margin:0; letter-spacing:-.005em; }
 .gate-grid{ display:grid; grid-template-columns:minmax(0,1.02fr) minmax(0,1fr); gap:clamp(28px,5vw,90px); align-items:start; }
 .gate-grid h2{ max-width:11ch; }
 .gate-copy{ padding-top:6px; }
-.gate-copy .lead{ font-size:clamp(15px,1.16vw,19px); line-height:1.66; color:#c2cdc5; text-shadow:0 1px 20px rgba(3,6,8,.9); }
+.gate-copy .lead{ font-size:clamp(15px,1.16vw,19px); line-height:1.66; color:#c2cdc5; text-shadow:0 1px 20px rgba(4,3,12,.9); }
 .gate-copy .lead + p{ margin-top:20px; }
 .arrowlink{ display:inline-flex; align-items:center; gap:12px; margin-top:34px;
   font-size:11px; font-weight:500; letter-spacing:.2em; text-transform:uppercase; color:var(--bone); }
@@ -262,7 +273,7 @@ h1,h2,h3{ font-weight:400; margin:0; letter-spacing:-.005em; }
 .arrowlink .ar svg{ width:13px; height:13px; transition:transform .5s var(--ease-out); }
 .arrowlink:hover .ar{ background:var(--bone); border-color:var(--bone); }
 .arrowlink:hover .ar svg{ transform:translate3d(2px,-2px,0); }
-.arrowlink:hover .ar svg path{ stroke:#05070a; }
+.arrowlink:hover .ar svg path{ stroke:#05040e; }
 .gate-stats{ display:flex; gap:clamp(24px,4vw,62px); margin-top:clamp(46px,8vh,96px); border-top:1px solid var(--line-soft); padding-top:24px; }
 .gate-stats div b{ display:block; font-size:clamp(22px,2.1vw,32px); font-weight:300; letter-spacing:-.02em; }
 .gate-stats div span{ font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); }
@@ -281,24 +292,24 @@ h1,h2,h3{ font-weight:400; margin:0; letter-spacing:-.005em; }
   outline:1px solid var(--line-soft); outline-offset:-1px;
   transition:outline-color .5s var(--ease);
 }
-.card:hover .card-fr{ outline-color:rgba(223,231,224,.30); }
+.card:hover .card-fr{ outline-color:rgba(230,239,255,.30); }
 .card:nth-child(1) .card-fr{
   background:
-    linear-gradient(180deg,rgba(3,6,9,.04) 36%,rgba(3,6,9,.72) 100%),
+    linear-gradient(180deg,rgba(4,3,13,.04) 36%,rgba(4,3,13,.72) 100%),
     url('secret-pathways-assets/generated/kage-approach.webp') center / cover no-repeat;
 }
 .card:nth-child(2) .card-fr{
   background:
-    linear-gradient(180deg,rgba(3,6,9,.06) 36%,rgba(3,6,9,.74) 100%),
+    linear-gradient(180deg,rgba(4,3,13,.06) 36%,rgba(4,3,13,.74) 100%),
     url('secret-pathways-assets/generated/kage-lantern-court.webp') center / cover no-repeat;
 }
 .card:nth-child(3) .card-fr{
   background:
-    linear-gradient(180deg,rgba(3,6,9,.05) 36%,rgba(3,6,9,.74) 100%),
+    linear-gradient(180deg,rgba(4,3,13,.05) 36%,rgba(4,3,13,.74) 100%),
     url('secret-pathways-assets/generated/kage-moonwater.webp') center / cover no-repeat;
 }
 .card-fr::after{ content:''; position:absolute; inset:0;
-  background:linear-gradient(transparent 46%, rgba(4,6,9,.80)); pointer-events:none; }
+  background:linear-gradient(transparent 46%, rgba(5,4,14,.80)); pointer-events:none; }
 /* The fabric overdraws its card by CL_BLEED on every side so the billow and
    the contact shadow have somewhere to go, so the frame cannot clip it. The
    card's outline is not here at all: it is drawn in the cloth shader, where it
@@ -350,7 +361,7 @@ h1,h2,h3{ font-weight:400; margin:0; letter-spacing:-.005em; }
 @media (prefers-reduced-motion:reduce){
   .glow, .glow::before{ animation:none; }
 }
-.no-webgl .card-fr{ background:linear-gradient(150deg,#101a1d,#0a0d10 62%,#1a0c0b); }
+.no-webgl .card-fr{ background:linear-gradient(150deg,#0e1a2a,#08060f 62%,#2a1210); }
 /* If WebGL will not start, the page stays a page: the scene simply becomes a
    still, and the wordmark moves from the 3-D layer into the document. */
 .word-fb{ display:none; }
@@ -358,16 +369,16 @@ h1,h2,h3{ font-weight:400; margin:0; letter-spacing:-.005em; }
 /* fixed, or the gradient is measured against a 6000-pixel body box and the
    moon ends up somewhere around the curriculum table */
 .no-webgl body{ background:
-  radial-gradient(11vw 11vw at 73% 17%, rgba(232,52,28,.95), rgba(158,20,16,.62) 44%, rgba(96,12,12,.20) 64%, transparent 72%),
-  radial-gradient(38vw 32vw at 50% 46%, rgba(228,104,24,.40), rgba(122,42,10,.18) 54%, transparent 74%),
-  radial-gradient(120% 80% at 50% 0%, rgba(120,150,158,.16), transparent 60%), #05070a;
+  radial-gradient(11vw 11vw at 73% 17%, rgba(255,150,110,.95), rgba(229,116,92,.62) 44%, rgba(120,40,30,.20) 64%, transparent 72%),
+  radial-gradient(38vw 32vw at 50% 46%, rgba(34,200,230,.34), rgba(20,90,120,.18) 54%, transparent 74%),
+  radial-gradient(120% 80% at 50% 0%, rgba(90,70,170,.20), transparent 60%), #05040e;
   background-attachment:fixed; }
-.no-webgl .peek-fr{ background:linear-gradient(160deg,#162326,#0b1013 55%,#241010); }
+.no-webgl .peek-fr{ background:linear-gradient(160deg,#122a34,#08060f 55%,#2a1410); }
 .no-webgl .word-fb{
   display:block; position:absolute; left:0; right:0; bottom:16%; z-index:1;
-  font-family:'Wordmark','Onest',sans-serif; font-weight:600; font-size:21.4vw; line-height:.78;
-  letter-spacing:.052em; text-align:center; pointer-events:none;
-  background:linear-gradient(#e2ece5, #97a89c); -webkit-background-clip:text; background-clip:text;
+  font-family:'Orbitron','Onest',sans-serif; font-weight:900; font-size:14.6vw; line-height:.78;
+  letter-spacing:.06em; text-align:center; pointer-events:none;
+  background:linear-gradient(#d6faff, #22e6ff 70%, #0fb3c9); -webkit-background-clip:text; background-clip:text;
   color:transparent;
 }
 /* The live hero has no foot scrim, but the fallback still needs one: there it
@@ -375,12 +386,12 @@ h1,h2,h3{ font-weight:400; margin:0; letter-spacing:-.005em; }
    wordmark have nothing else holding them off it. So this carries the whole
    declaration now rather than re-colouring one it used to inherit. */
 .no-webgl .hero::after{ content:''; position:absolute; left:0; right:0; bottom:0; height:34%;
-  pointer-events:none; background:linear-gradient(transparent, rgba(3,5,8,.72) 52%, rgba(3,5,8,.96)); }
+  pointer-events:none; background:linear-gradient(transparent, rgba(4,3,12,.72) 52%, rgba(4,3,12,.96)); }
 .no-webgl .sec::before, .no-webgl #pathways::before, .no-webgl #eternity::before{ background:none; }
 .card-lab{ position:absolute; left:16px; right:16px; bottom:14px; z-index:2;
   display:flex; align-items:flex-end; justify-content:space-between; gap:10px; }
 .card-lab b{ font-size:clamp(13px,1.15vw,17px); font-weight:400; letter-spacing:.02em; text-transform:uppercase; }
-.card-lab .jp{ font-size:11px; letter-spacing:.3em; color:rgba(223,231,224,.62); }
+.card-lab .jp{ font-size:11px; letter-spacing:.3em; color:rgba(230,239,255,.62); }
 .card-ar{ position:absolute; top:14px; right:14px; z-index:2; width:26px; height:26px;
   opacity:0; transform:translate3d(-4px,4px,0); transition:.5s var(--ease-out); }
 .card:hover .card-ar{ opacity:1; transform:none; }
@@ -399,16 +410,16 @@ h1,h2,h3{ font-weight:400; margin:0; letter-spacing:-.005em; }
   cursor:pointer; transition:padding .5s var(--ease-out);
 }
 .les::before{ content:''; position:absolute; left:calc(var(--pad) * -1); right:0; top:0; bottom:0;
-  background:linear-gradient(90deg, rgba(224,35,28,.09), transparent 46%);
+  background:linear-gradient(90deg, rgba(229,116,92,.09), transparent 46%);
   opacity:0; transition:opacity .55s var(--ease); pointer-events:none; }
 .les:hover::before{ opacity:1; }
 .les:hover{ padding-left:clamp(8px,1.2vw,18px); }
 .les .k{ font-size:11px; letter-spacing:.16em; color:var(--muted); font-variant-numeric:tabular-nums; transition:color .4s; }
 .les:hover .k{ color:var(--vermilion); }
 .les h3{ font-size:clamp(16px,1.5vw,23px); font-weight:400; letter-spacing:-.005em; }
-.les h3 em{ font-style:normal; font-family:'NotoJP',sans-serif; font-size:.72em; color:var(--muted); margin-left:12px; letter-spacing:.24em; }
-.les p{ margin:0; font-size:13px; line-height:1.6; color:#909b95; text-shadow:0 1px 16px rgba(3,6,8,.92); }
-.les .t{ text-align:right; font-size:11px; letter-spacing:.14em; color:#8b958f; font-variant-numeric:tabular-nums; text-shadow:0 1px 16px rgba(3,6,8,.92); }
+.les h3 em{ font-style:normal; font-size:.72em; color:var(--muted); margin-left:12px; letter-spacing:.24em; }
+.les p{ margin:0; font-size:13px; line-height:1.6; color:#909b95; text-shadow:0 1px 16px rgba(4,3,12,.92); }
+.les .t{ text-align:right; font-size:11px; letter-spacing:.14em; color:#8b958f; font-variant-numeric:tabular-nums; text-shadow:0 1px 16px rgba(4,3,12,.92); }
 .les .bar{ position:absolute; left:0; bottom:-1px; height:1px; width:100%; background:var(--vermilion);
   transform:scaleX(0); transform-origin:left; transition:transform .7s var(--ease-out); }
 .les:hover .bar{ transform:scaleX(1); }
@@ -427,9 +438,9 @@ h1,h2,h3{ font-weight:400; margin:0; letter-spacing:-.005em; }
 .cta i{ position:absolute; inset:0; background:var(--bone); transform:translate3d(0,101%,0);
   transition:transform .62s var(--ease-out); z-index:-1; }
 .cta span,.cta svg{ position:relative; z-index:1; }
-.cta:hover{ color:#05070a; border-color:var(--bone); }
+.cta:hover{ color:#05040e; border-color:var(--bone); }
 .cta:hover i{ transform:none; }
-.cta:hover svg path{ stroke:#05070a; }
+.cta:hover svg path{ stroke:#05040e; }
 
 /* — footer */
 .foot{ position:relative; padding:clamp(50px,8vh,96px) var(--pad) clamp(26px,4vh,40px);
@@ -449,16 +460,16 @@ h1,h2,h3{ font-weight:400; margin:0; letter-spacing:-.005em; }
 .rail{ position:fixed; right:calc(var(--pad) - 4px); top:50%; transform:translateY(-50%); z-index:45;
   display:flex; flex-direction:column; gap:12px; align-items:center; }
 .rail button{ width:22px; height:10px; display:grid; place-items:center; }
-.rail i{ display:block; width:14px; height:1px; background:rgba(223,231,224,.26); transition:.5s var(--ease-out); }
+.rail i{ display:block; width:14px; height:1px; background:rgba(230,239,255,.26); transition:.5s var(--ease-out); }
 .rail button.on i{ width:22px; background:var(--bone); }
 .rail button:hover i{ width:22px; background:var(--bone-dim); }
 
 /* ============================================================= cursor */
 .cur-dot{ position:fixed; z-index:80; top:0; left:0; width:26px; height:26px; margin:-13px 0 0 -13px;
-  border:1px solid rgba(223,231,224,.42); border-radius:50%; pointer-events:none;
+  border:1px solid rgba(230,239,255,.42); border-radius:50%; pointer-events:none;
   transition:width .35s var(--ease-out), height .35s var(--ease-out), margin .35s var(--ease-out),
              background .35s, border-color .35s, opacity .3s; opacity:0; }
-.cur-dot.act{ width:52px; height:52px; margin:-26px 0 0 -26px; background:rgba(223,231,224,.07); border-color:rgba(223,231,224,.6); }
+.cur-dot.act{ width:52px; height:52px; margin:-26px 0 0 -26px; background:rgba(230,239,255,.07); border-color:rgba(230,239,255,.6); }
 @media (hover:hover) and (pointer:fine){ .cur-dot{ opacity:1 } }
 
 /* ============================================================= responsive */
@@ -474,7 +485,7 @@ h1,h2,h3{ font-weight:400; margin:0; letter-spacing:-.005em; }
   .nav-links{
     display:flex; position:fixed; top:0; right:0; bottom:0; width:min(84vw,360px);
     padding:calc(var(--nav-h) + 28px) var(--pad) 34px; flex-direction:column; align-items:flex-start; gap:0;
-    background:rgba(3,6,9,.98); border-left:1px solid var(--line-soft);
+    background:rgba(4,3,13,.98); border-left:1px solid var(--line-soft);
     transform:translate3d(100%,0,0); opacity:0; visibility:hidden; pointer-events:none;
     transition:transform .65s var(--ease-out), opacity .4s, visibility 0s linear .65s;
   }
@@ -537,10 +548,8 @@ body[data-layout-hero="b"] .hero-cue{ justify-content:flex-start; }
 body[data-layout-hero="b"] .chapters{ grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; }
 body[data-layout-hero="b"] .chip{ position:relative; flex-direction:column; gap:0; }
 body[data-layout-hero="b"] .chip .num{ font-size:clamp(29px,3.1vw,48px); }
-body[data-layout-hero="b"] .chip .tx{
-  position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0);
-  clip-path:inset(50%); white-space:nowrap;
-}
+body[data-layout-hero="b"] .chip .tx{ padding-top:8px; }
+body[data-layout-hero="b"] .chip p{ font-size:10.5px; max-width:none; }
 /* the live window drops into the open right corner, away from the reading
    column and the oversized 3-D wordmark */
 body[data-layout-hero="b"] .peek{
@@ -550,12 +559,12 @@ body[data-layout-hero="b"] .peek-cap b.jp{ font-size:clamp(20px,2.2vw,34px); let
 /* The Japanese title reads down the right edge, hung under the navigation —
    the one mark on that side of the frame now that the romanization has gone. */
 body[data-layout-hero="b"] .hero-side{
-  left:auto; right:var(--pad); top:calc(var(--nav-h) + clamp(14px,3vh,42px));
+  left:auto; right:var(--pad); top:calc(var(--nav-h) + clamp(150px,22vh,200px));
   bottom:auto; transform:none; display:block;
 }
 body[data-layout-hero="b"] .hero-side .v{
   position:static; transform:none;
-  font-size:clamp(30px,3.2vw,54px); letter-spacing:.12em; color:rgba(223,231,224,.62);
+  font-size:clamp(30px,3.2vw,54px); letter-spacing:.12em; color:rgba(230,239,255,.62);
 }
 
 /* — story B · spread: the title crosses two columns, the reading column is
@@ -587,18 +596,18 @@ body[data-layout-gallery="b"] .card:not(:first-child) .card-fr{ min-height:200px
 /* — chapters B · atlas: a two-then-three plate grid instead of a syllabus.
      Number and title sit at the top of each plate, the running time drops to
      the foot of it. */
-body[data-layout-curriculum="b"] .cur-head{ grid-template-columns:minmax(0,.72fr) minmax(0,1.2fr); align-items:start; }
+body[data-layout-curriculum="b"] .cur-head{ grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr); align-items:start; }
 body[data-layout-curriculum="b"] .cur{
   display:grid; grid-template-columns:repeat(6,1fr); gap:1px;
   background:var(--line-soft); border:1px solid var(--line-soft);
 }
 body[data-layout-curriculum="b"] .les{
   display:flex; flex-direction:column; align-items:flex-start; min-height:250px;
-  padding:24px; gap:14px; border:0; background:rgba(5,7,10,.84); overflow:hidden;
+  padding:24px; gap:14px; border:0; background:rgba(5,4,14,.84); overflow:hidden;
 }
 body[data-layout-curriculum="b"] .les:nth-child(-n+2){ grid-column:span 3; }
 body[data-layout-curriculum="b"] .les:nth-child(n+3){ grid-column:span 2; }
-body[data-layout-curriculum="b"] .les::before{ left:0; background:linear-gradient(145deg,rgba(224,35,28,.13),transparent 58%); }
+body[data-layout-curriculum="b"] .les::before{ left:0; background:linear-gradient(145deg,rgba(229,116,92,.13),transparent 58%); }
 body[data-layout-curriculum="b"] .les:hover{ padding-left:32px; }
 body[data-layout-curriculum="b"] .les h3{ font-size:clamp(20px,2vw,30px); }
 body[data-layout-curriculum="b"] .les p{ display:block; max-width:34ch; }
@@ -766,9 +775,13 @@ body[data-layout-footer="b"] .foot-base span:last-child{ text-align:right; }
 /* — IV · afterlight: a far hill closes the horizon, the shrine ruins stand at
      the left of it, grass banks the right, one branch hangs into the corner */
 [data-fg="eternity"] .fg-hill   { left:-8%; width:min(150vh,116%); bottom:calc(-1 * min(20vh,15.5vw)); }
-[data-fg="eternity"] .fg-ruins  { left:-5%;  bottom:-32px; width:clamp(240px,28vw,500px); }
+[data-fg="eternity"] .fg-ruins  { left:-6%;  bottom:-60px; width:clamp(220px,24vw,440px); }
 [data-fg="eternity"] .fg-grass  { right:-7%; bottom:-60px; width:clamp(300px,37vw,670px); }
-[data-fg="eternity"] .fg-sakura { left:-15%; bottom:-70px; width:clamp(280px,33vw,580px); }
+[data-fg="eternity"] .fg-sakura { left:-16%; bottom:-150px; width:clamp(240px,26vw,440px); }
+
+/* — IV · the engine: a low periphery, stones left and a bush right */
+[data-fg="engine"] .fg-stones { left:-6%;  bottom:-90px; width:clamp(200px,22vw,380px); }
+[data-fg="engine"] .fg-bush   { right:-6%; bottom:-46px; width:clamp(250px,30vw,540px); }
 
 /* — colophon: one restrained planting along the lower edge, nothing above it */
 [data-fg="foot"] .fg-bush   { left:-6%;  bottom:-110px; width:clamp(230px,28vw,480px); }
@@ -799,6 +812,8 @@ body[data-layout-footer="b"] .foot-base span:last-child{ text-align:right; }
   [data-fg="lessons"] .fg-grass   { left:auto; right:-8%; bottom:-44px; width:min(70vw,380px); }
   [data-fg="eternity"] .fg-ruins  { left:-8%;   bottom:-25px; width:min(54vw,300px); }
   [data-fg="eternity"] .fg-grass  { right:-12%; bottom:-34px; width:min(80vw,440px); }
+  [data-fg="engine"] .fg-stones{ left:-8%; bottom:-30px; width:min(60vw,320px); }
+  [data-fg="engine"] .fg-bush  { right:-12%; bottom:-30px; width:min(70vw,380px); }
   [data-fg="foot"] .fg-bush  { left:-12%;  bottom:-26px; width:min(68vw,340px); }
   [data-fg="foot"] .fg-grass { right:-12%; bottom:-30px; width:min(74vw,380px); }
 }
@@ -830,10 +845,7 @@ body[data-layout-footer="b"] .foot-base span:last-child{ text-align:right; }
      "CHAPTERS." alone is wider than that, and it spilled over the paragraph. */
   body[data-layout-curriculum="b"] .cur-head{ grid-template-columns:1fr; gap:18px; align-items:start; }
   body[data-layout-hero="b"] .chip .num{ font-size:clamp(26px,8vw,36px); }
-  body[data-layout-hero="b"] .chip .tx{
-    position:static; width:auto; height:auto; overflow:visible; clip:auto;
-    clip-path:none; white-space:normal;
-  }
+  body[data-layout-hero="b"] .chip .tx{ padding-top:3px; }
 
   body[data-layout-story="b"] .gate-stats{ grid-template-columns:repeat(2,1fr); border-right:1px solid var(--line-soft); }
   body[data-layout-story="b"] .gate-stats div{ min-height:86px; padding:14px; }
@@ -881,6 +893,237 @@ body[data-layout-footer="b"] .foot-base span:last-child{ text-align:right; }
   [data-rv]{ opacity:1 !important; transform:none !important; }
   .mask-line > span,.word{ opacity:1 !important; transform:none !important; }
 }
+
+/* ================================================== cyberpunk layer (SIMPLES)
+   Everything below re-skins the grammar above for the Simples rebuild: cool
+   ink, cyan neon and coral signage, mono technical labels, Chinese display
+   type, scan lines, and the new engine / pricing / contact components. */
+.en{ font-family:'Orbitron','Onest',sans-serif; }
+.k, .eyebrow, .sec-head .k, .chip b, .hero-cue, .card-meta, .gate-stats div span,
+.foot h4, .foot-base, .pre-meta, .nav-link .alt, .les .k, .peek-cap i, .hud,
+.mx-h, .mx-r, .cell, .mx-cap, .mx-foot, .who, .steps .no, .cases .no, .tier .k, .eg .k{
+  font-family:'JetBrains Mono','Onest',monospace;
+}
+.display{ font-family:'Noto Sans TC','Onest',sans-serif; font-weight:500; letter-spacing:.01em; line-height:1.18; text-transform:none; }
+.h-hero{ font-size:clamp(30px,3.6vw,54px); }
+.h-sec{ font-size:clamp(26px,3.5vw,52px); }
+.display .hl{ color:var(--coral); text-shadow:0 0 18px rgba(229,116,92,.55); }
+h3{ font-family:'Noto Sans TC','Onest',sans-serif; }
+.eyebrow{ color:var(--neon-dim); }
+.hero-top .eyebrow .dot{ background:var(--neon); box-shadow:0 0 10px var(--neon), 0 0 22px rgba(34,230,255,.5); animation:blink 2.6s steps(1) infinite; }
+@keyframes blink{ 0%,92%{ opacity:1 } 96%{ opacity:.15 } 100%{ opacity:1 } }
+.hero-en{ margin:22px 0 0; letter-spacing:.3em; color:var(--muted); }
+.hero-sub{ max-width:380px; }
+.sec-head .k b{ color:var(--coral); text-shadow:0 0 12px rgba(229,116,92,.6); }
+.chip{ display:flex; }
+.chip .num{ font-family:'Orbitron','Onest',sans-serif; font-weight:500; color:var(--bone-dim); }
+.chip:hover .num, .chip.on .num{ color:var(--neon); text-shadow:0 0 14px rgba(34,230,255,.75); }
+.nav-link{ font-family:'Noto Sans TC','Onest',sans-serif; font-size:12px; letter-spacing:.14em; text-transform:none; }
+.nav-link .alt{ text-transform:uppercase; letter-spacing:.3em; color:var(--neon); }
+.nav-link.on::after{ background:var(--neon); box-shadow:0 0 8px var(--neon); }
+.brand-tx b{ font-family:'Orbitron','Onest',sans-serif; letter-spacing:.3em; }
+.brand-tx i{ letter-spacing:.2em; }
+.pre-jp{ font-size:16px; letter-spacing:.6em; color:var(--bone); text-shadow:0 0 18px rgba(34,230,255,.6); }
+.pre-bar i{ background:var(--neon); box-shadow:0 0 10px var(--neon); }
+.les:hover .k{ color:var(--neon); }
+.les .bar{ background:var(--neon); box-shadow:0 0 8px var(--neon); }
+.les h3 em{ font-family:'Orbitron','Onest',sans-serif; font-size:.5em; letter-spacing:.3em; color:var(--coral); }
+body[data-layout-curriculum="b"] .les::before{ background:linear-gradient(145deg,rgba(34,230,255,.12),transparent 58%); }
+body[data-layout-curriculum="b"] .les{ background:rgba(5,4,14,.86); }
+body[data-layout-curriculum="b"] .les .t{ font-size:10.5px; color:var(--muted); letter-spacing:.06em; }
+.les .t{ font-size:10.5px; }
+.rail button.on i{ background:var(--neon); box-shadow:0 0 8px var(--neon); }
+.cta:hover{ color:var(--ink); border-color:var(--neon); }
+.cta i{ background:var(--neon); }
+.cta:hover svg path{ stroke:var(--ink); }
+.arrowlink:hover .ar{ background:var(--neon); border-color:var(--neon); }
+.arrowlink:hover .ar svg path{ stroke:var(--ink); }
+.card:hover .card-fr{ outline-color:rgba(34,230,255,.45); }
+.card-lab b{ font-family:'Noto Sans TC','Onest',sans-serif; text-transform:none; font-weight:500; font-size:clamp(13px,1.05vw,16px); }
+.card-lab .jp{ letter-spacing:.14em; font-family:'JetBrains Mono',monospace; }
+/* the Kyoto plates read cyan / coral instead of blue / amber */
+.card-fr, .peek-fr{ filter:hue-rotate(14deg) saturate(1.15) contrast(1.06); }
+.peek-cap b.jp{ font-family:'Orbitron','Onest',sans-serif; color:var(--neon); text-shadow:0 0 14px rgba(34,230,255,.6); }
+body[data-layout-hero="b"] .hero-side .v{ font-family:'Noto Sans TC',sans-serif; font-weight:300; color:rgba(230,239,255,.5); text-orientation:upright; line-height:1; }
+/* the cut-outs go cold: silhouettes with a coral cast on the leaves, the
+   lit lantern turned cyan */
+.fg-el > img{ filter:saturate(.55) brightness(.62) contrast(1.15) hue-rotate(-18deg); }
+[data-fg="pathways"] .fg-lantern > img{ filter:hue-rotate(165deg) saturate(1.2) brightness(.95); }
+[data-fg="pathways"] .fg-sakura > img, [data-fg="eternity"] .fg-sakura > img{ filter:saturate(.7) brightness(.7) hue-rotate(-14deg); }
+[data-fg="pathways"] .fg-leaves > img{ filter:saturate(.8) brightness(.75) hue-rotate(-22deg); }
+
+/* ---- scan lines: a fixed pass over the whole frame, and one slow sweep */
+#scan{
+  position:fixed; inset:0; z-index:57; pointer-events:none; opacity:.42;
+  background:repeating-linear-gradient(180deg, transparent 0 2px, rgba(0,0,0,.20) 2px 3px);
+  mix-blend-mode:multiply;
+}
+#sweep{
+  position:fixed; left:0; right:0; top:-20%; height:14%; z-index:57; pointer-events:none; opacity:.05;
+  background:linear-gradient(180deg, transparent, rgba(34,230,255,.9) 50%, transparent);
+  mix-blend-mode:screen; animation:sweep 11s linear infinite;
+}
+@keyframes sweep{ from{ transform:translate3d(0,0,0) } to{ transform:translate3d(0,900%,0) } }
+
+/* ---- headings arrive with one chromatic split, then settle */
+.display.rv-in, .rv-in .display{ animation:glitch 1.1s steps(2,end) 1; }
+@keyframes glitch{
+  0%{ text-shadow:0 0 0 transparent; }
+  10%{ text-shadow:-3px 0 0 rgba(34,230,255,.8), 3px 0 0 rgba(229,116,92,.8); transform:translate3d(1px,0,0); }
+  20%{ text-shadow:3px 0 0 rgba(34,230,255,.6), -3px 0 0 rgba(229,116,92,.6); transform:translate3d(-1px,0,0); }
+  30%{ text-shadow:-2px 0 0 rgba(34,230,255,.5), 2px 0 0 rgba(229,116,92,.5); }
+  45%{ text-shadow:0 0 0 transparent; transform:none; }
+  100%{ text-shadow:0 2px 34px rgba(4,3,12,.72); }
+}
+
+/* ---- the HUD in the hero: coordinates, local time, a live dot */
+.hud{
+  position:absolute; z-index:2; right:var(--pad); top:calc(var(--nav-h) + 10px);
+  display:grid; grid-template-columns:auto auto; gap:7px 14px; align-items:center;
+  font-size:9.5px; letter-spacing:.18em; text-transform:uppercase; color:var(--muted);
+  padding:14px 16px; border:1px solid var(--line-soft); background:rgba(5,4,14,.42);
+  backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px);
+}
+.hud::before, .hud::after{ content:''; position:absolute; width:8px; height:8px; border:1px solid var(--neon); }
+.hud::before{ left:-1px; top:-1px; border-right:0; border-bottom:0; }
+.hud::after{ right:-1px; bottom:-1px; border-left:0; border-top:0; }
+.hud-k{ color:var(--neon-dim); }
+.hud-v{ color:var(--bone-dim); font-variant-numeric:tabular-nums; white-space:nowrap; display:inline-flex; align-items:center; gap:8px; }
+.hud-dot{ width:6px; height:6px; border-radius:50%; background:var(--neon); box-shadow:0 0 8px var(--neon); animation:blink 1.8s steps(1) infinite; }
+@media (max-width:1080px){ .hud{ display:none; } }
+
+/* ---- the ticker of principles under the figures */
+.ticker{ margin-top:clamp(26px,4vh,44px); border-top:1px solid var(--line-soft); border-bottom:1px solid var(--line-soft);
+  overflow:hidden; -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent); mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent); }
+.ticker-in{ display:flex; gap:clamp(34px,4vw,64px); width:max-content; padding:13px 0; animation:ticker 46s linear infinite;
+  font-size:12px; letter-spacing:.06em; color:var(--bone-dim); white-space:nowrap; }
+.ticker-in span{ display:inline-flex; align-items:center; gap:12px; }
+.ticker-in b{ font-family:'JetBrains Mono',monospace; font-weight:500; font-size:10px; letter-spacing:.2em; color:var(--coral); }
+.ticker:hover .ticker-in{ animation-play-state:paused; }
+@keyframes ticker{ from{ transform:translate3d(0,0,0) } to{ transform:translate3d(-50%,0,0) } }
+
+/* ---- the case list under the three live windows */
+.cases{ margin-top:clamp(26px,4vh,48px); border-top:1px solid var(--line-soft); }
+.crow{ position:relative; display:grid; grid-template-columns:44px minmax(0,1fr) minmax(0,.9fr) minmax(0,1.3fr) 30px; gap:clamp(12px,2vw,32px);
+  align-items:center; padding:clamp(16px,2vw,24px) 0; border-bottom:1px solid var(--line-soft); transition:padding .5s var(--ease-out); }
+.crow::before{ content:''; position:absolute; left:calc(var(--pad) * -1); right:0; top:0; bottom:0;
+  background:linear-gradient(90deg, rgba(34,230,255,.08), transparent 46%); opacity:0; transition:opacity .5s; pointer-events:none; }
+.crow:hover::before{ opacity:1; }
+.crow:hover{ padding-left:clamp(8px,1.2vw,18px); }
+.crow .no{ font-family:'Orbitron','Onest',sans-serif; font-size:15px; color:var(--coral); text-shadow:0 0 10px rgba(229,116,92,.5); }
+.crow .t{ font-size:clamp(14px,1.2vw,18px); font-weight:400; }
+.crow .m{ font-size:11px; letter-spacing:.1em; color:var(--muted); }
+.crow .r{ font-size:13px; color:var(--bone-dim); text-shadow:0 1px 16px rgba(4,3,12,.9); }
+.crow .arr{ text-align:right; color:var(--muted); transition:color .3s, transform .5s var(--ease-out); }
+.crow:hover .arr{ color:var(--neon); transform:translate3d(4px,0,0); }
+
+/* ---- three ways to work together */
+.engage{ display:grid; grid-template-columns:minmax(0,.9fr) repeat(3,minmax(0,1fr)); gap:1px; margin-top:clamp(28px,4vh,52px);
+  background:var(--line-soft); border:1px solid var(--line-soft); }
+.engage > div{ background:rgba(5,4,14,.82); padding:clamp(18px,2vw,28px); }
+.eg-h{ display:flex; flex-direction:column; gap:10px; justify-content:center; }
+.eg-h .k, .eg .k{ font-size:10px; letter-spacing:.22em; text-transform:uppercase; color:var(--muted); }
+.eg-h b{ font-size:clamp(18px,1.6vw,24px); font-weight:400; }
+.eg b{ display:block; font-size:clamp(15px,1.25vw,19px); font-weight:400; margin-bottom:8px; }
+.eg .k{ color:var(--neon-dim); display:block; margin-bottom:12px; }
+.eg p{ margin:0; font-size:13px; color:#8f9ab0; line-height:1.6; }
+
+/* ---- the engine: matrix, figures, pricing, process */
+.eng-grid{ display:grid; grid-template-columns:minmax(0,1.5fr) minmax(260px,.8fr); gap:clamp(16px,2.4vw,40px); align-items:stretch; }
+.matrix-wrap{ display:flex; flex-direction:column; gap:12px; padding:clamp(14px,1.6vw,22px); border:1px solid var(--line-soft); background:rgba(5,4,14,.72); position:relative; }
+.matrix-wrap::before, .matrix-wrap::after{ content:''; position:absolute; width:10px; height:10px; border:1px solid var(--neon); }
+.matrix-wrap::before{ left:-1px; top:-1px; border-right:0; border-bottom:0; }
+.matrix-wrap::after{ right:-1px; bottom:-1px; border-left:0; border-top:0; }
+.mx-cap, .mx-foot{ display:flex; justify-content:space-between; gap:12px; font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); }
+.mx-foot #mx-status{ color:var(--neon-dim); }
+.matrix{ display:grid; grid-template-columns:minmax(96px,1.2fr) repeat(5,minmax(0,1fr)); gap:5px; }
+.mx-h, .mx-r{ font-size:9.5px; letter-spacing:.12em; color:var(--bone-dim); display:flex; flex-direction:column; gap:3px; justify-content:flex-end; padding:6px 4px; }
+.mx-h b, .mx-r b{ font-weight:500; color:var(--coral); letter-spacing:.2em; }
+.mx-r{ justify-content:center; }
+.cell{ position:relative; display:grid; place-items:center; aspect-ratio:5/4; font-style:normal; font-size:10px; letter-spacing:.12em;
+  color:var(--muted); border:1px solid var(--line-soft); background:rgba(230,239,255,.02); transition:background .5s, color .5s, border-color .5s, box-shadow .5s; }
+.cell.lit{ color:var(--ink); background:var(--neon); border-color:var(--neon); box-shadow:0 0 14px rgba(34,230,255,.55), inset 0 0 10px rgba(255,255,255,.3); }
+.cell.was{ color:var(--neon); background:rgba(34,230,255,.10); border-color:rgba(34,230,255,.45); }
+.eng-stats{ display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--line-soft); border:1px solid var(--line-soft); }
+.eng-stats div{ background:rgba(5,4,14,.82); padding:clamp(16px,1.8vw,26px); display:flex; flex-direction:column; justify-content:flex-end; gap:10px; min-height:120px; }
+.eng-stats b{ font-family:'Orbitron','Onest',sans-serif; font-weight:500; font-size:clamp(20px,2vw,30px); letter-spacing:-.01em; color:var(--bone); font-variant-numeric:tabular-nums; }
+.eng-stats div:nth-child(odd) b{ color:var(--neon); text-shadow:0 0 16px rgba(34,230,255,.45); }
+.eng-stats div:nth-child(even) b{ color:var(--coral); text-shadow:0 0 16px rgba(229,116,92,.45); }
+.eng-stats span{ font-size:11px; line-height:1.5; color:#8f9ab0; }
+.pricing{ margin-top:clamp(26px,4vh,48px); }
+.pr-h{ display:flex; justify-content:space-between; gap:14px; flex-wrap:wrap; margin-bottom:12px; }
+.pr-h .k{ font-size:10px; letter-spacing:.22em; text-transform:uppercase; color:var(--muted); }
+.tiers{ display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:1px; background:var(--line-soft); border:1px solid var(--line-soft); }
+.tier{ position:relative; display:flex; flex-direction:column; gap:8px; padding:clamp(16px,1.8vw,26px); background:rgba(5,4,14,.84); transition:background .45s; overflow:hidden; }
+.tier::before{ content:''; position:absolute; inset:0; background:linear-gradient(160deg, rgba(34,230,255,.12), transparent 60%); opacity:0; transition:opacity .45s; }
+.tier:hover::before{ opacity:1; }
+.tier .k{ font-size:9.5px; letter-spacing:.22em; text-transform:uppercase; color:var(--muted); }
+.tier b{ font-size:clamp(15px,1.3vw,20px); font-weight:400; }
+.tier em{ font-style:normal; font-family:'Orbitron','Onest',sans-serif; font-weight:500; font-size:clamp(18px,1.7vw,26px); color:var(--bone); font-variant-numeric:tabular-nums; }
+.tier p{ margin:auto 0 0; font-size:12px; color:#8f9ab0; line-height:1.5; padding-top:10px; }
+.tier.is-rec{ outline:1px solid var(--coral); outline-offset:-1px; }
+.tier.is-rec .k{ color:var(--coral); }
+.tier.is-rec em{ color:var(--coral); text-shadow:0 0 14px rgba(229,116,92,.5); }
+.proc{ display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:clamp(8px,1vw,16px); margin-top:clamp(26px,4vh,48px); border-top:1px solid var(--line-soft); padding-top:18px; }
+.pc{ position:relative; display:flex; flex-direction:column; gap:6px; padding-right:10px; }
+.pc::after{ content:''; position:absolute; right:0; top:8px; width:calc(100% - 34px); height:1px; left:auto;
+  background:linear-gradient(90deg, transparent, var(--line)); }
+.pc:last-child::after{ display:none; }
+.pc .no{ font-family:'Orbitron','Onest',sans-serif; font-size:12px; color:var(--neon); text-shadow:0 0 10px rgba(34,230,255,.5); }
+.pc .who{ font-size:9.5px; letter-spacing:.22em; text-transform:uppercase; color:var(--coral); }
+.pc b{ font-size:13px; font-weight:400; }
+
+/* ---- contact: three steps beside the call to action */
+.steps{ display:grid; gap:10px; margin-top:22px; }
+.steps > div{ display:grid; grid-template-columns:28px auto 1fr; gap:12px; align-items:baseline; font-size:13px; }
+.steps .no{ font-size:10px; letter-spacing:.2em; color:var(--neon); }
+.steps b{ font-weight:400; color:var(--bone); }
+.steps span:last-child{ color:var(--muted); font-size:12px; }
+body[data-layout-closing="b"] .fin{ grid-template-rows:auto; align-items:center; }
+body[data-layout-closing="b"] .fin .fin-l{ grid-column:1; grid-row:1; display:flex; flex-direction:column; align-items:flex-start; gap:clamp(16px,2.6vh,30px); }
+body[data-layout-closing="b"] .fin .fin-l > *{ margin:0; }
+body[data-layout-closing="b"] .fin .steps{ margin-top:6px; }
+body[data-layout-closing="b"] .fin h2{ grid-column:2; grid-row:1; font-size:clamp(46px,5.4vw,80px); letter-spacing:.06em; }
+.fin h2{ text-transform:none; letter-spacing:.02em; line-height:1.1; }
+body[data-layout-closing="b"] .fin h2{ text-orientation:upright; }
+
+/* ---- footer */
+.foot-brand p .foot-en{ font-family:'JetBrains Mono',monospace; font-size:.5em; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); }
+.foot-note{ font-size:12px; color:#6f7a92; }
+.foot li a:hover{ color:var(--neon); }
+.foot-base{ font-family:'JetBrains Mono',monospace; letter-spacing:.1em; }
+
+@media (max-width:1080px){
+  .eng-grid{ grid-template-columns:1fr; }
+  .tiers{ grid-template-columns:repeat(3,minmax(0,1fr)); }
+  .proc{ grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px 12px; }
+  .engage{ grid-template-columns:1fr 1fr; }
+  .crow{ grid-template-columns:36px minmax(0,1fr) minmax(0,1.2fr) 24px; }
+  .crow .m{ display:none; }
+}
+@media (max-width:820px){
+  .tiers{ grid-template-columns:1fr 1fr; }
+  .engage{ grid-template-columns:1fr; }
+  .matrix{ grid-template-columns:minmax(64px,.9fr) repeat(5,minmax(0,1fr)); gap:3px; }
+  .mx-h, .mx-r{ font-size:8px; padding:4px 2px; }
+  .cell{ font-size:8px; }
+  .crow{ grid-template-columns:30px minmax(0,1fr) 20px; }
+  .crow .r{ grid-column:2; font-size:12px; }
+  .crow .arr{ grid-row:1 / 3; grid-column:3; }
+  .hero-en{ display:none; }
+  .fin h2{ font-size:clamp(30px,8vw,46px); }
+  body[data-layout-closing="b"] .fin h2{ grid-row:auto; font-size:clamp(28px,7.6vw,42px); letter-spacing:.02em; text-orientation:mixed; margin-bottom:22px; }
+  body[data-layout-closing="b"] .fin .fin-l{ align-items:center; text-align:center; }
+  body[data-layout-closing="b"] .fin .steps{ text-align:left; }
+  .steps > div{ grid-template-columns:24px 1fr; }
+  .steps span:last-child{ grid-column:2; }
+  #sweep{ display:none; }
+}
+@media (prefers-reduced-motion:reduce){
+  .ticker-in, #sweep, .hud-dot, .hero-top .eyebrow .dot{ animation:none; }
+  .display.rv-in, .rv-in .display{ animation:none; }
+}
+
 </style>
 </head>
 <body data-layout-hero="b" data-layout-story="b" data-layout-gallery="b"
@@ -888,6 +1131,8 @@ body[data-layout-footer="b"] .foot-base span:last-child{ text-align:right; }
 
 <canvas id="gl" aria-hidden="true"></canvas>
 <div id="vignette"></div>
+<div id="scan" aria-hidden="true"></div>
+<div id="sweep" aria-hidden="true"></div>
 <div id="grain"></div>
 <div class="cur-dot" id="cursor"></div>
 
@@ -896,14 +1141,15 @@ body[data-layout-footer="b"] .foot-base span:last-child{ text-align:right; }
   <div class="pre-in">
     <div class="pre-mark">
       <svg viewBox="0 0 44 44" fill="none" aria-hidden="true">
-        <circle cx="22" cy="24" r="9.5" stroke="#e0231c" stroke-width="1.2"/>
-        <path d="M6 12h32M9.5 17h25M22 8v28" stroke="#dfe7e0" stroke-width="1.2"/>
+        <path d="M22 4l16 9v18l-16 9-16-9V13z" stroke="#22e6ff" stroke-width="1.3"/>
+        <path d="M15 27.5c0 3 3.2 5 7 5s7-2 7-5-3.2-3.8-7-4.6-7-1.8-7-4.6 3.2-5 7-5 7 2 7 5" stroke="#e6efff" stroke-width="1.5" stroke-linecap="round"/>
+        <circle cx="34" cy="10" r="2.2" fill="#e5745c"/>
       </svg>
     </div>
-    <div class="pre-jp jp">影の道</div>
+    <div class="pre-jp en">SIMPLES</div>
     <div class="pre-bar"><i id="pre-fill"></i></div>
     <div class="pre-meta">
-      <span>Raising the mountain temple</span><b><span id="pre-pct">0</span>%</b>
+      <span>Initializing growth engine</span><b><span id="pre-pct">0</span>%</b>
     </div>
   </div>
 </div>
@@ -912,17 +1158,18 @@ body[data-layout-footer="b"] .foot-base span:last-child{ text-align:right; }
 <header class="nav" id="nav">
   <a class="brand" href="#top" data-cursor>
     <svg viewBox="0 0 44 44" fill="none" aria-hidden="true">
-      <circle cx="22" cy="25" r="8.6" fill="#e0231c" fill-opacity=".9"/>
-      <path d="M5 13h34M9 18.4h26M22 8.5v27" stroke="#dfe7e0" stroke-width="1.5"/>
-      <path d="M14 35.5h16" stroke="#dfe7e0" stroke-width="1.2" stroke-opacity=".6"/>
+      <path d="M22 4l16 9v18l-16 9-16-9V13z" stroke="#22e6ff" stroke-width="1.5"/>
+      <path d="M15 27.5c0 3 3.2 5 7 5s7-2 7-5-3.2-3.8-7-4.6-7-1.8-7-4.6 3.2-5 7-5 7 2 7 5" stroke="#e6efff" stroke-width="1.6" stroke-linecap="round"/>
+      <circle cx="34" cy="10" r="2.4" fill="#e5745c"/>
     </svg>
-    <span class="brand-tx"><b>KAGE</b><i>HIDDEN REALMS OF KYOTO</i></span>
+    <span class="brand-tx"><b>SIMPLES</b><i>簡單行銷 · GROWTH INTELLIGENCE STUDIO</i></span>
   </a>
   <nav class="nav-links" id="navlinks">
-    <a class="nav-link" href="#gate" data-cursor><span>Temples</span><span class="alt">伽藍</span></a>
-    <a class="nav-link" href="#pathways" data-cursor><span>Gardens</span><span class="alt">庭園</span></a>
-    <a class="nav-link" href="#lessons" data-cursor><span>Rituals</span><span class="alt">神事</span></a>
-    <a class="nav-link" href="#eternity" data-cursor><span>Afterlight</span><span class="alt">残光</span></a>
+    <a class="nav-link" href="#about" data-cursor><span>我們怎麼想</span><span class="alt">About</span></a>
+    <a class="nav-link" href="#work" data-cursor><span>案例</span><span class="alt">Work</span></a>
+    <a class="nav-link" href="#services" data-cursor><span>服務</span><span class="alt">Services</span></a>
+    <a class="nav-link" href="#engine" data-cursor><span>素材引擎</span><span class="alt">Engine</span></a>
+    <a class="nav-link" href="#contact" data-cursor><span>聯絡</span><span class="alt">Contact</span></a>
   </nav>
   <button class="nav-burger" aria-label="Menu" data-cursor><i></i><i></i></button>
 </header>
@@ -932,50 +1179,53 @@ body[data-layout-footer="b"] .foot-base span:last-child{ text-align:right; }
 <!-- ============================================================ hero -->
 <section class="hero" id="hero" data-cam="0">
   <div class="hero-top">
-    <div class="eyebrow" data-rv="fade"><span class="dot"></span> Chapter 00 — The Hidden Gate</div>
+    <div class="eyebrow" data-rv="fade"><span class="dot"></span> Simples · Growth Intelligence Studio · Taipei</div>
     <h1 class="display h-hero">
-      <span class="mask-line"><span>Where stillness</span></span>
-      <span class="mask-line"><span>reveals the</span></span>
-      <span class="mask-line"><span>unseen.</span></span>
+      <span class="mask-line"><span>讓每個好點子</span></span>
+      <span class="mask-line"><span>都可以落地。</span></span>
     </h1>
-    <p class="hero-sub body" data-rv="up">Enter Kyoto through its quiet thresholds, where ritual,
-      craft, and memory shape the path.</p>
+    <p class="hero-sub body" data-rv="up">用 AI 與系統思維做行銷的顧問公司。不賣曝光，不談流量，把「為什麼客戶會買」變成可以被理解、被複製、被放大的系統。</p>
+    <p class="hero-en eyebrow" data-rv="fade">Every good idea deserves to land.</p>
   </div>
 
   <div class="hero-spacer"></div>
 
   <div class="hero-foot">
-    <div class="hero-cue" data-rv="fade"><span>Scroll to enter</span><span class="track"><i></i></span></div>
+    <div class="hero-cue" data-rv="fade"><span>向下捲動 · Scroll</span><span class="track"><i></i></span></div>
     <div class="chapters" id="chips">
-      <div class="chip" data-chip="0" data-rv="up" data-cursor><span class="num">01</span>
-        <span class="tx"><b>Thresholds</b><p>Discover the hidden gates that open on to deeper paths.</p></span></div>
-      <div class="chip" data-chip="1" data-rv="up" data-cursor><span class="num">02</span>
-        <span class="tx"><b>Still Gardens</b><p>Witness the courts where silence gently unfolds.</p></span></div>
-      <div class="chip" data-chip="2" data-rv="up" data-cursor><span class="num">03</span>
-        <span class="tx"><b>Sacred Craft</b><p>Embrace the hands and heritage that shape devotion.</p></span></div>
-      <div class="chip" data-chip="3" data-rv="up" data-cursor><span class="num">04</span>
-        <span class="tx"><b>Night Rituals</b><p>Explore the rites that awaken when the day is done.</p></span></div>
+      <a class="chip" href="#about" data-chip="0" data-rv="up" data-cursor><span class="num">01</span>
+        <span class="tx"><b>我們怎麼想</b><p>理解先於行動，系統勝過技巧。</p></span></a>
+      <a class="chip" href="#work" data-chip="1" data-rv="up" data-cursor><span class="num">02</span>
+        <span class="tx"><b>案例</b><p>四個公開案例，數字都可以驗證。</p></span></a>
+      <a class="chip" href="#services" data-chip="2" data-rv="up" data-cursor><span class="num">03</span>
+        <span class="tx"><b>服務</b><p>策略、搜尋、投放、聲量、AI 部署。</p></span></a>
+      <a class="chip" href="#engine" data-chip="3" data-rv="up" data-cursor><span class="num">04</span>
+        <span class="tx"><b>素材引擎</b><p>一組廣告素材 $350 起，48 小時交付。</p></span></a>
     </div>
   </div>
 
-  <a class="peek" href="#pathways" data-view="3" data-rv="fade" data-cursor aria-label="Preview: Sanmon, before the bell">
-    <!-- data-frame, or the live view is blitted over the whole anchor and
-         runs on down behind the caption instead of stopping at the frame -->
+  <a class="peek" href="#engine" data-view="3" data-rv="fade" data-cursor aria-label="預覽：AI 素材引擎">
     <span class="peek-fr" data-frame></span>
-    <span class="peek-play"><svg viewBox="0 0 22 22" fill="none"><path d="M8 5.6 16.4 11 8 16.4z" fill="#dfe7e0"/></svg></span>
-    <span class="peek-cap"><b class="jp">山門</b><i>Sanmon — before the bell</i></span>
+    <span class="peek-play"><svg viewBox="0 0 22 22" fill="none"><path d="M8 5.6 16.4 11 8 16.4z" fill="#e6efff"/></svg></span>
+    <span class="peek-cap"><b class="jp">48H</b><i>AI 素材引擎 — $350 起</i></span>
   </a>
 
-  <div class="word-fb" aria-hidden="true">KAGE</div>
+  <div class="word-fb en" aria-hidden="true">SIMPLES</div>
 
   <div class="hero-side" data-rv="up">
-    <span class="v jp">影の道</span>
+    <span class="v jp">簡單行銷</span>
+  </div>
+
+  <div class="hud" data-rv="fade" aria-hidden="true">
+    <span class="hud-k">SYS</span><span class="hud-v"><i class="hud-dot"></i>ONLINE</span>
+    <span class="hud-k">LOC</span><span class="hud-v">TAIPEI 25.0629° N, 121.5237° E</span>
+    <span class="hud-k">TIME</span><span class="hud-v" id="hud-time">--:--:-- GMT+8</span>
+    <span class="hud-k">NET</span><span class="hud-v">TPE · TYO · SGN</span>
   </div>
 </section>
 
-<!-- ============================================================ chapter I -->
-<section class="sec" id="gate" data-cam="1">
-  <!-- foreground: the wall arrives first, the pine at the edge, the grass last -->
+<!-- ============================================================ 01 · about -->
+<section class="sec" id="about" data-cam="1">
   <div class="fg" data-fg="gate" aria-hidden="true">
     <span class="fg-el fg-wall" data-fg-in="left">
       <img src="secret-pathways-assets/foreground/png/temple-wall.webp" alt="" width="1536" height="884" loading="lazy" decoding="async">
@@ -988,35 +1238,35 @@ body[data-layout-footer="b"] .foot-base span:last-child{ text-align:right; }
     </span>
   </div>
   <div class="sec-head" data-rv="fade">
-    <span class="k"><b>01</b> — The Sanmon</span><span class="rule"></span><span class="k jp">山門</span>
+    <span class="k"><b>01</b> — 我們怎麼想</span><span class="rule"></span><span class="k">Philosophy</span>
   </div>
   <div class="gate-grid">
-    <h2 class="display h-sec" data-rv="up">Charred cypress, worn stone, one gate left open.</h2>
+    <h2 class="display h-sec" data-rv="up">不賣曝光，不談流量，只做一件事。</h2>
     <div class="gate-copy">
-      <p class="lead" data-rv="up">Kage begins where the city stops: a mountain gate of cedar burned black,
-        standing in its own weather. The soot is not decoration. It is how a board is taught to survive a
-        hundred rainy seasons, and the first thing this place asks you to understand.</p>
-      <p class="body" data-rv="up">Climb the worn steps and the worship hall lifts out of the mist, its paper
-        screens lit from inside like a lantern the size of a house. Above the eaves a vermilion moon holds
-        its place, patient, half hidden. Nothing here is in a hurry. Neither, for the next ninety minutes,
-        are you.</p>
-      <a class="arrowlink" href="#pathways" data-rv="fade" data-cursor>
-        <span>Cross the threshold</span>
-        <span class="ar"><svg viewBox="0 0 14 14" fill="none"><path d="M3 11 11 3M5 3h6v6" stroke="#dfe7e0" stroke-width="1.3"/></svg></span>
+      <p class="lead" data-rv="up">Simples，拉丁文，意思是「單一的、不摻雜的」。這是我們對行銷的全部主張——去掉不必要的東西，留下真正驅動增長的那一件事：把「為什麼客戶會買」變成可以被理解、被複製、被放大的系統。</p>
+      <p class="body" data-rv="up">行銷工具每年都在換，但「人為什麼買」這件事幾千年沒變。我們把每個專案的前兩週花在理解上：客戶是誰、他在什麼情境下需要你、他為什麼選別人。答不出來，就不投錢。一次成功的廣告是技巧，一套持續產出成功廣告的流程是系統——我們交付的是後者。AI 讓我們能同時測試 50 個素材切角、把三個月的分析壓成三天，但它放大的是判斷；判斷錯了，只會錯得更快。所以我們花更多時間在判斷上。</p>
+      <a class="arrowlink" href="#services" data-rv="fade" data-cursor>
+        <span>看我們的服務</span>
+        <span class="ar"><svg viewBox="0 0 14 14" fill="none"><path d="M3 11 11 3M5 3h6v6" stroke="#e6efff" stroke-width="1.3"/></svg></span>
       </a>
     </div>
   </div>
   <div class="gate-stats" data-rv="up">
-    <div><b>05</b><span>Chapters</span></div>
-    <div><b>92</b><span>Minutes</span></div>
-    <div><b>1611</b><span>Hall raised</span></div>
-    <div><b>∞</b><span>Stillness</span></div>
+    <div><b>2020</b><span>成立於台北 · Founded</span></div>
+    <div><b>3</b><span>個市場 · 台灣、日本、東南亞</span></div>
+    <div><b>50 億+</b><span>目前所有客戶的年營業額</span></div>
+    <div><b>6</b><span>個產業 · 零售、醫療、旅遊、餐飲、電商、B2B</span></div>
+  </div>
+  <div class="ticker" data-rv="fade" aria-label="六條原則">
+    <div class="ticker-in">
+      <span><b>01</b>每個數字都要有脈絡。</span><span><b>02</b>不做我們不會自己買的東西。</span><span><b>03</b>先小規模驗證，再談規模。</span><span><b>04</b>報告要能看懂，不是要看起來厲害。</span><span><b>05</b>平台規則是底線，不是障礙。</span><span><b>06</b>交接的那天，客戶應該比我們更懂自己的數據。</span>
+      <span><b>01</b>每個數字都要有脈絡。</span><span><b>02</b>不做我們不會自己買的東西。</span><span><b>03</b>先小規模驗證，再談規模。</span><span><b>04</b>報告要能看懂，不是要看起來厲害。</span><span><b>05</b>平台規則是底線，不是障礙。</span><span><b>06</b>交接的那天，客戶應該比我們更懂自己的數據。</span>
+    </div>
   </div>
 </section>
 
-<!-- ============================================================ chapter II -->
-<section class="sec" id="pathways" data-cam="2">
-  <!-- foreground: the garden frames the mosaic from the sides and the two lower corners -->
+<!-- ============================================================ 02 · work -->
+<section class="sec" id="work" data-cam="2">
   <div class="fg" data-fg="pathways" aria-hidden="true">
     <span class="fg-el fg-sakura fg-el--sway" data-fg-in="left">
       <img src="secret-pathways-assets/foreground/png/sakura-branch.webp" alt="" width="1536" height="1024" loading="lazy" decoding="async">
@@ -1032,39 +1282,56 @@ body[data-layout-footer="b"] .foot-base span:last-child{ text-align:right; }
     </span>
   </div>
   <div class="sec-head" data-rv="fade">
-    <span class="k"><b>02</b> — Still Gardens</span><span class="rule"></span><span class="k jp">庭園</span>
+    <span class="k"><b>02</b> — 案例</span><span class="rule"></span><span class="k">Work</span>
+  </div>
+  <div class="cur-head">
+    <h2 class="display h-sec" data-rv="up">數字會說話，但脈絡才是重點。</h2>
+    <p class="body-lg" data-rv="up">每個案例都寫清楚：一開始卡在哪、我們做了什麼、為什麼有效。沒有 logo 牆，沒有無法驗證的數字。</p>
   </div>
   <div class="cards" id="cards">
     <article class="card" data-rv="up" data-view="0" data-cursor>
       <div class="card-fr" data-frame>
-                <span class="card-ar"><svg viewBox="0 0 14 14" fill="none"><path d="M3 11 11 3M5 3h6v6" stroke="#dfe7e0" stroke-width="1.3"/></svg></span>
-        <i class="glow" style="--gx:80.2%; --gy:23.9%; --gr:22%; --gt:6.1s; --gt2:9.7s; --gc1:rgba(255,142,108,.50); --gc2:rgba(212,56,38,.24)"></i>
-        <div class="card-lab"><b>Approach</b><span class="jp">参道</span></div>
+        <span class="card-ar"><svg viewBox="0 0 14 14" fill="none"><path d="M3 11 11 3M5 3h6v6" stroke="#e6efff" stroke-width="1.3"/></svg></span>
+        <i class="glow" style="--gx:80.2%; --gy:23.9%; --gr:22%; --gt:6.1s; --gt2:9.7s; --gc1:rgba(255,150,110,.50); --gc2:rgba(229,116,92,.24)"></i>
+        <div class="card-lab"><b>單月活動導入線下營收 5 億</b><span class="jp">A · 零售 · O2O</span></div>
       </div>
-      <div class="card-meta"><span>The long climb</span><span>01 / 03</span></div>
+      <div class="card-meta"><span>大型連鎖零售集團</span><span>01 / 04</span></div>
     </article>
     <article class="card" data-rv="up" data-view="1" data-cursor>
       <div class="card-fr" data-frame>
-                <span class="card-ar"><svg viewBox="0 0 14 14" fill="none"><path d="M3 11 11 3M5 3h6v6" stroke="#dfe7e0" stroke-width="1.3"/></svg></span>
-        <i class="glow glow--flame" style="--gx:70.5%; --gy:47.2%; --gr:14%; --gt:3.7s; --gt2:5.3s; --gc1:rgba(255,198,124,.62); --gc2:rgba(226,118,40,.30)"></i>
-        <div class="card-lab"><b>Lanterns</b><span class="jp">灯籠</span></div>
+        <span class="card-ar"><svg viewBox="0 0 14 14" fill="none"><path d="M3 11 11 3M5 3h6v6" stroke="#e6efff" stroke-width="1.3"/></svg></span>
+        <i class="glow glow--flame" style="--gx:70.5%; --gy:47.2%; --gr:14%; --gt:3.7s; --gt2:5.3s; --gc1:rgba(140,240,255,.62); --gc2:rgba(34,200,230,.30)"></i>
+        <div class="card-lab"><b>全球客源 +300%</b><span class="jp">B · 旅遊 · 米其林推薦</span></div>
       </div>
-      <div class="card-meta"><span>Lantern court</span><span>02 / 03</span></div>
+      <div class="card-meta"><span>國際渡假飯店集團</span><span>02 / 04</span></div>
     </article>
     <article class="card" data-rv="up" data-view="2" data-cursor>
       <div class="card-fr" data-frame>
-                <span class="card-ar"><svg viewBox="0 0 14 14" fill="none"><path d="M3 11 11 3M5 3h6v6" stroke="#dfe7e0" stroke-width="1.3"/></svg></span>
-        <i class="glow" style="--gx:48.0%; --gy:16.8%; --gr:20%; --gt:7.3s; --gt2:11.2s; --gc1:rgba(255,138,104,.52); --gc2:rgba(208,54,36,.24)"></i>
-        <div class="card-lab"><b>Moonwater</b><span class="jp">月影</span></div>
+        <span class="card-ar"><svg viewBox="0 0 14 14" fill="none"><path d="M3 11 11 3M5 3h6v6" stroke="#e6efff" stroke-width="1.3"/></svg></span>
+        <i class="glow" style="--gx:48.0%; --gy:16.8%; --gr:20%; --gt:7.3s; --gt2:11.2s; --gc1:rgba(255,150,110,.52); --gc2:rgba(229,116,92,.24)"></i>
+        <div class="card-lab"><b>25+ 據點，年營收 8 億+</b><span class="jp">C · 醫療 · 私訊轉換</span></div>
       </div>
-      <div class="card-meta"><span>The wet court</span><span>03 / 03</span></div>
+      <div class="card-meta"><span>台灣連鎖診所品牌</span><span>03 / 04</span></div>
     </article>
+  </div>
+  <div class="cases" data-rv="up">
+    <a class="crow" href="https://simples.com.tw/work/" data-cursor>
+      <span class="no">A</span><span class="t">大型連鎖零售集團</span><span class="m">零售 · O2O 整合</span><span class="r">單月活動導入線下營收 5 億</span><span class="arr">→</span>
+    </a>
+    <a class="crow" href="https://simples.com.tw/work/" data-cursor>
+      <span class="no">B</span><span class="t">國際渡假飯店集團</span><span class="m">旅遊 · 全球客源</span><span class="r">2025 米其林推薦飯店，全球客源 +300%</span><span class="arr">→</span>
+    </a>
+    <a class="crow" href="https://simples.com.tw/work/" data-cursor>
+      <span class="no">C</span><span class="t">台灣連鎖診所品牌</span><span class="m">醫療 · 私訊轉換系統</span><span class="r">25+ 據點，年營收 8 億+</span><span class="arr">→</span>
+    </a>
+    <a class="crow" href="https://simples.com.tw/work/" data-cursor>
+      <span class="no">D</span><span class="t">亞洲包車旅遊平台</span><span class="m">旅遊 · 廣告規模化</span><span class="r">年營收 9,000 萬+，ROAS 24×</span><span class="arr">→</span>
+    </a>
   </div>
 </section>
 
-<!-- ============================================================ chapter III -->
-<section class="sec" id="lessons" data-cam="3">
-  <!-- foreground: a low periphery for the atlas — wall fragment, basalt, one stand of grass -->
+<!-- ============================================================ 03 · services -->
+<section class="sec" id="services" data-cam="3">
   <div class="fg" data-fg="lessons" aria-hidden="true">
     <span class="fg-el fg-wall fg-el--flip" data-fg-in="right">
       <img src="secret-pathways-assets/foreground/png/temple-wall.webp" alt="" width="1536" height="884" loading="lazy" decoding="async">
@@ -1077,50 +1344,113 @@ body[data-layout-footer="b"] .foot-base span:last-child{ text-align:right; }
     </span>
   </div>
   <div class="sec-head" data-rv="fade">
-    <span class="k"><b>03</b> — Sacred Craft</span><span class="rule"></span><span class="k jp">手業</span>
+    <span class="k"><b>03</b> — 服務</span><span class="rule"></span><span class="k">Services</span>
   </div>
   <div class="cur-head">
-    <h2 class="display h-sec" data-rv="up">Five chapters. Ninety minutes. One quiet mind.</h2>
-    <p class="body-lg" data-rv="up">Each chapter is a walk, not a lecture. You arrive at the gate, climb the
-      steps, sit with the lantern, and leave with one thing worth keeping.</p>
+    <h2 class="display h-sec" data-rv="up">五個服務，一套系統。</h2>
+    <p class="body-lg" data-rv="up">每個服務都可以單獨合作，但它們是為了彼此設計的——策略決定投什麼，投放產生數據，數據餵給 AI，AI 回頭修正策略。</p>
   </div>
   <div class="cur" id="cur">
-    <div class="les" data-les="0" data-cursor>
-      <span class="k">01</span>
-      <h3>The Hidden Gate<em class="jp">山門</em></h3>
-      <p>Why a gate is a sentence, and what you agree to when you walk under one.</p>
-      <span class="t">14 min</span><i class="bar"></i>
-    </div>
-    <div class="les" data-les="1" data-cursor>
-      <span class="k">02</span>
-      <h3>Borrowed Scenery<em class="jp">借景</em></h3>
-      <p>Shakkei: composing with a mountain you will never own.</p>
-      <span class="t">18 min</span><i class="bar"></i>
-    </div>
-    <div class="les" data-les="2" data-cursor>
-      <span class="k">03</span>
-      <h3>Charred Cypress<em class="jp">焼杉</em></h3>
-      <p>Yakisugi: burning a board black so the weather will let it live.</p>
-      <span class="t">21 min</span><i class="bar"></i>
-    </div>
-    <div class="les" data-les="3" data-cursor>
-      <span class="k">04</span>
-      <h3>Lantern Light<em class="jp">灯籠</em></h3>
-      <p>How a single ember decides the scale of everything around it.</p>
-      <span class="t">17 min</span><i class="bar"></i>
-    </div>
-    <div class="les" data-les="4" data-cursor>
-      <span class="k">05</span>
-      <h3>The Vermilion Moon<em class="jp">朱月</em></h3>
-      <p>Why the moon burns red over the valley, and what the garden does with it.</p>
-      <span class="t">22 min</span><i class="bar"></i>
-    </div>
+    <a class="les" href="https://simples.com.tw/services/strategy/" data-les="0" data-cursor>
+      <span class="k">01 · Strategy</span>
+      <h3>增長策略顧問<em>GROWTH</em></h3>
+      <p>從商業模式出發，設計整條獲客到變現的路徑。你會得到增長診斷報告、12 個月路線圖、每月顧問會議、帳戶健檢。</p>
+      <span class="t">適合：沒有行銷部門的中小企業、準備擴張的品牌、需要數位轉型的傳統產業</span><i class="bar"></i>
+    </a>
+    <a class="les" href="https://simples.com.tw/services/digital-asset/" data-les="1" data-cursor>
+      <span class="k">02 · SEO / GEO</span>
+      <h3>數位資產與搜尋<em>SEARCH</em></h3>
+      <p>讓品牌在 Google 與 AI 搜尋裡被找到、被推薦。官網建置或優化、關鍵字架構、內容策略、GEO 佈局、月報。</p>
+      <span class="t">適合：靠搜尋獲客的服務業、想在 ChatGPT / Gemini 裡被推薦的公司</span><i class="bar"></i>
+    </a>
+    <a class="les" href="https://simples.com.tw/services/media/" data-les="2" data-cursor>
+      <span class="k">03 · Media</span>
+      <h3>廣告投放與 AI 素材<em>MEDIA</em></h3>
+      <p>Meta / Google / TikTok / LINE 投放 + AI 素材生產線。帳戶架構、受眾策略、素材產線、週報與優化建議。</p>
+      <span class="t">適合：有明確轉換目標的電商、連鎖、旅遊、醫療品牌</span><i class="bar"></i>
+    </a>
+    <a class="les" href="https://simples.com.tw/services/reputation/" data-les="3" data-cursor>
+      <span class="k">04 · Reputation</span>
+      <h3>品牌聲量與社群公關<em>VOICE</em></h3>
+      <p>監測、理解、回應——用真實內容建立可信的品牌敘事。聲量監測儀表板、內容與社群策略、KOL 合作、危機應對手冊。</p>
+      <span class="t">適合：有公開評價壓力的連鎖品牌、需要危機準備的企業</span><i class="bar"></i>
+    </a>
+    <a class="les" href="https://simples.com.tw/services/ai/" data-les="4" data-cursor>
+      <span class="k">05 · AI Deployment</span>
+      <h3>AI 企業部署<em>DEPLOY</em></h3>
+      <p>把營運數據接上 AI，決策有依據、重複工作自動化。數據盤點、AI 工作流設計、MiroSwarm 部署、內部訓練。</p>
+      <span class="t">適合：有數據但沒人分析的企業、想導入 AI 但不知從哪開始的公司</span><i class="bar"></i>
+    </a>
+  </div>
+  <div class="engage" data-rv="up">
+    <div class="eg-h"><span class="k">Engagement</span><b>三種合作方式</b></div>
+    <div class="eg"><b>外包行銷部門</b><span class="k">月費制</span><p>你沒有行銷團隊，我們就是。</p></div>
+    <div class="eg"><b>增長陪跑</b><span class="k">月費 + 績效</span><p>你有團隊，我們補策略與技術。</p></div>
+    <div class="eg"><b>專案</b><span class="k">一次性</span><p>網站、AI 部署、素材包。</p></div>
   </div>
 </section>
 
-<!-- ============================================================ chapter IV -->
-<section class="sec fin" id="eternity" data-cam="4">
-  <!-- foreground: the closing horizon: hill, ruins, grass, and the last branch -->
+<!-- ============================================================ 04 · engine -->
+<section class="sec" id="engine" data-cam="4">
+  <div class="fg" data-fg="engine" aria-hidden="true">
+    <span class="fg-el fg-stones" data-fg-in="up">
+      <img src="secret-pathways-assets/foreground/png/basalt-stones.webp" alt="" width="1536" height="996" loading="lazy" decoding="async">
+    </span>
+    <span class="fg-el fg-bush" data-fg-in="right">
+      <img src="secret-pathways-assets/foreground/png/garden-bush.webp" alt="" width="1717" height="876" loading="lazy" decoding="async">
+    </span>
+  </div>
+  <div class="sec-head" data-rv="fade">
+    <span class="k"><b>04</b> — AI 素材引擎</span><span class="rule"></span><span class="k">Creative Engine</span>
+  </div>
+  <div class="cur-head">
+    <h2 class="display h-sec" data-rv="up">一組廣告素材，<span class="hl">$350</span> 起。</h2>
+    <p class="body-lg" data-rv="up">我們建了一條 AI 素材生產線——多切角、多版本、全通路格式，48 小時交付。給演算法夠多東西測，給你的團隊時間做判斷。Meta 與 TikTok 的演算法用素材做受眾探索，素材越多、切角越廣，系統找到對的人的機會越大。</p>
+  </div>
+  <div class="eng-grid">
+    <div class="matrix-wrap" data-rv="up">
+      <div class="mx-cap"><span class="k">5 angles × 3 versions</span><span class="k">= 15 組起</span></div>
+      <div class="matrix" id="matrix" role="img" aria-label="五個切角乘以三個版本，十五組素材">
+        <span class="mx-h"></span>
+        <span class="mx-h"><b>A1</b>痛點</span><span class="mx-h"><b>A2</b>利益</span><span class="mx-h"><b>A3</b>社會證明</span><span class="mx-h"><b>A4</b>比較</span><span class="mx-h"><b>A5</b>促銷</span>
+        <span class="mx-r"><b>V1</b>視覺 A · 文案 A</span>
+        <i class="cell">1:1</i><i class="cell">4:5</i><i class="cell">9:16</i><i class="cell">16:9</i><i class="cell">1:1</i>
+        <span class="mx-r"><b>V2</b>視覺 B · 文案 A</span>
+        <i class="cell">4:5</i><i class="cell">9:16</i><i class="cell">16:9</i><i class="cell">1:1</i><i class="cell">1:1</i>
+        <span class="mx-r"><b>V3</b>視覺 A · 文案 B</span>
+        <i class="cell">9:16</i><i class="cell">16:9</i><i class="cell">1:1</i><i class="cell">1:1</i><i class="cell">4:5</i>
+      </div>
+      <div class="mx-foot k"><span id="mx-status">ENGINE · IDLE</span><span>Meta / TikTok / Google / LINE 尺寸一次到位</span></div>
+    </div>
+    <div class="eng-stats" data-rv="up">
+      <div><b>−12–20%</b><span>CPA 平均下降 · 素材數量翻倍後</span></div>
+      <div><b>+35%</b><span>ROAS 平均提升 · 同一組客戶，年度</span></div>
+      <div><b>48H</b><span>從品牌規範確認起算的交付時間</span></div>
+      <div><b>15 組起</b><span>每個切角 3–5 個視覺與文案變體</span></div>
+    </div>
+  </div>
+  <div class="pricing" data-rv="up">
+    <div class="pr-h"><span class="k">Pricing · 五個方案</span><span class="k">價格為美金 · 可只買素材不投放 · 交付後版權歸客戶</span></div>
+    <div class="tiers">
+      <a class="tier" href="https://simples.com.tw/contact/" data-cursor><span class="k">Starter</span><b>入門</b><em>$2,000</em><p>小量測試包</p></a>
+      <a class="tier" href="https://simples.com.tw/contact/" data-cursor><span class="k">Standard</span><b>標準</b><em>$4,000</em><p>常規月度需求</p></a>
+      <a class="tier is-rec" href="https://simples.com.tw/contact/" data-cursor><span class="k">Recommended</span><b>專業</b><em>$7,500</em><p>多切角多版本，推薦</p></a>
+      <a class="tier" href="https://simples.com.tw/contact/" data-cursor><span class="k">Flagship</span><b>旗艦</b><em>$12,000</em><p>含影片與全通路</p></a>
+      <a class="tier" href="https://simples.com.tw/contact/" data-cursor><span class="k">Volume</span><b>大宗</b><em>$18,500</em><p>高頻投放品牌</p></a>
+    </div>
+  </div>
+  <div class="proc" data-rv="up">
+    <div class="pc"><span class="no">01</span><span class="who">You</span><b>提交需求</b></div>
+    <div class="pc"><span class="no">02</span><span class="who">Both</span><b>品牌規範確認</b></div>
+    <div class="pc"><span class="no">03</span><span class="who">Engine</span><b>AI 生產</b></div>
+    <div class="pc"><span class="no">04</span><span class="who">Simples</span><b>人工審核</b></div>
+    <div class="pc"><span class="no">05</span><span class="who">48H</span><b>交付</b></div>
+    <div class="pc"><span class="no">06</span><span class="who">Loop</span><b>投放回饋</b></div>
+  </div>
+</section>
+
+<!-- ============================================================ 05 · contact -->
+<section class="sec fin" id="contact" data-cam="5">
   <div class="fg" data-fg="eternity" aria-hidden="true">
     <span class="fg-el fg-hill" data-fg-in="up">
       <img src="secret-pathways-assets/foreground/png/hill.webp" alt="" width="1774" height="887" loading="lazy" decoding="async">
@@ -1135,19 +1465,24 @@ body[data-layout-footer="b"] .foot-base span:last-child{ text-align:right; }
       <img src="secret-pathways-assets/foreground/png/sakura-branch.webp" alt="" width="1536" height="1024" loading="lazy" decoding="async">
     </span>
   </div>
-  <div class="eyebrow" data-rv="fade">Chapter 04 — Afterlight</div>
-  <h2 class="display" data-rv="up">Afterlight</h2>
-  <p class="body-lg" data-rv="up">The gate does not close behind you. Take the walk whenever the noise
-    gets loud — it is always the same path, and never the same light.</p>
-  <a class="cta" href="#top" data-rv="fade" data-cursor>
-    <i></i><span>Begin the walk</span>
-    <svg viewBox="0 0 14 14" fill="none" width="13" height="13"><path d="M3 11 11 3M5 3h6v6" stroke="#dfe7e0" stroke-width="1.3"/></svg>
+  <h2 class="display" data-rv="up">先聊聊你的生意。</h2>
+  <div class="fin-l">
+  <div class="eyebrow" data-rv="fade">05 — 聯絡 · Contact</div>
+  <p class="body-lg" data-rv="up">30 分鐘，我們只問問題，不推方案。聊完你會更清楚下一步該做什麼——不管有沒有跟我們合作。線上或到玉門街，一個工作天內回信。</p>
+  <div class="steps" data-rv="up">
+    <div><span class="no">01</span><b>填表單</b><span>兩分鐘，告訴我們你最想解決的問題。</span></div>
+    <div><span class="no">02</span><b>我們回信約時間</b><span>一個工作天內。</span></div>
+    <div><span class="no">03</span><b>30 分鐘對話</b><span>只問問題，不推方案。</span></div>
+  </div>
+  <a class="cta" href="https://simples.com.tw/contact/" data-rv="fade" data-cursor>
+    <i></i><span>預約 30 分鐘對話</span>
+    <svg viewBox="0 0 14 14" fill="none" width="13" height="13"><path d="M3 11 11 3M5 3h6v6" stroke="#e6efff" stroke-width="1.3"/></svg>
   </a>
+  </div>
 </section>
 
 <!-- ============================================================ footer -->
-<footer class="foot" data-cam="5">
-  <!-- foreground: one planting along the lower edge of the colophon -->
+<footer class="foot" data-cam="6">
   <div class="fg" data-fg="foot" aria-hidden="true">
     <span class="fg-el fg-bush" data-fg-in="up">
       <img src="secret-pathways-assets/foreground/png/garden-bush.webp" alt="" width="1717" height="876" loading="lazy" decoding="async">
@@ -1162,42 +1497,43 @@ body[data-layout-footer="b"] .foot-base span:last-child{ text-align:right; }
   <div class="foot-grid">
     <div class="foot-brand">
       <svg viewBox="0 0 44 44" fill="none" width="34" height="34" aria-hidden="true">
-        <circle cx="22" cy="25" r="8.6" fill="#e0231c" fill-opacity=".9"/>
-        <path d="M5 13h34M9 18.4h26M22 8.5v27" stroke="#dfe7e0" stroke-width="1.5"/>
+        <path d="M22 4l16 9v18l-16 9-16-9V13z" stroke="#22e6ff" stroke-width="1.5"/>
+        <path d="M15 27.5c0 3 3.2 5 7 5s7-2 7-5-3.2-3.8-7-4.6-7-1.8-7-4.6 3.2-5 7-5 7 2 7 5" stroke="#e6efff" stroke-width="1.6" stroke-linecap="round"/>
+        <circle cx="34" cy="10" r="2.4" fill="#e5745c"/>
       </svg>
-      <p>A five-chapter night walk through a Kyoto mountain temple. Three illustrated garden field notes
-        sit inside a live Three.js sanctuary.</p>
+      <p>讓每個好點子都可以落地。<br><span class="foot-en">Every good idea deserves to land.</span></p>
     </div>
-    <div><h4>Chapters</h4><ul>
-      <li><a href="#gate" data-cursor>The Sanmon</a></li>
-      <li><a href="#pathways" data-cursor>Still Gardens</a></li>
-      <li><a href="#lessons" data-cursor>Sacred Craft</a></li>
-      <li><a href="#eternity" data-cursor>Afterlight</a></li>
+    <div><h4>服務 · Services</h4><ul>
+      <li><a href="https://simples.com.tw/services/strategy/" data-cursor>增長策略顧問</a></li>
+      <li><a href="https://simples.com.tw/services/digital-asset/" data-cursor>數位資產與搜尋</a></li>
+      <li><a href="https://simples.com.tw/services/media/" data-cursor>廣告投放與 AI 素材</a></li>
+      <li><a href="https://simples.com.tw/services/reputation/" data-cursor>品牌聲量與社群公關</a></li>
+      <li><a href="https://simples.com.tw/services/ai/" data-cursor>AI 企業部署</a></li>
     </ul></div>
-    <div><h4>Practice</h4><ul>
-      <li><a href="#lessons" data-cursor>Borrowed scenery</a></li>
-      <li><a href="#lessons" data-cursor>Lantern light</a></li>
-      <li><a href="#lessons" data-cursor>Charred cypress</a></li>
-      <li><a href="#lessons" data-cursor>Raked gravel</a></li>
+    <div><h4>探索 · Explore</h4><ul>
+      <li><a href="https://simples.com.tw/work/" data-cursor>案例</a></li>
+      <li><a href="https://simples.com.tw/engine/" data-cursor>AI 素材引擎</a></li>
+      <li><a href="https://simples.com.tw/insights/" data-cursor>洞察</a></li>
+      <li><a href="https://simples.com.tw/philosophy/" data-cursor>我們怎麼想</a></li>
+      <li><a href="https://simples.com.tw/contact/" data-cursor>聯絡</a></li>
     </ul></div>
-    <div><h4>Elsewhere</h4><ul>
-      <li><a href="#top" data-cursor>Journal</a></li>
-      <li><a href="#top" data-cursor>Field notes</a></li>
-      <li><a href="#top" data-cursor>Colophon</a></li>
+    <div><h4>聯絡 · Contact</h4><ul>
+      <li><a href="mailto:hello@simples.tw" data-cursor>hello@simples.tw</a></li>
+      <li><a href="https://simples.com.tw/contact/" data-cursor>台北市中山區玉門街 1 號</a></li>
+      <li><span class="foot-note">No. 1, Yumen St., Zhongshan Dist., Taipei 104</span></li>
+      <li><span class="foot-note">Mon–Fri 10:00–18:00 GMT+8</span></li>
+      <li><span class="foot-note">統編 90442317</span></li>
     </ul></div>
   </div>
   <div class="foot-base">
-    <span>© 2026 Kage — Kage no Michi</span>
-    <span class="jp">静けさは一つの技である</span>
-    <span>WebGL · Onest · Kyoto</span>
+    <span>© 2026 簡單行銷顧問有限公司 · Simples Marketing Co.</span>
+    <span>Taipei 25.0629° N, 121.5237° E</span>
+    <span>WebGL · Taipei · Tokyo · Ho Chi Minh</span>
   </div>
 </footer>
 
 </div><!-- /.page -->
 
-<!-- The near plane of the active chapter is parked here rather than inside its
-     section: .page is a stacking context at z-index 10, so nothing living in it
-     can rise past the nav. #fg-sky sits above the whole layout instead. -->
 <div id="fg-sky" aria-hidden="true"></div>
 
 <div class="rail" id="rail"></div>
@@ -1205,9 +1541,10 @@ body[data-layout-footer="b"] .foot-base span:last-child{ text-align:right; }
 <script src="secret-pathways-assets/three.min.js"></script>
 <script>
 /* =====================================================================
-   KAGE — a live Kyoto mountain temple, after dark.
-   Everything on this page is generated at runtime: no photographs,
-   no video, no external assets beyond three.js and two subset fonts.
+   SIMPLES — a corporate headquarters tower on a wet plaza, after dark.
+   Rebuilt from the Kage sanctuary: every building, tube and sign is
+   generated at runtime — no models, no photographs, only three.js,
+   two subset fonts and three web fonts.
    ===================================================================== */
 (function () {
 'use strict';
@@ -1766,50 +2103,61 @@ function texLeaf() {
 function texSky() {
   const W = 512, H = 512, c = cvs(W, H), x = c.getContext('2d');
   const g = x.createLinearGradient(0, 0, 0, H);
-  g.addColorStop(0, 'rgb(6,10,15)');    g.addColorStop(.34, 'rgb(13,22,31)');
-  g.addColorStop(.66, 'rgb(17,26,34)'); g.addColorStop(.88, 'rgb(24,35,42)');
-  g.addColorStop(1, 'rgb(14,22,28)');
+  g.addColorStop(0, 'rgb(5,4,14)');     g.addColorStop(.34, 'rgb(13,10,34)');
+  g.addColorStop(.66, 'rgb(22,16,48)'); g.addColorStop(.88, 'rgb(40,26,62)');
+  g.addColorStop(1, 'rgb(26,18,44)');
   x.fillStyle = g; x.fillRect(0, 0, W, H);
-  /* cloud, and a low warm bloom off the valley behind the ridge */
-  x.globalAlpha = .34; x.globalCompositeOperation = 'overlay';
+  x.globalAlpha = .30; x.globalCompositeOperation = 'overlay';
   x.drawImage(fbmCanvas(W, H, 313, 5, 3, .9), 0, 0);
   x.globalAlpha = 1; x.globalCompositeOperation = 'source-over';
-  const wg = x.createRadialGradient(W * .68, H * .95, 4, W * .68, H * .95, W * .44);
-  wg.addColorStop(0, 'rgba(150,66,26,.30)'); wg.addColorStop(.5, 'rgba(96,44,22,.12)');
+  /* the city under the ridge: coral to the right of the tower, cold cyan to
+     the left — two districts, two kinds of light */
+  let wg = x.createRadialGradient(W * .70, H * .96, 4, W * .70, H * .96, W * .46);
+  wg.addColorStop(0, 'rgba(229,116,92,.36)'); wg.addColorStop(.5, 'rgba(150,60,70,.13)');
+  wg.addColorStop(1, 'rgba(0,0,0,0)');
+  x.fillStyle = wg; x.fillRect(0, 0, W, H);
+  wg = x.createRadialGradient(W * .20, H * .98, 4, W * .20, H * .98, W * .40);
+  wg.addColorStop(0, 'rgba(34,230,255,.24)'); wg.addColorStop(.5, 'rgba(30,120,160,.10)');
   wg.addColorStop(1, 'rgba(0,0,0,0)');
   x.fillStyle = wg; x.fillRect(0, 0, W, H);
   /* a scatter of stars, faint enough to survive the bloom */
   const rnd = mulberry32(881);
-  for (let i = 0; i < 420; i++) {
-    const sx = rnd() * W, sy = rnd() * H * .78, r = .5 + rnd() * rnd() * 1.7;
-    x.fillStyle = 'rgba(214,232,240,' + (.12 + rnd() * .42) * (1 - sy / H) + ')';
+  for (let i = 0; i < 380; i++) {
+    const sx = rnd() * W, sy = rnd() * H * .72, r = .5 + rnd() * rnd() * 1.6;
+    x.fillStyle = 'rgba(214,236,250,' + (.10 + rnd() * .40) * (1 - sy / H) + ')';
     x.beginPath(); x.arc(sx, sy, r, 0, TAU); x.fill();
   }
   return c;
 }
 
 /* the wooded ridge the valley closes with — black, ragged, mostly fog */
+/* the ridge the valley closes with — now a skyline: a hill of towers, every
+   one of them pricked with lit windows, a beacon on the tall ones */
 function texRidge() {
   const W = 2048, H = 512, c = cvs(W, H), x = c.getContext('2d');
   const n = noise2D(1207), rnd = mulberry32(1207);
+  const ridgeAt = t => .30 + .14 * (fbm(n, t * 2.4, .5, 4, 2.1, .55) * .5 + .5)
+                          + .08 * (fbm(n, t * 7.5, 3.1, 3, 2.2, .5) * .5 + .5);
   x.beginPath(); x.moveTo(0, H);
-  for (let i = 0; i <= W; i += 4) {
-    const t = i / W;
-    const ridge = .46 + .30 * (fbm(n, t * 2.4, .5, 4, 2.1, .55) * .5 + .5)
-                      + .16 * (fbm(n, t * 7.5, 3.1, 3, 2.2, .5) * .5 + .5);
-    x.lineTo(i, H - ridge * H * .84);
-  }
+  for (let i = 0; i <= W; i += 4) x.lineTo(i, H - ridgeAt(i / W) * H * .84);
   x.lineTo(W, H); x.closePath();
-  x.fillStyle = '#050809'; x.fill();
-  /* conifer spikes along the crest so the silhouette reads as forest */
-  x.fillStyle = '#050809';
-  for (let i = 0; i < 460; i++) {
+  x.fillStyle = '#07060f'; x.fill();
+  const cols = ['rgba(150,225,245,', 'rgba(150,225,245,', 'rgba(150,225,245,', 'rgba(229,116,92,', 'rgba(255,255,255,'];
+  for (let i = 0; i < 160; i++) {
     const px = rnd() * W, t = px / W;
-    const ridge = .46 + .30 * (fbm(n, t * 2.4, .5, 4, 2.1, .55) * .5 + .5)
-                      + .16 * (fbm(n, t * 7.5, 3.1, 3, 2.2, .5) * .5 + .5);
-    const by = H - ridge * H * .84, hh = 8 + rnd() * 30, ww = 3 + rnd() * 6;
-    x.beginPath(); x.moveTo(px, by - hh); x.lineTo(px + ww, by + 4); x.lineTo(px - ww, by + 4);
-    x.closePath(); x.fill();
+    const base = H - ridgeAt(t) * H * .84 + 6;
+    const ww = 10 + rnd() * rnd() * 72, hh = 26 + rnd() * rnd() * 300;
+    x.fillStyle = '#07060f'; x.fillRect(px - ww / 2, base - hh, ww, hh + 10);
+    for (let wy = base - hh + 4; wy < base - 4; wy += 5.5)
+      for (let wx = px - ww / 2 + 2; wx < px + ww / 2 - 2; wx += 3.2) {
+        if (rnd() < .64) continue;
+        x.fillStyle = cols[(rnd() * cols.length) | 0] + (.22 + rnd() * .6) + ')';
+        x.fillRect(wx, wy, 1.5, 3.2);
+      }
+    if (hh > 190 && rnd() < .55) {
+      x.fillStyle = '#07060f'; x.fillRect(px - .8, base - hh - 26, 1.6, 26);
+      x.fillStyle = 'rgba(255,100,80,.95)'; x.fillRect(px - 1.6, base - hh - 29, 3.2, 3.2);
+    }
   }
   return c;
 }
@@ -2286,7 +2634,7 @@ function initGL() {
   renderer.outputEncoding = WANT_POST ? THREE.LinearEncoding : THREE.sRGBEncoding;
   renderer.toneMapping = WANT_POST ? THREE.NoToneMapping : THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.0;
-  renderer.setClearColor(0x05070a, 1);
+  renderer.setClearColor(0x05040e, 1);
   if (WANT_SHADOW) { renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap; }
   maxAniso = renderer.capabilities.getMaxAnisotropy();
   scene = new THREE.Scene();
@@ -2296,8 +2644,8 @@ function initGL() {
      moved the hall by 0.18 of a luminance unit, the fog colour moves it
      properly. And it reaches by distance, so the foreground does not
      follow it down. */
-  scene.fog = new THREE.FogExp2(0x050a0e, 0.0168);
-  scene.background = new THREE.Color(0x060a0d);
+  scene.fog = new THREE.FogExp2(0x09061c, 0.0168);
+  scene.background = new THREE.Color(0x07051a);
   camera = new THREE.PerspectiveCamera(36, vpW() / vpH(), .35, 220);
   scene.add(camera);
 }
@@ -2492,14 +2840,14 @@ function buildShell() {
   const wallNrm = tx(wallT.normal, { wrap: THREE.RepeatWrapping, repeat: [4, 1.4], srgb: false });
   const wallMat = new THREE.MeshStandardMaterial({
     map: wallMap, normalMap: wallNrm, normalScale: new THREE.Vector2(.85, .85),
-    roughness: .78, metalness: .05, color: 0x525c60
+    roughness: .72, metalness: .10, color: 0x48505e
   });
   /* The court used to be a roofless box. It is now an open mountain approach:
      nothing encloses the frame but the night, the ridge and the fog. */
 
   /* the sky, hung far enough back that the whole frustum sits inside it */
   const sky = new THREE.Mesh(new THREE.PlaneGeometry(360, 190),
-    new THREE.MeshBasicMaterial({ color: hdr(.60, .70, .80), map: tx(texSky()),
+    new THREE.MeshBasicMaterial({ color: hdr(.72, .70, .92), map: tx(texSky()),
       depthWrite: false, fog: false, toneMapped: false }));
   sky.position.set(0, 62, -108); sky.renderOrder = 0; scene.add(sky);
   WORLD.sky = sky;
@@ -2514,7 +2862,7 @@ function buildShell() {
       /* fog off: at a hundred metres it would lift a black silhouette to 80%
          of the fog colour, and the treeline came back as a *pale* band */
       new THREE.MeshBasicMaterial({ map: i ? tx(texRidge()) : ridgeMap, transparent: true,
-        color: i ? 0x0a1015 : 0x06090d, depthWrite: false, fog: false }));
+        color: i ? 0xffffff : 0x9aa0b8, depthWrite: false, fog: false }));
     m.position.set(r[4], r[1], r[0]); m.renderOrder = 1; scene.add(m);
   });
 
@@ -2530,7 +2878,7 @@ function buildShell() {
        gone those numbers only made the paving read as sheet metal, so it goes
        back to being wet stone: rough, barely metallic, and lit rather than
        reflecting. */
-    roughness: .74, metalness: .06, color: 0x69757a
+    roughness: .58, metalness: .12, color: 0x5a687e
   });
   const floor = new THREE.Mesh(new THREE.PlaneGeometry(150, 150), floorMat);
   floor.rotation.x = -Math.PI / 2; floor.position.set(0, 0, -18); floor.receiveShadow = true;
@@ -2544,7 +2892,7 @@ function buildShell() {
   const platMat = new THREE.MeshStandardMaterial({
     map: tx(fT.map, { wrap: THREE.RepeatWrapping, repeat: [3, 1.2], aniso: 16 }),
     normalMap: tx(fT.normal, { wrap: THREE.RepeatWrapping, repeat: [3, 1.2], srgb: false, aniso: 16 }),
-    normalScale: new THREE.Vector2(.18, .18), roughness: .93, metalness: .02, color: 0x58636a
+    normalScale: new THREE.Vector2(.18, .18), roughness: .86, metalness: .04, color: 0x4f5a6c
   });
   /* the podium the hall stands on */
   const plat = new THREE.Mesh(new THREE.BoxGeometry(42, PODIUM, 24), platMat);
@@ -2575,130 +2923,170 @@ function buildShell() {
    timber, two flaring tiled roofs, a bracket band under each eave, and a
    ground floor lit from inside so the lattice reads as the only warm thing
    for two hundred metres.                                                 */
+/* ------------------------------------------------------------ the tower
+   A stepped corporate headquarters on the podium at the head of the flight:
+   three setback tiers of lit curtain wall, a cyan tube along every ledge,
+   coral rails down the corners, a glass lobby the stairs climb into, two
+   annex blocks, a spire with an aviation beacon, and the company's signs
+   hung on the face. Facades are canvases: a grid of windows, most dark,
+   some cold, a few coral, a few with the blinds half down.               */
+function texFacade(seed, cols, rows) {
+  const W = cols * 24, H = rows * 24, c = cvs(W, H), x = c.getContext('2d');
+  const rnd = mulberry32(seed);
+  x.fillStyle = '#0a0c17'; x.fillRect(0, 0, W, H);
+  x.fillStyle = 'rgba(38,44,64,.95)';
+  for (let i = 0; i <= cols; i++) x.fillRect(i * 24 - 1.5, 0, 3, H);
+  for (let j = 0; j <= rows; j++) x.fillRect(0, j * 24 - 1.5, W, 3);
+  for (let j = 0; j < rows; j++) for (let i = 0; i < cols; i++) {
+    const r = rnd(); let col;
+    if (r < .52)      col = 'rgb(9,12,22)';
+    else if (r < .82) col = 'rgba(70,112,142,' + (.30 + rnd() * .35) + ')';
+    else if (r < .95) col = 'rgba(178,236,250,' + (.65 + rnd() * .35) + ')';
+    else              col = 'rgba(229,116,92,' + (.7 + rnd() * .3) + ')';
+    x.fillStyle = col; x.fillRect(i * 24 + 3, j * 24 + 3, 18, 18);
+    if (rnd() < .28) { x.fillStyle = 'rgba(7,9,18,.86)'; x.fillRect(i * 24 + 3, j * 24 + 3, 18, 4 + rnd() * 9); }
+  }
+  return c;
+}
+function texSign(text, W, H, opt) {
+  opt = opt || {};
+  const c = cvs(W, H), x = c.getContext('2d');
+  const col = opt.color || '#22e6ff';
+  x.clearRect(0, 0, W, H);
+  if (opt.frame) { x.strokeStyle = col; x.globalAlpha = .55; x.lineWidth = opt.frame; x.strokeRect(opt.frame, opt.frame, W - opt.frame * 2, H - opt.frame * 2); x.globalAlpha = 1; }
+  x.fillStyle = col; x.textAlign = 'center'; x.textBaseline = 'middle';
+  x.shadowColor = col; x.shadowBlur = opt.blur || 28;
+  x.font = opt.font;
+  if (opt.vertical) {
+    const chars = [...text], step = (H - (opt.pad || 60) * 2) / chars.length;
+    chars.forEach((ch, i) => { const y = (opt.pad || 60) + step * (i + .5); x.fillText(ch, W / 2, y); x.fillText(ch, W / 2, y); });
+  } else {
+    x.fillText(text, W / 2, H / 2); x.fillText(text, W / 2, H / 2);
+  }
+  return c;
+}
 function buildTemple() {
   const g = new THREE.Group();
-  /* One board library, sampled at two scales: the hall's flanks want the grain
-     long and lying down, the columns want it running their own length. */
-  const timber = surface(wallWood(), [4, 1.6], { color: 0x565150, normal: 1.5 });
-  const post   = surface(postWood(), [1.1, 1.0], { color: 0x8a746d, normal: 1.05, metalness: .03 });
-  const gold   = new THREE.MeshStandardMaterial({ color: 0x8f6f2e, roughness: .38, metalness: .78 });
-  const rf = lib('roof', () => texRoof());
-  /* Nearly a silhouette: the roof carries almost no colour of its own, and
-     what reads on it is relief rather than tone — so the normal goes up as
-     the albedo comes down. */
-  const tileMat = surface(rf, [1, 1], { color: 0x2b343a, roughness: .74, metalness: .10, normal: 1.4 });
-  /* the paper the lamps burn through — the only thing in the hall that is
-     allowed to be bright, and even then only just above white */
-  const paper = new THREE.MeshBasicMaterial({ color: hdr(1.06, .48, .18), fog: true, toneMapped: false });
-  const grid  = new THREE.MeshBasicMaterial({ map: tx(texShoji()), transparent: true,
-    depthWrite: false, fog: true });
-  WORLD.paper = paper;
+  const F = PODIUM;                                     /* the lobby floor */
+  const neonC = new THREE.MeshBasicMaterial({ color: hdr(.35, 2.4, 2.8), fog: true, toneMapped: false });
+  const neonO = new THREE.MeshBasicMaterial({ color: hdr(2.9, 1.05, .78), fog: true, toneMapped: false });
+  const dark  = new THREE.MeshStandardMaterial({ color: 0x0c0e1a, roughness: .48, metalness: .62 });
+  const steel = new THREE.MeshStandardMaterial({ color: 0x2a3040, roughness: .36, metalness: .85 });
+  WORLD.neonC = neonC; WORLD.neonO = neonO;
+  const facade = (seed, cols, rows) => {
+    const t = tx(texFacade(seed, cols, rows), { aniso: 16 });
+    return new THREE.MeshStandardMaterial({ map: t, emissiveMap: t, emissive: 0xffffff, emissiveIntensity: 1.35,
+      color: 0x8890a4, roughness: .32, metalness: .58 });
+  };
+  const strip = (w, h, d, x, y, z, mat) => {
+    const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat); m.position.set(x, y, z); g.add(m); return m;
+  };
 
-  /* one lit bay: a glowing sheet with a lattice hung just in front of it */
-  function bay(w, h, x, y, z) {
-    const p = new THREE.Mesh(new THREE.PlaneGeometry(w, h), paper);
-    p.position.set(x, y, z); g.add(p);
-    const s = new THREE.Mesh(new THREE.PlaneGeometry(w, h), grid);
-    s.position.set(x, y, z + .06); s.renderOrder = 3; g.add(s);
-  }
-  /* The block-and-arm band that carries every eave. The pieces are merged, so
-     they carry absolute coordinates — TEMPLE_Z has to go in here, not on the
-     mesh, or the whole band ends up hanging in the air by the camera. */
-  function brackets(halfW, halfD, y, step) {
-    const parts = [];
-    for (let x = -halfW; x <= halfW + 1e-3; x += step) {
-      [-halfD, halfD].forEach(dz => {
-        parts.push(new THREE.BoxGeometry(.34, .46, .34).translate(x, y, TEMPLE_Z + dz));
-        parts.push(new THREE.BoxGeometry(.92, .17, .24).translate(x, y + .30, TEMPLE_Z + dz));
-      });
-    }
-    for (let dz = -halfD + step; dz < halfD - 1e-3; dz += step) {
-      [-halfW, halfW].forEach(x => {
-        parts.push(new THREE.BoxGeometry(.34, .46, .34).translate(x, y, TEMPLE_Z + dz));
-        parts.push(new THREE.BoxGeometry(.24, .17, .92).translate(x, y + .30, TEMPLE_Z + dz));
-      });
-    }
-    const m = new THREE.Mesh(mergeGeos(parts), post);
-    m.castShadow = false; g.add(m);
-  }
-
-  const F = PODIUM;                                   /* the hall's floor level */
-
-  /* ---- ground storey: six bays of lit lattice between charred columns --- */
-  const core = new THREE.Mesh(new THREE.BoxGeometry(13.6, 5.0, 8.2), timber);
-  core.position.set(0, F + 2.5, TEMPLE_Z); core.castShadow = true; g.add(core);
-  for (let i = 0; i < 5; i++) {
-    const x = -5.6 + i * 2.8;
-    bay(1.55, 2.5, x, F + 2.6, TEMPLE_Z + 4.16);
-  }
-  for (let i = 0; i < 6; i++) {
-    const c = new THREE.Mesh(new THREE.CylinderGeometry(.30, .34, 5.0, 14), post);
-    c.position.set(-7.0 + i * 2.8, F + 2.5, TEMPLE_Z + 4.24); c.castShadow = true; g.add(c);
-  }
-  const sill = new THREE.Mesh(new THREE.BoxGeometry(14.6, .40, 8.9), post);
-  sill.position.set(0, F + .20, TEMPLE_Z); g.add(sill);
-  brackets(7.0, 4.4, F + 5.15, 1.40);
-
-  /* ---- the pent roof over the ground storey ---------------------------- */
-  const lower = new THREE.Mesh(roofGeo(9.6, 6.4, 3.2, 2.9, .40, .26), tileMat);
-  lower.position.set(0, F + 5.6, TEMPLE_Z); lower.castShadow = true; g.add(lower);
-
-  /* ---- upper storey: railed gallery, dark boards, the temple's name ----- */
-  const up = new THREE.Mesh(new THREE.BoxGeometry(10.0, 3.4, 6.0), timber);
-  up.position.set(0, F + 9.4, TEMPLE_Z); up.castShadow = true; g.add(up);
-  const deck = new THREE.Mesh(new THREE.BoxGeometry(12.4, .26, 8.4), post);
-  deck.position.set(0, F + 7.72, TEMPLE_Z); g.add(deck);
-  [.10, .94].forEach(dy => [4.2, -4.2].forEach(dz => {
-    const r = new THREE.Mesh(new THREE.BoxGeometry(12.4, .17, .17), post);
-    r.position.set(0, F + 7.85 + dy, TEMPLE_Z + dz); g.add(r);
-  }));
-  for (let i = 0; i <= 16; i++) {
-    const b = new THREE.Mesh(new THREE.BoxGeometry(.10, 1.05, .10), post);
-    b.position.set(-6.2 + i * .775, F + 8.42, TEMPLE_Z + 4.2); g.add(b);
-  }
-  for (let i = 0; i < 4; i++)
-    bay(1.0, 1.35, -4.5 + i * 3.0, F + 9.5, TEMPLE_Z + 3.06);
-  /* the plaque */
-  const plq = new THREE.Mesh(new THREE.BoxGeometry(1.9, 1.30, .16), gold);
-  plq.position.set(0, F + 9.7, TEMPLE_Z + 3.12); g.add(plq);
-  const plqIn = new THREE.Mesh(new THREE.BoxGeometry(1.52, .98, .18), timber);
-  plqIn.position.set(0, F + 9.7, TEMPLE_Z + 3.16); g.add(plqIn);
-  brackets(5.2, 3.3, F + 11.2, 1.30);
-
-  /* ---- the main roof: the silhouette the whole page hangs on ----------- */
-  const upper = new THREE.Mesh(roofGeo(10.8, 7.2, 3.6, 5.2, .48, .26), tileMat);
-  upper.position.set(0, F + 11.7, TEMPLE_Z); upper.castShadow = true; g.add(upper);
-  const ridge = new THREE.Mesh(new THREE.BoxGeometry(7.6, .60, 1.05), tileMat);
-  ridge.position.set(0, F + 17.10, TEMPLE_Z); g.add(ridge);
-  [-1, 1].forEach(s => {
-    const oni = new THREE.Mesh(new THREE.ConeGeometry(.46, 1.15, 4), tileMat);
-    oni.position.set(s * 3.9, F + 17.6, TEMPLE_Z); oni.rotation.y = Math.PI / 4; g.add(oni);
+  /* ---- the three tiers ------------------------------------------------ */
+  const tiers = [{ w: 15, d: 12, h: 11 }, { w: 11, d: 9, h: 8 }, { w: 7.4, d: 6.2, h: 6 }];
+  let y = F;
+  tiers.forEach((t, i) => {
+    const front = facade(11 + i, Math.round(t.w * 1.15), Math.round(t.h * 2.1));
+    const side  = facade(21 + i, Math.round(t.d * 1.15), Math.round(t.h * 2.1));
+    const box = new THREE.Mesh(new THREE.BoxGeometry(t.w, t.h, t.d), [side, side, dark, dark, front, front]);
+    box.position.set(0, y + t.h / 2, TEMPLE_Z); box.castShadow = true; g.add(box);
+    const top = y + t.h, hw = t.w / 2, hd = t.d / 2;
+    strip(t.w + .3, .10, .10, 0, top + .05, TEMPLE_Z + hd + .08, neonC);
+    strip(t.w + .3, .10, .10, 0, top + .05, TEMPLE_Z - hd - .08, neonC);
+    strip(.10, .10, t.d + .3, hw + .08, top + .05, TEMPLE_Z, neonC);
+    strip(.10, .10, t.d + .3, -hw - .08, top + .05, TEMPLE_Z, neonC);
+    /* a dark parapet so the ledge reads as a floor, not a line */
+    strip(t.w + .6, .36, t.d + .6, 0, top + .18, TEMPLE_Z, dark);
+    y = top;
   });
-  WORLD.templeTop = F + 18.2;
+  const TOP = y;
+  /* coral rails down the four corners of the base tier */
+  [-1, 1].forEach(sx => [-1, 1].forEach(sz => {
+    strip(.09, tiers[0].h - .6, .09, sx * (tiers[0].w / 2 + .07), F + tiers[0].h / 2 - .1, TEMPLE_Z + sz * (tiers[0].d / 2 + .07), neonO);
+  }));
 
-  /* ---- the two flanking wings, lit the same way ------------------------ */
+  /* ---- the lobby: a lit glass band the flight climbs into --------------- */
+  const FZ = TEMPLE_Z + tiers[0].d / 2;
+  const paper = new THREE.MeshBasicMaterial({ color: hdr(.42, 1.35, 1.6), fog: true, toneMapped: false });
+  const grid  = new THREE.MeshBasicMaterial({ map: tx(texShoji()), transparent: true, depthWrite: false, fog: true });
+  WORLD.paper = paper;
+  const lobby = new THREE.Mesh(new THREE.PlaneGeometry(12.6, 3.3), paper);
+  lobby.position.set(0, F + 1.95, FZ + .03); g.add(lobby);
+  const mull = new THREE.Mesh(new THREE.PlaneGeometry(12.6, 3.3), grid);
+  mull.position.set(0, F + 1.95, FZ + .09); mull.renderOrder = 3; g.add(mull);
+  for (let i = 0; i < 7; i++) {
+    const c = new THREE.Mesh(new THREE.CylinderGeometry(.20, .22, 3.9, 12), steel);
+    c.position.set(-6.6 + i * 2.2, F + 1.95, FZ + .9); c.castShadow = true; g.add(c);
+  }
+  const canopy = new THREE.Mesh(new THREE.BoxGeometry(14.4, .30, 3.2), dark);
+  canopy.position.set(0, F + 3.95, FZ + 1.2); canopy.castShadow = true; g.add(canopy);
+  strip(14.4, .08, .08, 0, F + 3.78, FZ + 2.78, neonC);
+  const sill = new THREE.Mesh(new THREE.BoxGeometry(16.2, .36, 13.6), steel);
+  sill.position.set(0, F + .18, TEMPLE_Z); g.add(sill);
+
+  /* ---- the signs -------------------------------------------------------- */
+  const CJK = '"Noto Sans TC","PingFang TC","Hiragino Sans","Microsoft JhengHei",sans-serif';
+  const signs = [];
+  const sign = (canvasEl, w, h, x, y, z, color) => {
+    const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h),
+      new THREE.MeshBasicMaterial({ map: tx(canvasEl, { aniso: 16 }), transparent: true, depthWrite: false,
+        color: color, fog: true, toneMapped: false }));
+    m.position.set(x, y, z); m.renderOrder = 4; g.add(m); signs.push(m); return m;
+  };
+  /* the company name, stacked down the left of the base tier, in coral */
+  sign(texSign('簡單行銷', 512, 2048, { vertical: true, font: '700 312px ' + CJK, color: '#ff8a66', frame: 10, pad: 140, blur: 30 }),
+       2.1, 8.4, -5.4, F + 6.9, FZ + .12, hdr(1.9, 1.9, 1.9));
+  /* the wordmark across the second tier */
+  sign(texSign('SIMPLES', 2048, 512, { font: '900 300px Orbitron, sans-serif', color: '#22e6ff', blur: 34 }),
+       9.6, 2.4, 0, F + tiers[0].h + 4.6, TEMPLE_Z + tiers[1].d / 2 + .12, hdr(1.9, 1.9, 1.9));
+  sign(texSign('GROWTH INTELLIGENCE STUDIO', 2048, 256, { font: '500 112px "JetBrains Mono", monospace', color: '#d6f6ff', blur: 16 }),
+       7.2, .9, 0, F + tiers[0].h + 2.75, TEMPLE_Z + tiers[1].d / 2 + .12, hdr(1.3, 1.3, 1.3));
+  /* a small hanging sign by the lobby, the tagline */
+  sign(texSign('讓每個好點子都可以落地', 2048, 256, { font: '500 132px ' + CJK, color: '#d6f6ff', blur: 14 }),
+       6.0, .75, 3.4, F + 4.55, FZ + 2.9, hdr(1.4, 1.4, 1.4));
+  WORLD.signs = signs;
+
+  /* ---- the spire and its beacon ------------------------------------------ */
+  const spire = new THREE.Mesh(new THREE.CylinderGeometry(.10, .30, 9.5, 10), steel);
+  spire.position.set(0, TOP + 4.75, TEMPLE_Z); g.add(spire);
+  [[1.8, .6, 1.2, 1.6, 0], [-1.6, .5, .9, .9, 1.4]].forEach(b => {
+    const m = new THREE.Mesh(new THREE.BoxGeometry(b[1], b[3], b[2]), dark);
+    m.position.set(b[0], TOP + b[3] / 2 + .3, TEMPLE_Z + b[4]); g.add(m);
+  });
+  const beaconMat = new THREE.MeshBasicMaterial({ color: hdr(3.2, .9, .6), fog: false, toneMapped: false });
+  const beacon = new THREE.Mesh(new THREE.SphereGeometry(.26, 12, 10), beaconMat);
+  beacon.position.set(0, TOP + 9.7, TEMPLE_Z); g.add(beacon);
+  const beaconGlow = new THREE.Mesh(new THREE.PlaneGeometry(4.2, 4.2),
+    new THREE.MeshBasicMaterial({ map: tx(texGlow('rgba(255,150,110,.9)', 'rgba(229,116,92,.3)')),
+      transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, fog: false, opacity: .8 }));
+  beaconGlow.position.copy(beacon.position); beaconGlow.renderOrder = 2; beaconGlow.userData.billboard = true; g.add(beaconGlow);
+  const beaconL = new THREE.PointLight(0xff7a55, 2.4, 30, 2);
+  beaconL.position.copy(beacon.position); g.add(beaconL);
+  WORLD.beacon = { mesh: beacon, glow: beaconGlow, light: beaconL };
+  WORLD.templeTop = TOP + 10;
+
+  /* ---- the two annex blocks, lit the same way ---------------------------- */
   [-1, 1].forEach(s => {
-    const w = new THREE.Mesh(new THREE.BoxGeometry(7.6, 3.4, 5.2), timber);
-    w.position.set(s * 10.6, F + 1.7, TEMPLE_Z + 1.4); w.castShadow = true; g.add(w);
-    for (let i = 0; i < 3; i++)
-      bay(1.3, 1.6, s * 10.6 + (i - 1) * 2.4, F + 1.8, TEMPLE_Z + 4.06);
-    const r = new THREE.Mesh(roofGeo(5.0, 4.0, 1.4, 1.9, .32, .26), tileMat);
-    r.position.set(s * 10.6, F + 3.4, TEMPLE_Z + 1.4); r.castShadow = true; g.add(r);
+    const fr = facade(31 + s, 9, 12), sd = facade(41 + s, 6, 12);
+    const w = new THREE.Mesh(new THREE.BoxGeometry(7.6, 5.6, 5.2), [sd, sd, dark, dark, fr, fr]);
+    w.position.set(s * 11.6, F + 2.8, TEMPLE_Z + 1.4); w.castShadow = true; g.add(w);
+    strip(7.9, .10, .10, s * 11.6, F + 5.65, TEMPLE_Z + 4.08, neonC);
+    strip(.10, .10, 5.5, s * (11.6 + (s > 0 ? 3.88 : -3.88)) , F + 5.65, TEMPLE_Z + 1.4, neonC);
+    strip(7.9, .36, 5.5, s * 11.6, F + 5.78, TEMPLE_Z + 1.4, dark);
   });
 
   scene.add(g); WORLD.temple = g;
 
-  /* the glow the hall pushes out over its own steps */
+  /* the glow the lobby pushes out over its own steps */
   const spill = new THREE.Mesh(new THREE.PlaneGeometry(30, 16),
-    new THREE.MeshBasicMaterial({ map: tx(texGlow('rgba(255,150,66,.80)', 'rgba(240,96,26,.24)')),
+    new THREE.MeshBasicMaterial({ map: tx(texGlow('rgba(130,235,255,.80)', 'rgba(40,170,210,.24)')),
       transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, fog: false, opacity: .30 }));
-  spill.position.set(0, F + 3.0, TEMPLE_Z + 5.6); spill.renderOrder = 2;
+  spill.position.set(0, F + 3.0, FZ + 1.2); spill.renderOrder = 2;
   scene.add(spill); WORLD.hallHalo = spill;
 
-  /* the band of mist that separates the hall from the trees behind it — the
-     one thing that stops the whole background reading as a single flat cut-out */
+  /* the band of mist that separates the tower from the skyline behind it */
   const mist = new THREE.Mesh(new THREE.PlaneGeometry(64, 20),
-    new THREE.MeshBasicMaterial({ map: tx(texGlow('rgba(150,178,190,.62)', 'rgba(104,138,154,.20)')),
+    new THREE.MeshBasicMaterial({ map: tx(texGlow('rgba(150,170,220,.62)', 'rgba(100,120,190,.20)')),
       transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, fog: false, opacity: .17 }));
   mist.position.set(0, F - 1.4, TEMPLE_Z + 10); mist.renderOrder = 2; scene.add(mist);
 }
@@ -2715,14 +3103,14 @@ function buildMoon() {
        is decoded out of sRGB before this multiplies it, so the tint has to be
        written in linear, where the same look is ≈ .21. Reading the ratio
        straight off the reference is what left the moon a pale pink. */
-    new THREE.MeshBasicMaterial({ map: tx(texMoon()), color: hdr(3.6, .64, .61),
+    new THREE.MeshBasicMaterial({ map: tx(texMoon()), color: hdr(3.4, 1.15, .74),
       transparent: true, depthWrite: false, fog: false, toneMapped: false }));
   disc.position.set(MOON.x, MOON.y, MOON.z); disc.renderOrder = 1;
   scene.add(disc); WORLD.moon = disc;
 
   /* the air around it — a wide, weak corona that the bloom picks up */
   const halo = new THREE.Mesh(new THREE.PlaneGeometry(MOON.r * 6.4, MOON.r * 6.4),
-    new THREE.MeshBasicMaterial({ map: tx(texGlow('rgba(255,124,112,.90)', 'rgba(206,52,48,.26)')),
+    new THREE.MeshBasicMaterial({ map: tx(texGlow('rgba(255,160,120,.90)', 'rgba(229,116,92,.26)')),
       transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, fog: false, opacity: .44 }));
   halo.position.set(MOON.x, MOON.y, MOON.z - .3); halo.renderOrder = 0;
   scene.add(halo); WORLD.moonHalo = halo;
@@ -2740,9 +3128,10 @@ function buildTorii() {
   /* the weathering costs the gate a lot of its chroma, so the tint puts it
      back: red lifted well past green and blue rather than a flat brightening,
      or the vermilion comes out of the grade as brick */
-  const lac = surface(lib('lacquer', () => texLacquer()), [2, 2],
-    { color: hdr(1.72, 1.02, .94), roughness: .92, metalness: .05, normal: .75 });
-  const gold = new THREE.MeshStandardMaterial({ color: 0x7a5d2a, roughness: .50, metalness: .60 });
+  /* the lacquer and the gilt are gone: the gate is gunmetal now, and what
+     used to be vermilion is carried by the tubes hung on it */
+  const lac  = new THREE.MeshStandardMaterial({ color: 0x151824, roughness: .40, metalness: .80 });
+  const gold = new THREE.MeshStandardMaterial({ color: 0x2a3040, roughness: .34, metalness: .88 });
   const g = new THREE.Group();
   const BASE = .78, H = 8.2, SPAN = 3.55;
 
@@ -2802,50 +3191,57 @@ function buildTorii() {
   /* The lowest thing on the gate is the foot of each column, and it starts
      at BASE — so anchoring the group at y=0 left the whole torii hanging
      BASE*scale above the court. Drop it by exactly that and the feet land. */
+  /* the tubes: cyan along both crown beams and the nuki, coral rails down
+     each column, and one cold lamp in the opening */
+  const neonC = new THREE.MeshBasicMaterial({ color: hdr(.35, 2.4, 2.8), fog: true, toneMapped: false });
+  const neonO = new THREE.MeshBasicMaterial({ color: hdr(2.9, 1.05, .78), fog: true, toneMapped: false });
+  [[.50, BASE + H + .60], [.34, BASE + H - .88], [.28, BASE + H - 2.47]].forEach((t, i) => {
+    [-1, 1].forEach(d => {
+      const tube = new THREE.Mesh(new THREE.BoxGeometry(i === 2 ? 9.0 : SPAN * 2 + 2.6, .08, .08), neonC);
+      tube.position.set(0, t[1], d * t[0]); g.add(tube);
+    });
+  });
+  [-1, 1].forEach(s => [-1, 1].forEach(d => {
+    const r = new THREE.Mesh(new THREE.BoxGeometry(.07, H - 2.6, .07), neonO);
+    r.position.set(s * (SPAN + .38), BASE + (H - 2.6) / 2 + .1, d * .20); g.add(r);
+  }));
+  const lamp = new THREE.PointLight(0x22e6ff, 2.4, 13, 2);
+  lamp.position.set(0, BASE + H - 1.4, 0); g.add(lamp);
+
   const GS = .72;
   g.position.set(0, -BASE * GS, -8.6); g.scale.setScalar(GS);
   scene.add(g); WORLD.torii = g;
 }
 
+/* the stone lanterns are light pillars now: a gunmetal post with four cyan
+   tubes down it and a coral cap, the same glow and the same pulse */
 function buildLantern(x, z, s, y) {
-  const stone = lib('lanternStone', () => surface(lib('granite', () => texStone(17)), [1.5, 1.5],
-    { color: 0x9aa5a5, metalness: 0, normal: 1.45 }));
-  const dark  = lib('lanternDark', () => surface(postWood(), [.9, .9],
-    { color: 0xd8c2b6, metalness: .1, normal: .7 }));
+  const metal = lib('pillarMetal', () => new THREE.MeshStandardMaterial({ color: 0x141826, roughness: .38, metalness: .82 }));
   const g = new THREE.Group();
-  const base = new THREE.Mesh(new THREE.CylinderGeometry(.44, .52, .26, 20), stone);
-  base.position.y = .13; base.castShadow = true; g.add(base);
-  const post = new THREE.Mesh(new THREE.CylinderGeometry(.15, .18, 1.02, 16), stone);
-  post.position.y = .77; post.castShadow = true; g.add(post);
-  const shelf = new THREE.Mesh(new THREE.CylinderGeometry(.42, .34, .13, 20), stone);
-  shelf.position.y = 1.34; shelf.castShadow = true; g.add(shelf);
-
-  const box = new THREE.Mesh(new THREE.BoxGeometry(.50, .50, .50), dark);
-  box.position.y = 1.66; box.castShadow = true; g.add(box);
-  const paneMat = new THREE.MeshBasicMaterial({ color: hdr(2.3, .30, .085), fog: false, toneMapped: false });
-  [[0, 0, .256, 0], [0, 0, -.256, Math.PI], [.256, 0, 0, Math.PI / 2], [-.256, 0, 0, -Math.PI / 2]].forEach(p => {
-    const pane = new THREE.Mesh(new THREE.PlaneGeometry(.34, .34), paneMat);
-    pane.position.set(p[0], 1.66, p[2]); pane.rotation.y = p[3]; g.add(pane);
+  const base = new THREE.Mesh(new THREE.CylinderGeometry(.40, .48, .22, 20), metal);
+  base.position.y = .11; base.castShadow = true; g.add(base);
+  const post = new THREE.Mesh(new THREE.BoxGeometry(.30, 2.3, .30), metal);
+  post.position.y = 1.27; post.castShadow = true; g.add(post);
+  const tubeMat = new THREE.MeshBasicMaterial({ color: hdr(.35, 2.3, 2.7), fog: false, toneMapped: false });
+  [[.18, 0], [-.18, 0], [0, .18], [0, -.18]].forEach(p => {
+    const t = new THREE.Mesh(new THREE.BoxGeometry(.05, 1.7, .05), tubeMat);
+    t.position.set(p[0], 1.35, p[1]); g.add(t);
   });
-  WORLD.lanternPane = WORLD.lanternPane || paneMat;
-
-  const roof = new THREE.Mesh(new THREE.CylinderGeometry(.10, .62, .34, 4, 1), stone);
-  roof.position.y = 2.06; roof.rotation.y = Math.PI / 4; roof.castShadow = true; g.add(roof);
-  const brim = new THREE.Mesh(new THREE.CylinderGeometry(.66, .70, .07, 4, 1), stone);
-  brim.position.y = 1.93; brim.rotation.y = Math.PI / 4; g.add(brim);
-  const knob = new THREE.Mesh(new THREE.SphereGeometry(.09, 12, 10), stone);
-  knob.position.y = 2.28; g.add(knob);
-  const tip = new THREE.Mesh(new THREE.ConeGeometry(.055, .16, 10), stone);
-  tip.position.y = 2.4; g.add(tip);
+  WORLD.lanternPane = WORLD.lanternPane || tubeMat;
+  const cap = new THREE.Mesh(new THREE.BoxGeometry(.44, .10, .44),
+    new THREE.MeshBasicMaterial({ color: hdr(2.8, 1.0, .75), fog: false, toneMapped: false }));
+  cap.position.y = 2.47; g.add(cap);
+  const lid = new THREE.Mesh(new THREE.BoxGeometry(.50, .08, .50), metal);
+  lid.position.y = 2.56; g.add(lid);
 
   const glow = new THREE.Mesh(new THREE.PlaneGeometry(3.4, 3.4),
-    new THREE.MeshBasicMaterial({ map: tx(texGlow('rgba(255,120,60,.9)', 'rgba(255,60,24,.28)')),
+    new THREE.MeshBasicMaterial({ map: tx(texGlow('rgba(130,235,255,.9)', 'rgba(34,200,240,.28)')),
       transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, fog: false, opacity: .5 }));
-  glow.position.y = 1.66; glow.renderOrder = 2; g.add(glow);
+  glow.position.y = 1.5; glow.renderOrder = 2; g.add(glow);
   glow.userData.billboard = true;
 
-  const lt = new THREE.PointLight(0xff5a24, 2.6, 9, 2);
-  lt.position.set(0, 1.66, 0); g.add(lt);
+  const lt = new THREE.PointLight(0x22e6ff, 2.6, 9, 2);
+  lt.position.set(0, 1.5, 0); g.add(lt);
   WORLD.lanternLights = WORLD.lanternLights || [];
   WORLD.lanternLights.push(lt); WORLD.lanternGlows = WORLD.lanternGlows || []; WORLD.lanternGlows.push(glow);
 
@@ -2895,8 +3291,8 @@ function buildMaple(seed, x, z, scale) {
 
   const leafGeo = new THREE.PlaneGeometry(.36, .36);
   const leafMat = new THREE.MeshStandardMaterial({
-    map: tx(texLeaf()), color: 0x2b0406, alphaTest: .42, side: THREE.DoubleSide,
-    roughness: .86, metalness: 0, emissive: 0x080000, emissiveIntensity: .12
+    map: tx(texLeaf()), color: 0x2a0c08, alphaTest: .42, side: THREE.DoubleSide,
+    roughness: .86, metalness: 0, emissive: 0x3a1208, emissiveIntensity: .30
   });
   const per = LOW ? 5 : 9;
   const inst = new THREE.InstancedMesh(leafGeo, leafMat, tips.length * per);
@@ -2934,7 +3330,7 @@ function buildMaple(seed, x, z, scale) {
 }
 
 function buildRocks() {
-  const mat = new THREE.MeshStandardMaterial({ color: 0x141a1c, roughness: .46, metalness: .10 });
+  const mat = new THREE.MeshStandardMaterial({ color: 0x12141f, roughness: .42, metalness: .18 });
   const rnd = mulberry32(404), n = noise2D(88);
   const spots = [[-6.2, -5.4, .95], [-7.4, -2.1, .7], [6.6, -7.2, .8], [8.0, -4.0, 1.05],
                  [-9.0, -8.4, 1.15], [9.6, -9.2, .9], [3.4, -7.8, .55], [-3.2, -8.6, .6]];
@@ -3022,11 +3418,11 @@ function buildWordmark() {
      Four letters at the old tracking put a 400-pixel cap height across the
      scene; the letters are spaced out instead, which keeps the type edge to
      edge while the caps come back down to the height of the headline block. */
-  const SZ = 320, TRACK = .40, PAD = 26;
+  const SZ = 320, TRACK = .14, PAD = 26;
   const m = cvs(4, 4).getContext('2d');
-  m.font = '600 ' + SZ + 'px Wordmark, sans-serif';
+  m.font = '900 ' + SZ + 'px Orbitron, sans-serif';
   m.textBaseline = 'alphabetic'; m.textAlign = 'left';
-  const word = 'KAGE', gl = [];
+  const word = 'SIMPLES', gl = [];
   let pen = 0, ascMax = 0, descMax = 0, xMin = 1e9, xMax = -1e9;
   for (const ch of word) {
     const t = m.measureText(ch);
@@ -3042,14 +3438,14 @@ function buildWordmark() {
   gl.forEach((g, i) => {
     const cw = Math.ceil(g.l + g.r) + PAD * 2, chh = Math.ceil(g.asc + g.desc) + PAD * 2;
     const c = cvs(cw, chh), x = c.getContext('2d');
-    x.font = '600 ' + SZ + 'px Wordmark, sans-serif';
+    x.font = '900 ' + SZ + 'px Orbitron, sans-serif';
     x.textBaseline = 'alphabetic'; x.textAlign = 'left';
     /* the vertical wash is baked per glyph so the whole word shares one ramp */
     const gy0 = PAD + g.asc - ascMax, gy1 = PAD + g.asc + descMax * .4;
     const grad = x.createLinearGradient(0, gy0, 0, gy1);
-    grad.addColorStop(0, 'rgb(226,236,229)');
-    grad.addColorStop(.52, 'rgb(198,214,203)');
-    grad.addColorStop(1, 'rgb(150,170,157)');
+    grad.addColorStop(0, 'rgb(220,250,255)');
+    grad.addColorStop(.55, 'rgb(34,230,255)');
+    grad.addColorStop(1, 'rgb(14,150,175)');
     x.fillStyle = grad;
     x.fillText(g.ch, PAD + g.l, PAD + g.asc);
 
@@ -3074,7 +3470,7 @@ const WORD = { glyphs: [], group: null, ink: null, reveal: 0 };
 /* --------------------------------------------------------- atmospherics */
 function buildAtmosphere() {
   /* drifting haze slabs */
-  const hazeTex = tx(texGlow('rgba(160,205,210,.55)', 'rgba(110,165,175,.18)'));
+  const hazeTex = tx(texGlow('rgba(140,160,230,.55)', 'rgba(90,110,200,.18)'));
   WORLD.haze = [];
   const rnd = mulberry32(66);
   for (let i = 0; i < (LOW ? 4 : 6); i++) {
@@ -3099,12 +3495,12 @@ function buildAtmosphere() {
   g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
   g.setAttribute('aSeed', new THREE.BufferAttribute(seed, 1));
   const emb = new THREE.Points(g, new THREE.ShaderMaterial({
-    uniforms: { uT: WORLD.uT, uTex: { value: tx(texGlow('rgba(255,190,140,1)', 'rgba(255,120,60,.35)')) },
+    uniforms: { uT: WORLD.uT, uTex: { value: tx(texGlow('rgba(255,255,255,1)', 'rgba(255,255,255,.35)')) },
       uSize: { value: vpH() * .5 } },
     transparent: true, blending: THREE.AdditiveBlending, depthWrite: false,
     vertexShader:
-      'attribute float aSeed; uniform float uT; uniform float uSize; varying float vA;\n' +
-      'void main(){ vec3 p=position;\n' +
+      'attribute float aSeed; uniform float uT; uniform float uSize; varying float vA; varying float vS;\n' +
+      'void main(){ vec3 p=position; vS = aSeed;\n' +
       ' p.y = mod(p.y + uT*(0.14+aSeed*0.28), 11.5);\n' +
       ' p.x += sin(uT*0.36 + aSeed*22.0)*0.85;\n' +
       ' p.z += cos(uT*0.29 + aSeed*17.0)*0.7;\n' +
@@ -3113,16 +3509,18 @@ function buildAtmosphere() {
       ' gl_PointSize = uSize*(0.010+aSeed*0.020)/max(-mv.z,0.6);\n' +
       ' gl_Position = projectionMatrix * mv; }',
     fragmentShader:
-      'uniform sampler2D uTex; varying float vA;\n' +
+      'uniform sampler2D uTex; varying float vA; varying float vS;\n' +
       'void main(){ vec4 t=texture2D(uTex, gl_PointCoord);\n' +
-      ' gl_FragColor = vec4(t.rgb*vec3(1.6,0.78,0.42), t.a*vA*0.75); }'
+      /* two kinds of mote: most are cold, one in four is coral */
+      ' vec3 tint = vS > 0.74 ? vec3(1.8,0.9,0.62) : vec3(0.45,1.5,1.8);\n' +
+      ' gl_FragColor = vec4(t.rgb*tint, t.a*vA*0.75); }'
   }));
   emb.frustumCulled = false; emb.renderOrder = 5;
   scene.add(emb); WORLD.embers = emb;
 
   /* rain in the slot of open sky */
   if (!LOW) {
-    const D = 900, rp = new Float32Array(D * 2 * 3), rt = new Float32Array(D * 2), rs = new Float32Array(D * 2), rl = new Float32Array(D * 2);
+    const D = 1300, rp = new Float32Array(D * 2 * 3), rt = new Float32Array(D * 2), rs = new Float32Array(D * 2), rl = new Float32Array(D * 2);
     for (let i = 0; i < D; i++) {
       const x = (rnd() - .5) * 40, z = -30 + rnd() * 34, y = rnd() * 17, sp = 7 + rnd() * 9, ln = .30 + rnd() * .55;
       for (let k = 0; k < 2; k++) {
@@ -3146,7 +3544,7 @@ function buildAtmosphere() {
         ' p.y = y + aTop*aLen;\n' +
         ' vA = smoothstep(0.0,3.0,y)*smoothstep(17.0,11.0,y);\n' +
         ' gl_Position = projectionMatrix * modelViewMatrix * vec4(p,1.0); }',
-      fragmentShader: 'varying float vA;\nvoid main(){ gl_FragColor = vec4(0.55,0.74,0.82, vA*0.024); }'
+      fragmentShader: 'varying float vA;\nvoid main(){ gl_FragColor = vec4(0.45,0.86,0.98, vA*0.036); }'
     }));
     rain.frustumCulled = false; rain.renderOrder = 6;
     scene.add(rain); WORLD.rain = rain;
@@ -3190,10 +3588,8 @@ function buildLeafFall() {
   const N = LOW ? 110 : 260;
   const mat = new THREE.MeshStandardMaterial({
     map: tx(texLeaf()), alphaTest: .42, side: THREE.DoubleSide,
-    color: 0x40080a, roughness: .84, metalness: 0,
-    /* green and blue driven to nothing: the composite tone-maps at the end,
-       and an emissive red with any green in it comes back out of that pink */
-    emissive: 0x780200, emissiveIntensity: .72
+    color: 0x40140a, roughness: .84, metalness: 0,
+    emissive: 0xb0442a, emissiveIntensity: .62
   });
   const inst = new THREE.InstancedMesh(new THREE.PlaneGeometry(.40, .40), mat, N);
   inst.frustumCulled = false; inst.renderOrder = 5;
@@ -3834,10 +4230,10 @@ function clothPlate(img, w, h) {
   const dw = img.width * s, dh = img.height * s;
   x.drawImage(img, (c.width - dw) / 2, (c.height - dh) / 2, dw, dh);
   let g = x.createLinearGradient(0, 0, 0, c.height);
-  g.addColorStop(.36, 'rgba(3,6,9,.05)'); g.addColorStop(1, 'rgba(3,6,9,.73)');
+  g.addColorStop(.36, 'rgba(4,3,13,.05)'); g.addColorStop(1, 'rgba(4,3,13,.73)');
   x.fillStyle = g; x.fillRect(0, 0, c.width, c.height);
   g = x.createLinearGradient(0, 0, 0, c.height);
-  g.addColorStop(.46, 'rgba(4,6,9,0)'); g.addColorStop(1, 'rgba(4,6,9,.80)');
+  g.addColorStop(.46, 'rgba(5,4,14,0)'); g.addColorStop(1, 'rgba(5,4,14,.80)');
   x.fillStyle = g; x.fillRect(0, 0, c.width, c.height);
   return c;
 }
@@ -3875,9 +4271,9 @@ function buildCardCloth() {
 }
 
 function buildLights() {
-  scene.add(new THREE.HemisphereLight(0x53838f, 0x060a08, .13));
+  scene.add(new THREE.HemisphereLight(0x2a5c8f, 0x07051a, .16));
 
-  const key = new THREE.DirectionalLight(0xb6dbe4, 1.22);
+  const key = new THREE.DirectionalLight(0x9fc4ff, 1.10);
   key.position.set(2.6, 21, 2.5);
   key.target.position.set(0, 2.2, -12.5); scene.add(key.target);
   if (WANT_SHADOW) {
@@ -3890,34 +4286,28 @@ function buildLights() {
   }
   scene.add(key); WORLD.key = key;
 
-  /* moonlight: no shadow, no fill, purely a rim down the right-hand slope of
-     every roof — without it the hall is a flat black cut-out against the sky */
-  const moonKey = new THREE.DirectionalLight(0xff6a42, .52);
+  /* the moon: a coral rim down the right-hand face of the tower */
+  const moonKey = new THREE.DirectionalLight(0xff8a66, .55);
   moonKey.position.set(26, 30, -60);
   moonKey.target.position.set(0, 8, -40); scene.add(moonKey.target);
   scene.add(moonKey);
 
-  /* The hall's own lamps. They light the podium and the top of the flight and
-     nothing else — a range that reaches the roof turns the whole building into
-     a paper lantern and the silhouette disappears. */
-  const hallL = new THREE.PointLight(0xff8a26, 2.3, 15, 2);
+  /* the lobby's own light, cold, spilling onto the top of the flight */
+  const hallL = new THREE.PointLight(0x22e6ff, 2.4, 15, 2);
   hallL.position.set(0, PODIUM + 1.2, TEMPLE_Z + 8.6); scene.add(hallL); WORLD.hallLight = hallL;
   [-1, 1].forEach(s => {
-    const w = new THREE.PointLight(0xff8420, 2.2, 11, 2);
+    const w = new THREE.PointLight(0x22d0ee, 2.0, 11, 2);
     w.position.set(s * 11.4, PODIUM + 1.2, TEMPLE_Z + 5.6); scene.add(w);
   });
 
-  /* the moon throws almost nothing, but a trace of red high on the right
-     keeps it attached to the scene instead of floating on top of it */
-  const moonL = new THREE.PointLight(0xff3a1c, 3.0, 46, 2);
+  const moonL = new THREE.PointLight(0xe5745c, 3.0, 46, 2);
   moonL.position.set(11.0, 17.0, -24.0); scene.add(moonL); WORLD.moonLight = moonL;
 
-  const fill = new THREE.PointLight(0x86c6d2, 0.95, 30, 2);
+  const fill = new THREE.PointLight(0x6b4dff, 1.0, 30, 2);
   fill.position.set(-1, 13.5, -16.0); scene.add(fill);
 
-  /* the flight is the spine of the composition — without a lamp of its own it
-     falls into the same black as the ground and the eye has nothing to climb */
-  const stairL = new THREE.PointLight(0xffa049, 4.2, 17, 2);
+  /* the flight is the spine of the composition — lit cyan from above */
+  const stairL = new THREE.PointLight(0x37d6ff, 4.0, 17, 2);
   stairL.position.set(0, 7.6, -26.0); scene.add(stairL);
 }
 /* ====================================================== 6 · planar mirror */
@@ -3946,7 +4336,7 @@ function initPost() {
     lw = Math.max(2, lw >> 1); lh = Math.max(2, lh >> 1);
   }
   POST.bright = new THREE.ShaderMaterial({
-    uniforms: { tS: { value: null }, uThr: { value: .86 }, uKnee: { value: .50 } },
+    uniforms: { tS: { value: null }, uThr: { value: .80 }, uKnee: { value: .50 } },
     vertexShader: QUAD_VS,
     fragmentShader:
       'uniform sampler2D tS; uniform float uThr; uniform float uKnee; varying vec2 vUv;\n' +
@@ -3970,13 +4360,13 @@ function initPost() {
   POST.comp = new THREE.ShaderMaterial({
     uniforms: {
       tS: { value: null }, tB: { value: null }, uRes: { value: new THREE.Vector2(w, h) },
-      uT: { value: 0 }, uBloom: { value: .34 }, uCA: { value: 1 }, uGrain: { value: .020 },
-      uVig: { value: 1 }, uExp: { value: .62 }, uFade: { value: 1 }, uSat: { value: 1.05 }
+      uT: { value: 0 }, uBloom: { value: .48 }, uCA: { value: 2.4 }, uGrain: { value: .022 },
+      uVig: { value: 1 }, uExp: { value: .62 }, uFade: { value: 1 }, uSat: { value: 1.12 }, uScan: { value: .09 }
     },
     vertexShader: QUAD_VS,
     fragmentShader:
       'uniform sampler2D tS; uniform sampler2D tB; uniform vec2 uRes;\n' +
-      'uniform float uT, uBloom, uCA, uGrain, uVig, uExp, uFade, uSat;\n' +
+      'uniform float uT, uBloom, uCA, uGrain, uVig, uExp, uFade, uSat, uScan;\n' +
       'varying vec2 vUv;\n' +
       'vec3 aces(vec3 x){ return clamp((x*(2.51*x+0.03))/(x*(2.43*x+0.59)+0.14), 0.0, 1.0); }\n' +
       'void main(){\n' +
@@ -3991,8 +4381,8 @@ function initPost() {
       ' c = aces(c);\n' +
       ' float l = dot(c, vec3(0.2126,0.7152,0.0722));\n' +
       ' c = mix(vec3(l), c, uSat);\n' +
-      ' c = mix(c, c*vec3(0.74,1.03,1.11), smoothstep(0.55,0.0,l)*0.80);\n' +    /* teal shadows */
-      ' c = mix(c, c*vec3(1.035,0.995,0.968), smoothstep(0.50,1.0,l)*0.26);\n' + /* warm highs   */
+      ' c = mix(c, c*vec3(0.78,0.86,1.24), smoothstep(0.55,0.0,l)*0.80);\n' +   /* violet shadows */
+      ' c = mix(c, c*vec3(1.06,0.985,0.95), smoothstep(0.50,1.0,l)*0.30);\n' +  /* coral highs    */
       ' float v = smoothstep(1.22, 0.26, length(d*vec2(1.0,0.94))*1.42);\n' +
       ' c *= mix(1.0, v, uVig);\n' +
       ' float g = fract(sin(dot(vUv*uRes + uT*137.0, vec2(12.9898,78.233)))*43758.5453);\n' +
@@ -4003,7 +4393,11 @@ function initPost() {
          in linear the same curve mostly crushes the shadows, and this frame is
          nearly all shadow. Pivoted low, at 0.30, so it deepens the night
          without pulling the lit paper of the hall down with it. */
-      ' e = clamp((e - 0.30) * 1.00 + 0.30, 0.0, 1.0);\n' +
+      ' e = clamp((e - 0.30) * 1.04 + 0.30, 0.0, 1.0);\n' +
+      /* scan lines, in the encoded domain so they read as lines on the glass
+         and not as a darkening of the scene */
+      ' float sl = 0.5 + 0.5*sin(vUv.y*uRes.y*1.5707963);\n' +
+      ' e *= 1.0 - uScan*sl*sl;\n' +
       ' gl_FragColor = vec4( e, 1.0 );\n' +
       '}'
   });
@@ -4032,12 +4426,13 @@ function renderPost() {
 
 /* ================================================= 8 · the camera rig */
 const CAM = [
-  { p: [  0.0, 4.05, 13.6 ], t: [  0.0, 6.60, -18.0 ], fov: 36 },  /* 0 hero        */
-  { p: [ -5.6, 2.35, 11.6 ], t: [  1.2, 5.60, -14.0 ], fov: 48 },  /* 1 the sanmon  */
-  { p: [  1.2, 3.60,  2.2 ], t: [ -0.6, 7.50, -22.0 ], fov: 40 },  /* 2 gardens     */
-  { p: [  5.2, 2.10, -3.4 ], t: [ -2.6, 7.00, -20.0 ], fov: 46 },  /* 3 craft       */
-  { p: [  0.0, 7.60, -16.0 ], t: [  0.0, 13.0, -40.0 ], fov: 42 }, /* 4 afterlight  */
-  { p: [  0.0, 10.5, -20.0 ], t: [  0.0, 3.00, -34.0 ], fov: 46 }  /* 5 footer      */
+  { p: [  0.0, 4.05, 13.6 ], t: [  0.0, 7.40, -18.0 ], fov: 36 },  /* 0 hero        */
+  { p: [ -5.6, 2.35, 11.6 ], t: [  1.2, 6.20, -14.0 ], fov: 48 },  /* 1 about       */
+  { p: [  1.2, 3.60,  2.2 ], t: [ -0.6, 8.50, -22.0 ], fov: 40 },  /* 2 work        */
+  { p: [  5.2, 2.10, -3.4 ], t: [ -2.6, 8.00, -20.0 ], fov: 46 },  /* 3 services    */
+  { p: [ -4.4, 5.40, -9.0 ], t: [  1.6, 14.0, -36.0 ], fov: 44 },  /* 4 engine      */
+  { p: [  0.0, 7.60, -16.0 ], t: [  0.0, 15.0, -40.0 ], fov: 42 }, /* 5 contact     */
+  { p: [  0.0, 10.5, -20.0 ], t: [  0.0, 4.00, -34.0 ], fov: 46 }  /* 6 footer      */
 ];
 const RIG = { prog: 0, smooth: 0, mx: 0, my: 0, tmx: 0, tmy: 0, intro: 0, focus: -1, focusAmt: 0 };
 let curveP, curveT, tmpCam;
@@ -4128,7 +4523,7 @@ function layoutWord() {
      as the six-letter word could afford to, decapitates the K and the E. The
      narrow branch is held a little inside the edge because a phone frame has
      no gutter to lose the tracking that trails the final letter into. */
-  const fill = narrow ? .96 : 1.00;
+  const fill = narrow ? .96 : .93;
   const s = (R.x - L.x) * fill / WORD.ink.w;
   /* on a tall frame the mounds sit near mid-height, so the baseline has to
      ride above them or the whole word disappears into the grass */
@@ -4169,6 +4564,32 @@ function wireReveals() {
    when each heading starts. */
 function splitHeadingWords() {
   if (REDUCE) return;
+  /* Chinese has no spaces to split on, so a run of CJK is broken into
+     characters instead; closing punctuation rides with the character before
+     it and opening punctuation with the one after, so neither can start a
+     line on its own. */
+  const CJK = /[⺀-鿿豈-﫿＀-￯　-〿]/;
+  const CLOSE = /[、。，：；！？」』）—…]/;
+  const OPEN = /[「『（]/;
+  /* returns phrases: arrays of tokens. A phrase runs up to and including a
+     closing mark, and is laid out nowrap, so a title only ever breaks where
+     its own punctuation does. Latin runs inside a Chinese word ("AI", "$350")
+     stay whole. */
+  const tokens = word => {
+    if (!CJK.test(word)) return [[word]];
+    const phrases = []; let ph = [], cur = '', glue = false, latin = false;
+    const flush = () => { if (cur) ph.push(cur); cur = ''; latin = false; };
+    for (const ch of word) {
+      const isCjk = CJK.test(ch);
+      if (!isCjk) { if (!latin) { flush(); latin = true; } cur += ch; continue; }
+      if (CLOSE.test(ch) || glue) { if (latin) flush(); cur += ch; glue = false;
+        if (CLOSE.test(ch)) { flush(); phrases.push(ph); ph = []; } continue; }
+      flush(); cur = ch;
+      if (OPEN.test(ch)) glue = true;
+    }
+    flush(); if (ph.length) phrases.push(ph);
+    return phrases;
+  };
   $$('h1.display, h2.display').forEach(heading => {
     const lines = heading.querySelectorAll('.mask-line');
     const targets = lines.length ? [].slice.call(lines) : [heading];
@@ -4176,21 +4597,65 @@ function splitHeadingWords() {
       if (target.dataset.wordReady === 'true') return;
       const phrase = target.textContent.replace(/\s+/g, ' ').trim();
       if (!phrase) return;
+      const hl = target.querySelector('.hl') ? target.querySelector('.hl').textContent : null;
       target.dataset.wordReady = 'true';
       target.classList.add('word-reveal');
       target.setAttribute('aria-label', phrase);
       target.textContent = '';
+      let k = 0;
       phrase.split(' ').forEach((word, i) => {
         if (i) target.appendChild(document.createTextNode(' '));
-        const mask = document.createElement('span');
-        const inner = document.createElement('span');
-        mask.className = 'word-mask'; mask.setAttribute('aria-hidden', 'true');
-        inner.className = 'word'; inner.textContent = word;
-        inner.style.setProperty('--word-delay', (i * 72) + 'ms');
-        mask.appendChild(inner); target.appendChild(mask);
+        tokens(word).forEach(phrase => {
+          const wrap = document.createElement('span'); wrap.className = 'ph';
+          phrase.forEach(tok => {
+            const mask = document.createElement('span');
+            const inner = document.createElement('span');
+            mask.className = 'word-mask'; mask.setAttribute('aria-hidden', 'true');
+            inner.className = 'word' + (hl && tok.indexOf(hl) >= 0 ? ' hl' : ''); inner.textContent = tok;
+            inner.style.setProperty('--word-delay', (k++ * 48) + 'ms');
+            mask.appendChild(inner); wrap.appendChild(mask);
+          });
+          target.appendChild(wrap);
+        });
       });
     });
   });
+}
+
+/* the HUD clock in the hero: Taipei time, once a second */
+function wireHud() {
+  const el = $('#hud-time'); if (!el) return;
+  let fmt = null;
+  try { fmt = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Taipei', hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' }); } catch (e) {}
+  const tick = () => { el.textContent = (fmt ? fmt.format(new Date()) : new Date().toTimeString().slice(0, 8)) + ' GMT+8'; };
+  tick(); setInterval(tick, 1000);
+}
+
+/* the engine matrix: cells light one after another while the section is on
+   screen, so the grid reads as a production line rather than a table */
+function wireMatrix() {
+  const box = $('#matrix'); if (!box) return;
+  const cells = $$('#matrix .cell'), status = $('#mx-status');
+  if (!cells.length || REDUCE) return;
+  let i = -1, timer = null, run = 0;
+  const step = () => {
+    cells.forEach(c => c.classList.remove('lit'));
+    i = (i + 1) % (cells.length + 4);
+    if (i < cells.length) {
+      cells[i].classList.add('lit', 'was');
+      if (status) status.textContent = 'ENGINE · RENDERING ' + String(i + 1).padStart(2, '0') + ' / 15';
+    } else if (i === cells.length) {
+      if (status) status.textContent = 'ENGINE · 15 組完成 · 48H';
+    } else if (i === cells.length + 3) {
+      cells.forEach(c => c.classList.remove('was'));
+      run++;
+    }
+  };
+  const io = new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting && !timer) { timer = setInterval(step, 260); step(); }
+    else if (!e.isIntersecting && timer) { clearInterval(timer); timer = null; if (status) status.textContent = 'ENGINE · STANDBY'; }
+  }), { threshold: .2 });
+  io.observe(box);
 }
 
 /* Foreground PNGs are section-owned until their chapter is called. At that
@@ -4329,7 +4794,7 @@ function wireHeroExit() {
 function wireNav() {
   let last = 0;
   const rail = $('#rail');
-  const names = ['The Hidden Gate', 'The Sanmon', 'Still Gardens', 'Sacred Craft', 'Afterlight', 'Colophon'];
+  const names = ['首頁', '我們怎麼想', '案例', '服務', 'AI 素材引擎', '聯絡', '頁尾'];
   SECS.forEach((s, i) => {
     const b = document.createElement('button');
     b.innerHTML = '<i></i>'; b.title = names[i] || '';
@@ -4443,7 +4908,7 @@ function buildCards() {
     { p: [-2.0, 1.60, -2.0], t: [0, 10.0, -34.0], fov: 40 },    /* the long climb */
     { p: [4.2, 2.90, -9.5], t: [6.4, 2.90, -14.4], fov: 40 },   /* lantern court  */
     { p: [3.4, 2.40, 2.0], t: [-1.0, -.60, -6.0], fov: 40 },    /* the wet court  */
-    { p: [0.6, 3.40, -12.0], t: [0, 12.0, -40.0], fov: 26 }     /* hero window    */
+    { p: [0.6, 3.40, -12.0], t: [0, 14.0, -40.0], fov: 26 }     /* hero window    */
   ];
   $$('[data-view]').forEach(el => {
     const d = defs[+el.dataset.view]; if (!d) return;
@@ -4610,6 +5075,21 @@ function updateWorld(dt) {
   });
   if (WORLD.lanternGlows) WORLD.lanternGlows.forEach(g => { g.quaternion.copy(camera.quaternion); });
 
+  /* the signs buzz: a slow breath with the odd dropped frame, per sign */
+  if (WORLD.signs) WORLD.signs.forEach((s, i) => {
+    const t = clock * 7.3 + i * 2.9;
+    const drop = Math.sin(t) * Math.sin(t * 2.31) * Math.sin(t * .37 + i) > .80 ? .45 : 1;
+    s.material.opacity = drop * (.90 + .10 * Math.sin(clock * 1.3 + i * 1.7));
+  });
+  /* the aviation beacon on the spire */
+  if (WORLD.beacon) {
+    const on = (clock % 1.6) < .18;
+    WORLD.beacon.mesh.visible = on;
+    WORLD.beacon.glow.material.opacity = on ? .85 : .12;
+    WORLD.beacon.light.intensity = on ? 3.2 : .3;
+    WORLD.beacon.glow.quaternion.copy(camera.quaternion);
+  }
+
   /* haze slides across the courtyard */
   if (WORLD.haze) WORLD.haze.forEach(h => {
     h.position.x = h.userData.x0 + Math.sin(clock * h.userData.sp + h.userData.ph) * 5.5;
@@ -4701,13 +5181,13 @@ function queue() { TIMER ? setTimeout(() => frame(performance.now()), 16) : requ
 
 /* ======================================================== 14 · booting */
 const JOBS = [
-  ['Reading the type', () => document.fonts && document.fonts.load('600 320px Wordmark')],
+  ['Reading the type', () => document.fonts && Promise.all([document.fonts.load('900 320px Orbitron'), document.fonts.load('700 156px "Noto Sans TC"')])],
   ['Pouring the ground', () => { initGL(); WORLD.uT = { value: 0 }; buildRig(); buildLights(); }],
-  ['Cutting the approach', () => buildShell()],
-  ['Raising the hall', () => buildTemple()],
+  ['Laying the plaza', () => buildShell()],
+  ['Raising the tower', () => buildTemple()],
   ['Hanging the moon', () => buildMoon()],
-  ['Setting the gate', () => buildTorii()],
-  ['Placing the stones', () => {
+  ['Wiring the gate', () => buildTorii()],
+  ['Standing the pillars', () => {
     buildRocks();
     buildLantern(7.4, -7.0, 1.15); buildLantern(-7.6, -5.2, 1.0);
     /* The pairs flanking the flight were given flat heights — 2 and PODIUM —
@@ -4724,7 +5204,7 @@ const JOBS = [
       buildLantern(-cheekX(z), z, sc, cheekTop(z));
     });
   }],
-  ['Growing the maples', () => {
+  ['Planting the avenue', () => {
     buildMaple(71, 12.6, -13.0, 1.05); buildMaple(72, -11.8, -9.4, .95);
     buildMaple(73, 9.2, -19.0, .82);   buildMaple(74, -14.5, -17.5, 1.0);
     buildMaple(75, 16.5, -6.0, .88);
@@ -4749,7 +5229,7 @@ const JOBS = [
 
 function boot() {
   makeGrain();
-  wireReveals(); wireForegroundStages(); wireNav(); wireHeroExit(); wireFocus(); wireCursor();
+  wireReveals(); wireForegroundStages(); wireNav(); wireHeroExit(); wireFocus(); wireCursor(); wireHud(); wireMatrix();
   document.body.classList.add('is-locked');
   let i = 0;
   const step = () => {
