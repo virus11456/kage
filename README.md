@@ -68,4 +68,4 @@ kage/
 
 頁面上的公司介紹、服務、案例數字與聯絡資訊皆取自 [simples.com.tw](https://simples.com.tw/)，更新時請以官網為準；`INTEGRATION.md` 說明了哪些區塊對應到官網的哪些頁面。
 
-案例卡片與預覽視窗的四張照片來自 [Unsplash](https://unsplash.com/license)（可免費商用、不需標示），正式上線前可換成客戶授權的實景照。前景剪影圖層沿用 Kage 專案的生成素材；原始 Kage 程式碼與素材未授權再散布，Three.js 依其 MIT 授權使用。
+案例卡片與預覽視窗的五張照片來自 [Unsplash](https://unsplash.com/license)（可免費商用、不需標示），正式上線前可換成客戶授權的實景照。前景剪影圖層沿用 Kage 專案的生成素材；原始 Kage 程式碼與素材未授權再散布，Three.js 依其 MIT 授權使用。
