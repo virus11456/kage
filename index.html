@@ -3104,92 +3104,53 @@ function placeMoon() {
   WORLD.moonHalo.position.x = x;
 }
 
+/* ---------------------------------------------------- the entrance gate
+   Where the torii stood: the gantry at the foot of the stand — two steel
+   pylons, a beam across them carrying the gate's LED board, cyan tube
+   framing the opening and coral rails down the pylons. */
 function buildTorii() {
-  /* the weathering costs the gate a lot of its chroma, so the tint puts it
-     back: red lifted well past green and blue rather than a flat brightening,
-     or the vermilion comes out of the grade as brick */
-  /* the lacquer and the gilt are gone: the gate is gunmetal now, and what
-     used to be vermilion is carried by the tubes hung on it */
-  const lac  = new THREE.MeshStandardMaterial({ color: 0x151824, roughness: .40, metalness: .80 });
-  const gold = new THREE.MeshStandardMaterial({ color: 0x2a3040, roughness: .34, metalness: .88 });
-  const g = new THREE.Group();
-  const BASE = .78, H = 8.2, SPAN = 3.55;
-
-  [-1, 1].forEach(s => {
-    const col = new THREE.Mesh(new THREE.CylinderGeometry(.30, .38, H, 26), lac);
-    col.position.set(s * SPAN, BASE + H / 2, 0); col.castShadow = true; g.add(col);
-    const foot = new THREE.Mesh(new THREE.CylinderGeometry(.46, .50, .52, 26), gold);
-    foot.position.set(s * SPAN, BASE + .26, 0); foot.castShadow = true; g.add(foot);
-    const collar = new THREE.Mesh(new THREE.CylinderGeometry(.345, .345, .26, 26), gold);
-    collar.position.set(s * SPAN, BASE + H - 1.42, 0); g.add(collar);
-    /* the ornate bracket where the beams cross the column */
-    const br = new THREE.Mesh(new THREE.BoxGeometry(.86, .30, .86), gold);
-    br.position.set(s * SPAN, BASE + H - .72, 0); g.add(br);
-    const br2 = new THREE.Mesh(new THREE.BoxGeometry(.60, .52, .60), gold);
-    br2.position.set(s * SPAN, BASE + H - .34, 0); g.add(br2);
-    [-1, 1].forEach(d => {
-      const wing = new THREE.Mesh(new THREE.BoxGeometry(.24, .70, .18), gold);
-      wing.position.set(s * SPAN + d * .40, BASE + H - .62, .30); g.add(wing);
-      const wing2 = wing.clone(); wing2.position.z = -.30; g.add(wing2);
-    });
-  });
-
-  /* nuki — the straight beam that pierces the columns */
-  const nuki = new THREE.Mesh(new THREE.BoxGeometry(9.4, .52, .46), lac);
-  nuki.position.set(0, BASE + H - 2.15, 0); nuki.castShadow = true; g.add(nuki);
-
-  /* gakuzuka — the little strut at the centre */
-  const gak = new THREE.Mesh(new THREE.BoxGeometry(.46, 1.22, .40), lac);
-  gak.position.set(0, BASE + H + .10, 0); g.add(gak);
-  const gakG = new THREE.Mesh(new THREE.BoxGeometry(.60, .18, .50), gold);
-  gakG.position.set(0, BASE + H + .68, 0); g.add(gakG);
-
-  /* shimaki + kasagi — the two crowning beams, swept upward at the ends */
-  function beamPath(half, rise, power) {
-    const p = [];
-    for (let i = 0; i <= 26; i++) {
-      const u = i / 26 * 2 - 1;
-      p.push(new THREE.Vector3(u * half, Math.pow(Math.abs(u), power) * rise, 0));
-    }
-    return p;
-  }
-  const shimaki = new THREE.Mesh(sweepPoly(beamPath(5.05, .40, 2.6),
-    [[-.30, -.19], [.30, -.19], [.32, .06], [.28, .21], [-.28, .21], [-.32, .06]]), lac);
-  shimaki.position.set(0, BASE + H - .52, 0); shimaki.castShadow = true; g.add(shimaki);
-
-  const kasagi = new THREE.Mesh(sweepPoly(beamPath(5.85, .62, 2.4),
-    [[-.42, -.24], [.42, -.24], [.46, .04], [.30, .28], [-.30, .28], [-.46, .04]]), lac);
-  kasagi.position.set(0, BASE + H + .96, 0); kasagi.castShadow = true; g.add(kasagi);
-  /* a black lacquer cap along the top of the kasagi */
-  const cap = new THREE.Mesh(sweepPoly(beamPath(5.95, .62, 2.4),
-    [[-.48, .22], [.48, .22], [.48, .34], [-.48, .34]]),
-    new THREE.MeshStandardMaterial({ color: 0x120c0c, roughness: .42, metalness: .14 }));
-  cap.position.set(0, BASE + H + .96, 0); g.add(cap);
-
-  /* the gate stands at the foot of the flight, not over the court — small
-     enough that the hall keeps the top of the frame to itself */
-  /* The lowest thing on the gate is the foot of each column, and it starts
-     at BASE — so anchoring the group at y=0 left the whole torii hanging
-     BASE*scale above the court. Drop it by exactly that and the feet land. */
-  /* the tubes: cyan along both crown beams and the nuki, coral rails down
-     each column, and one cold lamp in the opening */
+  const steel = new THREE.MeshStandardMaterial({ color: 0x1a1e2c, roughness: .40, metalness: .82 });
+  const dark  = new THREE.MeshStandardMaterial({ color: 0x0c0e1a, roughness: .48, metalness: .62 });
   const neonC = new THREE.MeshBasicMaterial({ color: hdr(.35, 2.4, 2.8), fog: true, toneMapped: false });
   const neonO = new THREE.MeshBasicMaterial({ color: hdr(2.9, 1.05, .78), fog: true, toneMapped: false });
-  [[.50, BASE + H + .60], [.34, BASE + H - .88], [.28, BASE + H - 2.47]].forEach((t, i) => {
+  const g = new THREE.Group();
+  const SPAN = 5.4, H = 7.2;
+  [-1, 1].forEach(sx => {
+    const col = new THREE.Mesh(new THREE.BoxGeometry(.62, H, .62), steel);
+    col.position.set(sx * SPAN, H / 2, 0); col.castShadow = true; g.add(col);
+    const foot = new THREE.Mesh(new THREE.BoxGeometry(1.1, .5, 1.1), dark);
+    foot.position.set(sx * SPAN, .25, 0); g.add(foot);
     [-1, 1].forEach(d => {
-      const tube = new THREE.Mesh(new THREE.BoxGeometry(i === 2 ? 9.0 : SPAN * 2 + 2.6, .08, .08), neonC);
-      tube.position.set(0, t[1], d * t[0]); g.add(tube);
+      const r = new THREE.Mesh(new THREE.BoxGeometry(.07, H - 1.4, .07), neonO);
+      r.position.set(sx * (SPAN + .36), H / 2 - .2, d * .22); g.add(r);
     });
   });
-  [-1, 1].forEach(s => [-1, 1].forEach(d => {
-    const r = new THREE.Mesh(new THREE.BoxGeometry(.07, H - 2.6, .07), neonO);
-    r.position.set(s * (SPAN + .38), BASE + (H - 2.6) / 2 + .1, d * .20); g.add(r);
-  }));
-  const lamp = new THREE.PointLight(0x22e6ff, 2.4, 13, 2);
-  lamp.position.set(0, BASE + H - 1.4, 0); g.add(lamp);
+  const beam = new THREE.Mesh(new THREE.BoxGeometry(SPAN * 2 + 1.6, 1.5, .9), dark);
+  beam.position.set(0, H - .75, 0); beam.castShadow = true; g.add(beam);
+  const cap = new THREE.Mesh(new THREE.BoxGeometry(SPAN * 2 + 2.0, .18, 1.2), steel);
+  cap.position.set(0, H + .09, 0); g.add(cap);
+  /* the cyan tube framing the opening, both faces */
+  [-1, 1].forEach(d => {
+    const top = new THREE.Mesh(new THREE.BoxGeometry(SPAN * 2 + 1.6, .08, .08), neonC);
+    top.position.set(0, H - 1.55, d * .48); g.add(top);
+    const top2 = new THREE.Mesh(new THREE.BoxGeometry(SPAN * 2 + 2.0, .08, .08), neonC);
+    top2.position.set(0, H + .2, d * .62); g.add(top2);
+  });
+  /* the LED board: gate number, address, the studio */
+  const board = (text, w, h, x, y, z, ry) => {
+    const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h),
+      new THREE.MeshBasicMaterial({ map: tx(texSign(text, 2048, 256, { font: '500 118px "JetBrains Mono", "Noto Sans TC", monospace', color: '#d6f6ff', blur: 12 }), { aniso: 16 }),
+        transparent: true, depthWrite: false, fog: true, toneMapped: false, color: hdr(1.4, 1.4, 1.4) }));
+    m.position.set(x, y, z); m.rotation.y = ry; m.renderOrder = 4; g.add(m);
+    WORLD.signs = WORLD.signs || []; WORLD.signs.push(m); return m;
+  };
+  board('GATE 01 · SIMPLES · 玉門街 1 號', 9.6, 1.2, 0, H - .75, .48, 0);
+  board('CIT · CENTER FOR INNOVATION TAIPEI', 9.6, 1.2, 0, H - .75, -.48, Math.PI);
+  const lamp = new THREE.PointLight(0x22e6ff, 2.0, 13, 2);
+  lamp.position.set(0, H - 1.6, 0); g.add(lamp);
 
   const GS = .72;
-  g.position.set(0, -BASE * GS, -8.6); g.scale.setScalar(GS);
+  g.position.set(0, 0, -8.6); g.scale.setScalar(GS);
   scene.add(g); WORLD.torii = g;
 }
 
@@ -5148,7 +5109,7 @@ const JOBS = [
   ['Laying the plaza', () => buildShell()],
   ['Raising the stand', () => buildTemple()],
   ['Hanging the moon', () => buildMoon()],
-  ['Wiring the gate', () => buildTorii()],
+  ['Raising the gate', () => buildTorii()],
   ['Standing the pillars', () => {
     buildRocks();
     buildLantern(7.4, -7.0, 1.15); buildLantern(-7.6, -5.2, 1.0);
