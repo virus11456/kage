@@ -946,6 +946,28 @@ body[data-layout-hero="b"] .hero-side .v{ font-family:'Noto Sans TC',sans-serif;
 [data-fg="pathways"] .fg-sakura > img, [data-fg="eternity"] .fg-sakura > img{ filter:saturate(.7) brightness(.7) hue-rotate(-14deg); }
 [data-fg="pathways"] .fg-leaves > img{ filter:saturate(.8) brightness(.75) hue-rotate(-22deg); }
 
+/* ---- 中 / EN */
+.lang{ display:inline-flex; align-items:center; gap:7px; margin-left:clamp(14px,2vw,30px); flex:0 0 auto;
+  font-family:'JetBrains Mono','Onest',monospace; font-size:10px; font-weight:500; letter-spacing:.22em; color:var(--muted); }
+.lang span{ transition:color .3s, text-shadow .3s; }
+.lang span.on{ color:var(--neon); text-shadow:0 0 8px rgba(34,230,255,.6); }
+.lang i{ font-style:normal; opacity:.45; }
+.lang:hover span:not(.on){ color:var(--bone-dim); }
+@media (max-width:820px){ .lang{ margin-left:auto; } .nav-burger{ margin-left:18px !important; } }
+/* English display type: the uppercase grotesk the Kage grammar was set in */
+html[data-lang="en"] .display{ font-family:'Onest','Noto Sans TC',sans-serif; font-weight:400; text-transform:uppercase; letter-spacing:-.012em; line-height:1.06; }
+html[data-lang="en"] .h-hero{ font-size:clamp(26px,3.1vw,48px); }
+html[data-lang="en"] .h-sec{ font-size:clamp(28px,3.6vw,54px); }
+html[data-lang="en"] .fin h2{ letter-spacing:-.02em; }
+html[data-lang="en"] body[data-layout-closing="b"] .fin h2{ text-orientation:mixed; font-size:clamp(30px,3.6vw,52px); letter-spacing:-.02em; }
+html[data-lang="en"] .hero-en, html[data-lang="en"] .foot-brand p .foot-en{ font-family:'Noto Sans TC',sans-serif; letter-spacing:.2em; text-transform:none; }
+html[data-lang="en"] .nav-link{ font-family:'JetBrains Mono','Onest',monospace; font-size:11px; text-transform:uppercase; letter-spacing:.2em; }
+html[data-lang="en"] .nav-link .alt{ font-family:'Noto Sans TC',sans-serif; text-transform:none; letter-spacing:.14em; font-size:12px; }
+html[data-lang="en"] .chip b{ letter-spacing:.16em; }
+html[data-lang="en"] .les h3{ font-family:'Onest',sans-serif; text-transform:uppercase; letter-spacing:.02em; font-size:clamp(17px,1.6vw,24px); }
+html[data-lang="en"] .card-lab b{ font-family:'Onest',sans-serif; text-transform:uppercase; letter-spacing:.04em; font-size:clamp(12px,.95vw,15px); }
+html[data-lang="en"] .gate-grid h2{ max-width:12ch; }
+
 /* ---- scan lines: a fixed pass over the whole frame, and one slow sweep */
 #scan{
   position:fixed; inset:0; z-index:57; pointer-events:none; opacity:.42;
@@ -1113,6 +1135,7 @@ body[data-layout-closing="b"] .fin h2{ text-orientation:upright; }
     <a class="nav-link" href="engine.html" data-cursor><span>素材引擎</span><span class="alt">Engine</span></a>
     <a class="nav-link" href="#contact" data-cursor><span>聯絡</span><span class="alt">Contact</span></a>
   </nav>
+  <button class="lang" aria-label="切換語言 / Switch language" data-cursor><span data-l="zh">中</span><i>/</i><span data-l="en">EN</span></button>
   <button class="nav-burger" aria-label="Menu" data-cursor><i></i><i></i></button>
 </header>
 
@@ -1422,6 +1445,7 @@ body[data-layout-closing="b"] .fin h2{ text-orientation:upright; }
 <div class="rail" id="rail"></div>
 
 <script src="secret-pathways-assets/three.min.js"></script>
+<script src="secret-pathways-assets/i18n.js" defer></script>
 <script>
 /* =====================================================================
    SIMPLES — the CIT grandstand at Yuanshan, after dark.
@@ -5298,8 +5322,11 @@ function start() {
   INTRO.t0 = shot !== null ? 0 : (REDUCE ? performance.now() - 4000 : performance.now());
   queue();
   window.__kage = window.__secret = { RIG: RIG, WORLD: WORLD, WORD: WORD, CAM: CAM, POST: POST, renderer: renderer, scene: scene, camera: camera, anchors: () => anchors };
+  measure();
 }
 
+/* the language switch puts a heading's text back and needs it split again */
+window.__simplesResplit = () => { splitHeadingWords(); measure(); };
 if (document.readyState === 'complete' || document.readyState === 'interactive') setTimeout(boot, 0);
 else addEventListener('DOMContentLoaded', boot);
 })();
