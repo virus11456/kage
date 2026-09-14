@@ -64,8 +64,8 @@
     '醫療 · 私訊轉換系統': 'Healthcare · DM conversion system',
     '亞洲包車旅遊平台': 'Asian charter travel platform',
     '旅遊 · 廣告規模化': 'Travel · Scaled media',
-    '年營收 9,000 萬+，ROAS 24×': 'NT$90M+ annual revenue, 24× ROAS',
-    'ROAS 24×，年營收 9,000 萬+': '24× ROAS, NT$90M+ annual revenue', 'D · 日本包車 · 廣告規模化': 'D · Japan charters · Scaled media',
+    '年營收 1 億+，ROAS 24×': 'NT$100M+ annual revenue, 24× ROAS',
+    'ROAS 24×，年營收 1 億+': '24× ROAS, NT$100M+ annual revenue', 'D · 亞洲包車平台 · 廣告規模化': 'D · Asia charter platform · Scaled media',
     /* ---- 03 services */
     '— 服務': '— Services',
     '五個服務，一套系統。': 'Five services. One system.',
