@@ -5104,7 +5104,16 @@ function queue() { TIMER ? setTimeout(() => frame(performance.now()), 16) : requ
 
 /* ======================================================== 14 · booting */
 const JOBS = [
-  ['Reading the type', () => document.fonts && Promise.all([document.fonts.load('900 320px Orbitron'), document.fonts.load('700 156px "Noto Sans TC"')])],
+  /* The signs are painted on canvases, and a canvas never asks the browser
+     to fetch a font. Google serves Noto Sans TC in unicode-range slices, so
+     every character a sign uses has to be requested here by name, or the
+     slice it lives in is never downloaded and the glyph paints as a box. */
+  ['Reading the type', () => document.fonts && Promise.all([
+    document.fonts.load('900 320px Orbitron', 'SIMPLESCIT'),
+    document.fonts.load('700 156px "Noto Sans TC"', '簡單行銷'),
+    document.fonts.load('500 132px "Noto Sans TC"', '讓每個好點子都可以落地圓山玉門街號'),
+    document.fonts.load('500 118px "JetBrains Mono"', 'GATE01·SIMPLESYUANSHANCENTERFORINNOVATIONTAIPEI')
+  ])],
   ['Pouring the ground', () => { initGL(); WORLD.uT = { value: 0 }; buildRig(); buildLights(); }],
   ['Laying the plaza', () => buildShell()],
   ['Raising the stand', () => buildTemple()],
