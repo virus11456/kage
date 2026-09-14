@@ -779,10 +779,6 @@ body[data-layout-footer="b"] .foot-base span:last-child{ text-align:right; }
 [data-fg="eternity"] .fg-grass  { right:-7%; bottom:-60px; width:clamp(300px,37vw,670px); }
 [data-fg="eternity"] .fg-sakura { left:-16%; bottom:-150px; width:clamp(240px,26vw,440px); }
 
-/* — IV · the engine: a low periphery, stones left and a bush right */
-[data-fg="engine"] .fg-stones { left:-6%;  bottom:-90px; width:clamp(200px,22vw,380px); }
-[data-fg="engine"] .fg-bush   { right:-6%; bottom:-46px; width:clamp(250px,30vw,540px); }
-
 /* — colophon: one restrained planting along the lower edge, nothing above it */
 [data-fg="foot"] .fg-bush   { left:-6%;  bottom:-110px; width:clamp(230px,28vw,480px); }
 [data-fg="foot"] .fg-grass  { right:-5%; bottom:-98px;  width:clamp(255px,30vw,530px); }
@@ -812,8 +808,6 @@ body[data-layout-footer="b"] .foot-base span:last-child{ text-align:right; }
   [data-fg="lessons"] .fg-grass   { left:auto; right:-8%; bottom:-44px; width:min(70vw,380px); }
   [data-fg="eternity"] .fg-ruins  { left:-8%;   bottom:-25px; width:min(54vw,300px); }
   [data-fg="eternity"] .fg-grass  { right:-12%; bottom:-34px; width:min(80vw,440px); }
-  [data-fg="engine"] .fg-stones{ left:-8%; bottom:-30px; width:min(60vw,320px); }
-  [data-fg="engine"] .fg-bush  { right:-12%; bottom:-30px; width:min(70vw,380px); }
   [data-fg="foot"] .fg-bush  { left:-12%;  bottom:-26px; width:min(68vw,340px); }
   [data-fg="foot"] .fg-grass { right:-12%; bottom:-30px; width:min(74vw,380px); }
 }
@@ -897,11 +891,11 @@ body[data-layout-footer="b"] .foot-base span:last-child{ text-align:right; }
 /* ================================================== cyberpunk layer (SIMPLES)
    Everything below re-skins the grammar above for the Simples rebuild: cool
    ink, cyan neon and coral signage, mono technical labels, Chinese display
-   type, scan lines, and the new engine / capability / contact components. */
+   type, scan lines, and the new case / engagement / contact components. */
 .en{ font-family:'Orbitron','Onest',sans-serif; }
 .k, .eyebrow, .sec-head .k, .chip b, .hero-cue, .card-meta, .gate-stats div span,
 .foot h4, .foot-base, .pre-meta, .nav-link .alt, .les .k, .peek-cap i, .hud,
-.mx-h, .mx-r, .cell, .mx-cap, .mx-foot, .who, .steps .no, .cases .no, .cap .k, .eg .k{
+.steps .no, .cases .no, .eg .k{
   font-family:'JetBrains Mono','Onest',monospace;
 }
 .display{ font-family:'Noto Sans TC','Onest',sans-serif; font-weight:500; letter-spacing:.01em; line-height:1.18; text-transform:none; }
@@ -1029,44 +1023,6 @@ body[data-layout-hero="b"] .hero-side .v{ font-family:'Noto Sans TC',sans-serif;
 .eg .k{ color:var(--neon-dim); display:block; margin-bottom:12px; }
 .eg p{ margin:0; font-size:13px; color:#8f9ab0; line-height:1.6; }
 
-/* ---- the engine: matrix, figures, capabilities, process */
-.eng-grid{ display:grid; grid-template-columns:minmax(0,1.5fr) minmax(260px,.8fr); gap:clamp(16px,2.4vw,40px); align-items:stretch; }
-.matrix-wrap{ display:flex; flex-direction:column; gap:12px; padding:clamp(14px,1.6vw,22px); border:1px solid var(--line-soft); background:rgba(5,4,14,.72); position:relative; }
-.matrix-wrap::before, .matrix-wrap::after{ content:''; position:absolute; width:10px; height:10px; border:1px solid var(--neon); }
-.matrix-wrap::before{ left:-1px; top:-1px; border-right:0; border-bottom:0; }
-.matrix-wrap::after{ right:-1px; bottom:-1px; border-left:0; border-top:0; }
-.mx-cap, .mx-foot{ display:flex; justify-content:space-between; gap:12px; font-size:10px; letter-spacing:.2em; text-transform:uppercase; color:var(--muted); }
-.mx-foot #mx-status{ color:var(--neon-dim); }
-.matrix{ display:grid; grid-template-columns:minmax(96px,1.2fr) repeat(5,minmax(0,1fr)); gap:5px; }
-.mx-h, .mx-r{ font-size:9.5px; letter-spacing:.12em; color:var(--bone-dim); display:flex; flex-direction:column; gap:3px; justify-content:flex-end; padding:6px 4px; }
-.mx-h b, .mx-r b{ font-weight:500; color:var(--coral); letter-spacing:.2em; }
-.mx-r{ justify-content:center; }
-.cell{ position:relative; display:grid; place-items:center; aspect-ratio:5/4; font-style:normal; font-size:10px; letter-spacing:.12em;
-  color:var(--muted); border:1px solid var(--line-soft); background:rgba(230,239,255,.02); transition:background .5s, color .5s, border-color .5s, box-shadow .5s; }
-.cell.lit{ color:var(--ink); background:var(--neon); border-color:var(--neon); box-shadow:0 0 14px rgba(34,230,255,.55), inset 0 0 10px rgba(255,255,255,.3); }
-.cell.was{ color:var(--neon); background:rgba(34,230,255,.10); border-color:rgba(34,230,255,.45); }
-.eng-stats{ display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--line-soft); border:1px solid var(--line-soft); }
-.eng-stats div{ background:rgba(5,4,14,.82); padding:clamp(16px,1.8vw,26px); display:flex; flex-direction:column; justify-content:flex-end; gap:10px; min-height:120px; }
-.eng-stats b{ font-family:'Orbitron','Onest',sans-serif; font-weight:500; font-size:clamp(20px,2vw,30px); letter-spacing:-.01em; color:var(--bone); font-variant-numeric:tabular-nums; }
-.eng-stats div:nth-child(odd) b{ color:var(--neon); text-shadow:0 0 16px rgba(34,230,255,.45); }
-.eng-stats div:nth-child(even) b{ color:var(--coral); text-shadow:0 0 16px rgba(229,116,92,.45); }
-.eng-stats span{ font-size:11px; line-height:1.5; color:#8f9ab0; }
-.caps{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1px; margin-top:clamp(26px,4vh,48px); background:var(--line-soft); border:1px solid var(--line-soft); }
-.cap{ position:relative; display:flex; flex-direction:column; gap:10px; padding:clamp(18px,2vw,28px); background:rgba(5,4,14,.84); overflow:hidden; transition:background .45s; }
-.cap::before{ content:''; position:absolute; inset:0; background:linear-gradient(160deg, rgba(34,230,255,.10), transparent 60%); opacity:0; transition:opacity .45s; }
-.cap:hover::before{ opacity:1; }
-.cap .k{ font-size:9.5px; letter-spacing:.22em; text-transform:uppercase; color:var(--neon-dim); }
-.cap b{ font-size:clamp(16px,1.35vw,21px); font-weight:400; }
-.cap p{ margin:0; font-size:12.5px; line-height:1.65; color:#8f9ab0; }
-.proc{ display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:clamp(8px,1vw,16px); margin-top:clamp(26px,4vh,48px); border-top:1px solid var(--line-soft); padding-top:18px; }
-.pc{ position:relative; display:flex; flex-direction:column; gap:6px; padding-right:10px; }
-.pc::after{ content:''; position:absolute; right:0; top:8px; width:calc(100% - 34px); height:1px; left:auto;
-  background:linear-gradient(90deg, transparent, var(--line)); }
-.pc:last-child::after{ display:none; }
-.pc .no{ font-family:'Orbitron','Onest',sans-serif; font-size:12px; color:var(--neon); text-shadow:0 0 10px rgba(34,230,255,.5); }
-.pc .who{ font-size:9.5px; letter-spacing:.22em; text-transform:uppercase; color:var(--coral); }
-.pc b{ font-size:13px; font-weight:400; }
-
 /* ---- contact: three steps beside the call to action */
 .steps{ display:grid; gap:10px; margin-top:22px; }
 .steps > div{ display:grid; grid-template-columns:28px auto 1fr; gap:12px; align-items:baseline; font-size:13px; }
@@ -1088,19 +1044,12 @@ body[data-layout-closing="b"] .fin h2{ text-orientation:upright; }
 .foot-base{ font-family:'JetBrains Mono',monospace; letter-spacing:.1em; }
 
 @media (max-width:1080px){
-  .eng-grid{ grid-template-columns:1fr; }
-  .caps{ grid-template-columns:repeat(2,minmax(0,1fr)); }
-  .proc{ grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px 12px; }
   .engage{ grid-template-columns:1fr 1fr; }
   .crow{ grid-template-columns:36px minmax(0,1fr) minmax(0,1.2fr) 24px; }
   .crow .m{ display:none; }
 }
 @media (max-width:820px){
-  .caps{ grid-template-columns:1fr; }
   .engage{ grid-template-columns:1fr; }
-  .matrix{ grid-template-columns:minmax(64px,.9fr) repeat(5,minmax(0,1fr)); gap:3px; }
-  .mx-h, .mx-r{ font-size:8px; padding:4px 2px; }
-  .cell{ font-size:8px; }
   .crow{ grid-template-columns:30px minmax(0,1fr) 20px; }
   .crow .r{ grid-column:2; font-size:12px; }
   .crow .arr{ grid-row:1 / 3; grid-column:3; }
@@ -1162,7 +1111,7 @@ body[data-layout-closing="b"] .fin h2{ text-orientation:upright; }
     <a class="nav-link" href="#about" data-cursor><span>我們怎麼想</span><span class="alt">About</span></a>
     <a class="nav-link" href="#work" data-cursor><span>案例</span><span class="alt">Work</span></a>
     <a class="nav-link" href="#services" data-cursor><span>服務</span><span class="alt">Services</span></a>
-    <a class="nav-link" href="#engine" data-cursor><span>素材引擎</span><span class="alt">Engine</span></a>
+    <a class="nav-link" href="engine.html" data-cursor><span>素材引擎</span><span class="alt">Engine</span></a>
     <a class="nav-link" href="#contact" data-cursor><span>聯絡</span><span class="alt">Contact</span></a>
   </nav>
   <button class="nav-burger" aria-label="Menu" data-cursor><i></i><i></i></button>
@@ -1193,15 +1142,15 @@ body[data-layout-closing="b"] .fin h2{ text-orientation:upright; }
         <span class="tx"><b>案例</b><p>四個公開案例，數字都可以驗證。</p></span></a>
       <a class="chip" href="#services" data-chip="2" data-rv="up" data-cursor><span class="num">03</span>
         <span class="tx"><b>服務</b><p>策略、搜尋、投放、聲量、AI 部署。</p></span></a>
-      <a class="chip" href="#engine" data-chip="3" data-rv="up" data-cursor><span class="num">04</span>
-        <span class="tx"><b>素材引擎</b><p>多切角 × 多版本，48 小時上線。</p></span></a>
+      <a class="chip" href="#contact" data-chip="3" data-rv="up" data-cursor><span class="num">04</span>
+        <span class="tx"><b>聯絡</b><p>30 分鐘，只問問題，不推方案。</p></span></a>
     </div>
   </div>
 
-  <a class="peek" href="#engine" data-view="3" data-rv="fade" data-cursor aria-label="預覽：AI 素材引擎">
+  <a class="peek" href="#contact" data-view="3" data-rv="fade" data-cursor aria-label="預覽：CIT 辦公室">
     <span class="peek-fr" data-frame></span>
     <span class="peek-play"><svg viewBox="0 0 22 22" fill="none"><path d="M8 5.6 16.4 11 8 16.4z" fill="#e6efff"/></svg></span>
-    <span class="peek-cap"><b class="jp">48H</b><i>AI 素材引擎 — 15 組起，兩天上線</i></span>
+    <span class="peek-cap"><b class="jp">CIT</b><i>玉門街 1 號 — 線上或到辦公室聊</i></span>
   </a>
 
   <div class="word-fb en" aria-hidden="true">SIMPLES</div>
@@ -1384,64 +1333,7 @@ body[data-layout-closing="b"] .fin h2{ text-orientation:upright; }
   </div>
 </section>
 
-<!-- ============================================================ 04 · engine -->
-<section class="sec" id="engine" data-cam="4">
-  <div class="fg" data-fg="engine" aria-hidden="true">
-    <span class="fg-el fg-stones" data-fg-in="up">
-      <img src="secret-pathways-assets/foreground/png/basalt-stones.webp" alt="" width="1536" height="996" loading="lazy" decoding="async">
-    </span>
-    <span class="fg-el fg-bush" data-fg-in="right">
-      <img src="secret-pathways-assets/foreground/png/garden-bush.webp" alt="" width="1717" height="876" loading="lazy" decoding="async">
-    </span>
-  </div>
-  <div class="sec-head" data-rv="fade">
-    <span class="k"><b>04</b> — AI 素材引擎</span><span class="rule"></span><span class="k">Creative Engine</span>
-  </div>
-  <div class="cur-head">
-    <h2 class="display h-sec" data-rv="up">素材不是做一組，是做一條<span class="hl">生產線</span>。</h2>
-    <p class="body-lg" data-rv="up">Meta 與 TikTok 的演算法用素材做受眾探索：素材越多、切角越廣，系統找到對的人的機會越大。我們自己建了一條 AI 素材生產線——先建品牌規範，AI 在規範內生成，人工審核後 48 小時上線，成效再回流到下一批。給演算法夠多東西測，給你的團隊時間做判斷。</p>
-  </div>
-  <div class="eng-grid">
-    <div class="matrix-wrap" data-rv="up">
-      <div class="mx-cap"><span class="k">5 angles × 3 versions</span><span class="k">= 15 組起</span></div>
-      <div class="matrix" id="matrix" role="img" aria-label="五個切角乘以三個版本，十五組素材">
-        <span class="mx-h"></span>
-        <span class="mx-h"><b>A1</b>痛點</span><span class="mx-h"><b>A2</b>利益</span><span class="mx-h"><b>A3</b>社會證明</span><span class="mx-h"><b>A4</b>比較</span><span class="mx-h"><b>A5</b>促銷</span>
-        <span class="mx-r"><b>V1</b>視覺 A · 文案 A</span>
-        <i class="cell">1:1</i><i class="cell">4:5</i><i class="cell">9:16</i><i class="cell">16:9</i><i class="cell">1:1</i>
-        <span class="mx-r"><b>V2</b>視覺 B · 文案 A</span>
-        <i class="cell">4:5</i><i class="cell">9:16</i><i class="cell">16:9</i><i class="cell">1:1</i><i class="cell">1:1</i>
-        <span class="mx-r"><b>V3</b>視覺 A · 文案 B</span>
-        <i class="cell">9:16</i><i class="cell">16:9</i><i class="cell">1:1</i><i class="cell">1:1</i><i class="cell">4:5</i>
-      </div>
-      <div class="mx-foot k"><span id="mx-status">ENGINE · IDLE</span><span>Meta / TikTok / Google / LINE 尺寸一次到位</span></div>
-    </div>
-    <div class="eng-stats" data-rv="up">
-      <div><b>−12–20%</b><span>CPA 平均下降 · 素材數量翻倍後</span></div>
-      <div><b>+35%</b><span>ROAS 平均提升 · 同一組客戶，年度</span></div>
-      <div><b>48H</b><span>從品牌規範確認起算的交付時間</span></div>
-      <div><b>15 組起</b><span>每個切角 3–5 個視覺與文案變體</span></div>
-    </div>
-  </div>
-  <div class="caps" data-rv="up">
-    <div class="cap"><span class="k">Brand system</span><b>品牌規範先行</b><p>每個品牌先建一套規範——語氣、色彩、版型、禁區。模型在規範內生成，再經人工審核，所以素材不會跟別人的很像。</p></div>
-    <div class="cap"><span class="k">Angles × Versions</span><b>多切角 × 多版本</b><p>同一產品拆成痛點、利益、社會證明、比較、促銷五種以上切角，每個切角 3–5 個視覺與文案變體，一批 15 組起。</p></div>
-    <div class="cap"><span class="k">All formats</span><b>全通路格式一次到位</b><p>1:1、4:5、9:16、橫式，Meta / TikTok / Google / LINE 的尺寸同時產出，不用再請設計改版。</p></div>
-    <div class="cap"><span class="k">48 hours</span><b>兩天上線</b><p>從品牌規範確認起算 48 小時交付。演算法每週都需要新素材，生產線跟得上投放節奏。</p></div>
-    <div class="cap"><span class="k">Feedback loop</span><b>成效回流</b><p>投放數據回到引擎，哪個切角、哪種版型在哪個受眾有效，下一批素材直接從贏家出發。</p></div>
-    <div class="cap"><span class="k">Ownership</span><b>版權歸客戶</b><p>交付後素材版權完全歸你。可以只用素材不投放，也可以接上我們的廣告投放服務。</p></div>
-  </div>
-  <div class="proc" data-rv="up">
-    <div class="pc"><span class="no">01</span><span class="who">You</span><b>提交需求</b></div>
-    <div class="pc"><span class="no">02</span><span class="who">Both</span><b>品牌規範確認</b></div>
-    <div class="pc"><span class="no">03</span><span class="who">Engine</span><b>AI 生產</b></div>
-    <div class="pc"><span class="no">04</span><span class="who">Simples</span><b>人工審核</b></div>
-    <div class="pc"><span class="no">05</span><span class="who">48H</span><b>交付</b></div>
-    <div class="pc"><span class="no">06</span><span class="who">Loop</span><b>投放回饋</b></div>
-  </div>
-</section>
-
-<!-- ============================================================ 05 · contact -->
+<!-- ============================================================ 04 · contact -->
 <section class="sec fin" id="contact" data-cam="5">
   <div class="fg" data-fg="eternity" aria-hidden="true">
     <span class="fg-el fg-hill" data-fg-in="up">
@@ -1459,7 +1351,7 @@ body[data-layout-closing="b"] .fin h2{ text-orientation:upright; }
   </div>
   <h2 class="display" data-rv="up">先聊聊你的生意。</h2>
   <div class="fin-l">
-  <div class="eyebrow" data-rv="fade">05 — 聯絡 · Contact</div>
+  <div class="eyebrow" data-rv="fade">04 — 聯絡 · Contact</div>
   <p class="body-lg" data-rv="up">30 分鐘，我們只問問題，不推方案。聊完你會更清楚下一步該做什麼——不管有沒有跟我們合作。線上或到玉門街，一個工作天內回信。</p>
   <div class="steps" data-rv="up">
     <div><span class="no">01</span><b>填表單</b><span>兩分鐘，告訴我們你最想解決的問題。</span></div>
@@ -1504,7 +1396,7 @@ body[data-layout-closing="b"] .fin h2{ text-orientation:upright; }
     </ul></div>
     <div><h4>探索 · Explore</h4><ul>
       <li><a href="https://simples.com.tw/work/" data-cursor>案例</a></li>
-      <li><a href="https://simples.com.tw/engine/" data-cursor>AI 素材引擎</a></li>
+      <li><a href="engine.html" data-cursor>AI 素材引擎</a></li>
       <li><a href="https://simples.com.tw/insights/" data-cursor>洞察</a></li>
       <li><a href="https://simples.com.tw/philosophy/" data-cursor>我們怎麼想</a></li>
       <li><a href="https://simples.com.tw/contact/" data-cursor>聯絡</a></li>
@@ -1533,7 +1425,7 @@ body[data-layout-closing="b"] .fin h2{ text-orientation:upright; }
 <script src="secret-pathways-assets/three.min.js"></script>
 <script>
 /* =====================================================================
-   SIMPLES — a corporate headquarters tower on a wet plaza, after dark.
+   SIMPLES — the CIT grandstand at Yuanshan, after dark.
    Rebuilt from the Kage sanctuary: every building, tube and sign is
    generated at runtime — no models, no photographs, only three.js,
    two subset fonts and three web fonts.
@@ -2915,13 +2807,15 @@ function buildShell() {
    timber, two flaring tiled roofs, a bracket band under each eave, and a
    ground floor lit from inside so the lattice reads as the only warm thing
    for two hundred metres.                                                 */
-/* ------------------------------------------------------------ the tower
-   A stepped corporate headquarters on the podium at the head of the flight:
-   three setback tiers of lit curtain wall, a cyan tube along every ledge,
-   coral rails down the corners, a glass lobby the stairs climb into, two
-   annex blocks, a spire with an aviation beacon, and the company's signs
-   hung on the face. Facades are canvases: a grid of windows, most dark,
-   some cold, a few coral, a few with the blinds half down.               */
+/* ------------------------------------------------------------ the stand
+   CIT — the west stand of the former Zhongshan Soccer Stadium, where the
+   studio actually sits: a wide arc of concrete terraces climbing to a
+   concourse, a cantilevered canopy on a row of columns, the press box with
+   its glazed tile roof riding the canopy's end, and the glass offices set
+   into the back of the stand. Around it, the parts of Yuanshan the night
+   is made of: floodlight masts, the MRT viaduct with a train crossing, and
+   a rank of towers behind. Facades are canvases: a grid of windows, most
+   dark, some cold, a few coral, a few with the blinds half down.         */
 function texFacade(seed, cols, rows) {
   const W = cols * 24, H = rows * 24, c = cvs(W, H), x = c.getContext('2d');
   const rnd = mulberry32(seed);
@@ -2959,124 +2853,218 @@ function texSign(text, W, H, opt) {
 }
 function buildTemple() {
   const g = new THREE.Group();
-  const F = PODIUM;                                     /* the lobby floor */
+  const F = PODIUM;                                     /* the concourse level */
   const neonC = new THREE.MeshBasicMaterial({ color: hdr(.35, 2.4, 2.8), fog: true, toneMapped: false });
   const neonO = new THREE.MeshBasicMaterial({ color: hdr(2.9, 1.05, .78), fog: true, toneMapped: false });
   const dark  = new THREE.MeshStandardMaterial({ color: 0x0c0e1a, roughness: .48, metalness: .62 });
   const steel = new THREE.MeshStandardMaterial({ color: 0x2a3040, roughness: .36, metalness: .85 });
+  const conc  = lib('standConc', () => surface(lib('granite', () => texStone(17)), [3, 1.2],
+    { color: 0x6a7382, roughness: .86, metalness: .02, normal: .9 }));
+  const bone  = new THREE.MeshStandardMaterial({ color: 0xa9b3c4, roughness: .7, metalness: .05 });
   WORLD.neonC = neonC; WORLD.neonO = neonO;
   const facade = (seed, cols, rows) => {
     const t = tx(texFacade(seed, cols, rows), { aniso: 16 });
     return new THREE.MeshStandardMaterial({ map: t, emissiveMap: t, emissive: 0xffffff, emissiveIntensity: 1.35,
       color: 0x8890a4, roughness: .32, metalness: .58 });
   };
-  const strip = (w, h, d, x, y, z, mat) => {
-    const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat); m.position.set(x, y, z); g.add(m); return m;
+  const strip = (w, h, d, x, y, z, mat, ry) => {
+    const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat); m.position.set(x, y, z);
+    if (ry) m.rotation.y = ry; g.add(m); return m;
   };
 
-  /* ---- the three tiers ------------------------------------------------ */
-  const tiers = [{ w: 15, d: 12, h: 11 }, { w: 11, d: 9, h: 8 }, { w: 7.4, d: 6.2, h: 6 }];
-  let y = F;
-  tiers.forEach((t, i) => {
-    const front = facade(11 + i, Math.round(t.w * 1.15), Math.round(t.h * 2.1));
-    const side  = facade(21 + i, Math.round(t.d * 1.15), Math.round(t.h * 2.1));
-    const box = new THREE.Mesh(new THREE.BoxGeometry(t.w, t.h, t.d), [side, side, dark, dark, front, front]);
-    box.position.set(0, y + t.h / 2, TEMPLE_Z); box.castShadow = true; g.add(box);
-    const top = y + t.h, hw = t.w / 2, hd = t.d / 2;
-    strip(t.w + .3, .10, .10, 0, top + .05, TEMPLE_Z + hd + .08, neonC);
-    strip(t.w + .3, .10, .10, 0, top + .05, TEMPLE_Z - hd - .08, neonC);
-    strip(.10, .10, t.d + .3, hw + .08, top + .05, TEMPLE_Z, neonC);
-    strip(.10, .10, t.d + .3, -hw - .08, top + .05, TEMPLE_Z, neonC);
-    /* a dark parapet so the ledge reads as a floor, not a line */
-    strip(t.w + .6, .36, t.d + .6, 0, top + .18, TEMPLE_Z, dark);
-    y = top;
+  /* ---- the terraces: an arc of rows either side of the central aisle ----
+     The aisle is the flight built in buildShell; the rows sweep around it on
+     an arc centred out on the pitch, two treads deep and two risers high,
+     every fourth riser carrying an LED strip. */
+  const CZ = 30, ROWS = STEPS / 2, aisle = STAIR_W / 2 + 1.1;
+  const rowGeos = [], ledGeos = [];
+  for (let r = 0; r < ROWS; r++) {
+    const y = (r + 1) * (PODIUM / ROWS), h = PODIUM / ROWS + .04;
+    const z = STAIR_Z0 - (r + .5) * STAIR_RUN * 2, depth = STAIR_RUN * 2 + .04;
+    const R = CZ - z, span = Math.asin(Math.min(.95, 36 / R));
+    const segs = Math.max(8, Math.round(R * span * 2 / 2.2)), da = span * 2 / segs;
+    for (let k = 0; k < segs; k++) {
+      const a = -span + da * (k + .5), cx = R * Math.sin(a), cz = CZ - R * Math.cos(a);
+      if (Math.abs(cx) < aisle + R * da * .5) continue;
+      const M = new THREE.Matrix4().makeRotationY(-a).setPosition(cx, y - h / 2, cz);
+      rowGeos.push(new THREE.BoxGeometry(R * da + .05, h, depth).applyMatrix4(M));
+      if (r % 4 === 3) {
+        const L = new THREE.Matrix4().makeRotationY(-a).setPosition(cx + Math.sin(a) * (depth / 2 + .04), y - h * .5, cz + Math.cos(a) * (depth / 2 + .04));
+        ledGeos.push(new THREE.BoxGeometry(R * da + .05, .06, .06).applyMatrix4(L));
+      }
+    }
+  }
+  const terraces = new THREE.Mesh(mergeGeos(rowGeos), conc);
+  terraces.receiveShadow = true; terraces.castShadow = true; g.add(terraces);
+  g.add(new THREE.Mesh(mergeGeos(ledGeos), neonC));
+  /* the retaining walls that close each end of the arc */
+  [-1, 1].forEach(s => {
+    const w = new THREE.Mesh(new THREE.BoxGeometry(1.2, PODIUM + 1.2, 24), conc);
+    w.position.set(s * 37.5, PODIUM / 2 + .1, STAIR_Z0 - 11); w.castShadow = true; g.add(w);
   });
-  const TOP = y;
-  /* coral rails down the four corners of the base tier */
-  [-1, 1].forEach(sx => [-1, 1].forEach(sz => {
-    strip(.09, tiers[0].h - .6, .09, sx * (tiers[0].w / 2 + .07), F + tiers[0].h / 2 - .1, TEMPLE_Z + sz * (tiers[0].d / 2 + .07), neonO);
-  }));
 
-  /* ---- the lobby: a lit glass band the flight climbs into --------------- */
-  const FZ = TEMPLE_Z + tiers[0].d / 2;
+  /* ---- the offices at the back of the stand -------------------------- */
+  const OFF = { w: 38, h: 6.2, d: 11 }, OZ = TEMPLE_Z - .5, FZ = OZ + OFF.d / 2;   /* front face z = -39 */
+  const front = facade(11, 40, 12), side = facade(21, 12, 12);
+  const office = new THREE.Mesh(new THREE.BoxGeometry(OFF.w, OFF.h, OFF.d), [side, side, dark, dark, front, front]);
+  office.position.set(0, F + OFF.h / 2, OZ); office.castShadow = true; g.add(office);
+  strip(OFF.w + .3, .10, .10, 0, F + OFF.h + .05, FZ + .08, neonC);
+  strip(OFF.w + .6, .36, OFF.d + .6, 0, F + OFF.h + .2, OZ, dark);
+  /* the balustrade of white posts along the office roof, the stadium's own
+     Chinese railing carried up onto the night */
+  const posts = [];
+  for (let x = -OFF.w / 2; x <= OFF.w / 2 + 1e-3; x += 1.2)
+    posts.push(new THREE.BoxGeometry(.22, .9, .22).translate(x, F + OFF.h + .8, FZ + .1));
+  posts.push(new THREE.BoxGeometry(OFF.w + .3, .12, .26).translate(0, F + OFF.h + 1.25, FZ + .1));
+  g.add(new THREE.Mesh(mergeGeos(posts), bone));
+  /* the lobby: a lit glass band the flight climbs into */
   const paper = new THREE.MeshBasicMaterial({ color: hdr(.42, 1.35, 1.6), fog: true, toneMapped: false });
   const grid  = new THREE.MeshBasicMaterial({ map: tx(texShoji()), transparent: true, depthWrite: false, fog: true });
   WORLD.paper = paper;
-  const lobby = new THREE.Mesh(new THREE.PlaneGeometry(12.6, 3.3), paper);
+  const lobby = new THREE.Mesh(new THREE.PlaneGeometry(13, 3.3), paper);
   lobby.position.set(0, F + 1.95, FZ + .03); g.add(lobby);
-  const mull = new THREE.Mesh(new THREE.PlaneGeometry(12.6, 3.3), grid);
+  const mull = new THREE.Mesh(new THREE.PlaneGeometry(13, 3.3), grid);
   mull.position.set(0, F + 1.95, FZ + .09); mull.renderOrder = 3; g.add(mull);
   for (let i = 0; i < 7; i++) {
     const c = new THREE.Mesh(new THREE.CylinderGeometry(.20, .22, 3.9, 12), steel);
     c.position.set(-6.6 + i * 2.2, F + 1.95, FZ + .9); c.castShadow = true; g.add(c);
   }
-  const canopy = new THREE.Mesh(new THREE.BoxGeometry(14.4, .30, 3.2), dark);
-  canopy.position.set(0, F + 3.95, FZ + 1.2); canopy.castShadow = true; g.add(canopy);
+  const canopyS = new THREE.Mesh(new THREE.BoxGeometry(14.4, .30, 3.2), dark);
+  canopyS.position.set(0, F + 3.95, FZ + 1.2); canopyS.castShadow = true; g.add(canopyS);
   strip(14.4, .08, .08, 0, F + 3.78, FZ + 2.78, neonC);
-  const sill = new THREE.Mesh(new THREE.BoxGeometry(16.2, .36, 13.6), steel);
-  sill.position.set(0, F + .18, TEMPLE_Z); g.add(sill);
 
-  /* ---- the signs -------------------------------------------------------- */
-  const CJK = '"Noto Sans TC","PingFang TC","Hiragino Sans","Microsoft JhengHei",sans-serif';
-  const signs = [];
-  const sign = (canvasEl, w, h, x, y, z, color) => {
-    const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h),
-      new THREE.MeshBasicMaterial({ map: tx(canvasEl, { aniso: 16 }), transparent: true, depthWrite: false,
-        color: color, fog: true, toneMapped: false }));
-    m.position.set(x, y, z); m.renderOrder = 4; g.add(m); signs.push(m); return m;
-  };
-  /* the company name, stacked down the left of the base tier, in coral */
-  sign(texSign('簡單行銷', 512, 2048, { vertical: true, font: '700 312px ' + CJK, color: '#ff8a66', frame: 10, pad: 140, blur: 30 }),
-       2.1, 8.4, -5.4, F + 6.9, FZ + .12, hdr(1.9, 1.9, 1.9));
-  /* the wordmark across the second tier */
-  sign(texSign('SIMPLES', 2048, 512, { font: '900 300px Orbitron, sans-serif', color: '#22e6ff', blur: 34 }),
-       9.6, 2.4, 0, F + tiers[0].h + 4.6, TEMPLE_Z + tiers[1].d / 2 + .12, hdr(1.9, 1.9, 1.9));
-  sign(texSign('GROWTH INTELLIGENCE STUDIO', 2048, 256, { font: '500 112px "JetBrains Mono", monospace', color: '#d6f6ff', blur: 16 }),
-       7.2, .9, 0, F + tiers[0].h + 2.75, TEMPLE_Z + tiers[1].d / 2 + .12, hdr(1.3, 1.3, 1.3));
-  /* a small hanging sign by the lobby, the tagline */
-  sign(texSign('讓每個好點子都可以落地', 2048, 256, { font: '500 132px ' + CJK, color: '#d6f6ff', blur: 14 }),
-       6.0, .75, 3.4, F + 4.55, FZ + 2.9, hdr(1.4, 1.4, 1.4));
-  WORLD.signs = signs;
+  /* ---- the canopy: one slab cantilevered out over the upper rows ------- */
+  const ROOF = { w: 58, d: 18, y: F + 15, z: TEMPLE_Z + 3 };           /* z -50 … -32, high: a visor over the top rows */
+  const roof = new THREE.Mesh(new THREE.BoxGeometry(ROOF.w, .9, ROOF.d), steel);
+  roof.position.set(0, ROOF.y, ROOF.z); roof.castShadow = true; g.add(roof);
+  const fascia = new THREE.Mesh(new THREE.BoxGeometry(ROOF.w, 1.6, .5), dark);
+  fascia.position.set(0, ROOF.y - .9, ROOF.z + ROOF.d / 2 - .2); g.add(fascia);
+  strip(ROOF.w + .2, .10, .10, 0, ROOF.y - 1.75, ROOF.z + ROOF.d / 2 + .1, neonC);
+  strip(ROOF.w + .2, .08, .08, 0, ROOF.y + .5, ROOF.z + ROOF.d / 2 + .1, neonO);
+  /* the truss under the front edge: a run of diagonals between two chords */
+  const truss = [];
+  for (let x = -ROOF.w / 2 + 1; x < ROOF.w / 2 - 1; x += 2.6) {
+    truss.push(new THREE.BoxGeometry(.12, 2.6, .12).rotateZ(.62).translate(x, ROOF.y - 2.2, ROOF.z + ROOF.d / 2 - 1.6));
+  }
+  g.add(new THREE.Mesh(mergeGeos(truss), steel));
+  /* the columns at the back: the inner ones stand on the office roof, the
+     outer pair go all the way down to the concourse */
+  for (let i = 0; i < 7; i++) {
+    const x = -24 + i * 8, base = Math.abs(x) < OFF.w / 2 ? F + OFF.h + .4 : F, hgt = ROOF.y - base;
+    const c = new THREE.Mesh(new THREE.CylinderGeometry(.42, .5, hgt, 14), conc);
+    c.position.set(x, base + hgt / 2, OZ - 2.6); c.castShadow = true; g.add(c);
+    const rail = new THREE.Mesh(new THREE.BoxGeometry(.07, hgt - .8, .07), neonO);
+    rail.position.set(x + .5, base + hgt / 2, OZ - 2.1); g.add(rail);
+  }
 
-  /* ---- the spire and its beacon ------------------------------------------ */
-  const spire = new THREE.Mesh(new THREE.CylinderGeometry(.10, .30, 9.5, 10), steel);
-  spire.position.set(0, TOP + 4.75, TEMPLE_Z); g.add(spire);
-  [[1.8, .6, 1.2, 1.6, 0], [-1.6, .5, .9, .9, 1.4]].forEach(b => {
-    const m = new THREE.Mesh(new THREE.BoxGeometry(b[1], b[3], b[2]), dark);
-    m.position.set(b[0], TOP + b[3] / 2 + .3, TEMPLE_Z + b[4]); g.add(m);
-  });
+  /* ---- the press box, riding the canopy's end under a glazed tile roof -- */
+  const PB = { x: 19, w: 10, h: 4.4, d: 8, z: ROOF.z - 3 };
+  const pbF = facade(31, 10, 5), pbS = facade(41, 8, 5);
+  const pb = new THREE.Mesh(new THREE.BoxGeometry(PB.w, PB.h, PB.d), [pbS, pbS, dark, dark, pbF, pbF]);
+  pb.position.set(PB.x, ROOF.y + .45 + PB.h / 2, PB.z); pb.castShadow = true; g.add(pb);
+  const rf = lib('roof', () => texRoof());
+  const tileMat = surface(rf, [1, 1], { color: 0x5a2a24, roughness: .68, metalness: .12, normal: 1.3 });
+  const hip = new THREE.Mesh(roofGeo(6.6, 5.6, 2.4, 2.1, .36, .28), tileMat);
+  hip.position.set(PB.x, ROOF.y + .45 + PB.h, PB.z); hip.castShadow = true; g.add(hip);
+  strip(PB.w + .4, .08, .08, PB.x, ROOF.y + .45 + PB.h - .1, PB.z + PB.d / 2 + .1, neonC);
+  WORLD.templeTop = ROOF.y + PB.h + 2.6;
+
+  /* ---- the beacon mast on the press box ---------------------------------- */
+  const mast = new THREE.Mesh(new THREE.CylinderGeometry(.08, .16, 6, 8), steel);
+  mast.position.set(PB.x + 3.5, ROOF.y + .45 + PB.h + 3, PB.z); g.add(mast);
   const beaconMat = new THREE.MeshBasicMaterial({ color: hdr(3.2, .9, .6), fog: false, toneMapped: false });
-  const beacon = new THREE.Mesh(new THREE.SphereGeometry(.26, 12, 10), beaconMat);
-  beacon.position.set(0, TOP + 9.7, TEMPLE_Z); g.add(beacon);
+  const beacon = new THREE.Mesh(new THREE.SphereGeometry(.24, 12, 10), beaconMat);
+  beacon.position.set(PB.x + 3.5, ROOF.y + .45 + PB.h + 6.2, PB.z); g.add(beacon);
   const beaconGlow = new THREE.Mesh(new THREE.PlaneGeometry(4.2, 4.2),
     new THREE.MeshBasicMaterial({ map: tx(texGlow('rgba(255,150,110,.9)', 'rgba(229,116,92,.3)')),
       transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, fog: false, opacity: .8 }));
-  beaconGlow.position.copy(beacon.position); beaconGlow.renderOrder = 2; beaconGlow.userData.billboard = true; g.add(beaconGlow);
+  beaconGlow.position.copy(beacon.position); beaconGlow.renderOrder = 2; g.add(beaconGlow);
   const beaconL = new THREE.PointLight(0xff7a55, 2.4, 30, 2);
   beaconL.position.copy(beacon.position); g.add(beaconL);
   WORLD.beacon = { mesh: beacon, glow: beaconGlow, light: beaconL };
-  WORLD.templeTop = TOP + 10;
 
-  /* ---- the two annex blocks, lit the same way ---------------------------- */
+  /* ---- the signs ----------------------------------------------------------- */
+  const CJK = '"Noto Sans TC","PingFang TC","Hiragino Sans","Microsoft JhengHei",sans-serif';
+  const signs = [];
+  const sign = (canvasEl, w, h, x, y, z, color, ry) => {
+    const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h),
+      new THREE.MeshBasicMaterial({ map: tx(canvasEl, { aniso: 16 }), transparent: true, depthWrite: false,
+        color: color, fog: true, toneMapped: false }));
+    m.position.set(x, y, z); if (ry) m.rotation.y = ry; m.renderOrder = 4; g.add(m); signs.push(m); return m;
+  };
+  /* CIT on the canopy's fascia, where a stadium hangs its name */
+  sign(texSign('CIT', 1024, 512, { font: '900 380px Orbitron, sans-serif', color: '#22e6ff', blur: 40 }),
+       6.2, 3.1, -19, ROOF.y - .6, ROOF.z + ROOF.d / 2 + .2, hdr(1.9, 1.9, 1.9));
+  sign(texSign('CENTER FOR INNOVATION TAIPEI', 2048, 256, { font: '500 112px "JetBrains Mono", monospace', color: '#d6f6ff', blur: 16 }),
+       8.4, 1.05, -8.4, ROOF.y - .9, ROOF.z + ROOF.d / 2 + .2, hdr(1.3, 1.3, 1.3));
+  /* the studio: its wordmark across the office glass, its name stacked in
+     coral beside the lobby, the tagline on the lobby canopy */
+  sign(texSign('SIMPLES', 2048, 512, { font: '900 300px Orbitron, sans-serif', color: '#22e6ff', blur: 34 }),
+       9.6, 2.4, -11.5, F + 4.4, FZ + .12, hdr(1.9, 1.9, 1.9));
+  sign(texSign('GROWTH INTELLIGENCE STUDIO', 2048, 256, { font: '500 112px "JetBrains Mono", monospace', color: '#d6f6ff', blur: 16 }),
+       7.2, .9, -11.5, F + 2.6, FZ + .12, hdr(1.3, 1.3, 1.3));
+  sign(texSign('簡單行銷', 512, 2048, { vertical: true, font: '700 312px ' + CJK, color: '#ff8a66', frame: 10, pad: 140, blur: 30 }),
+       1.5, 6.0, 10.2, F + 3.1, FZ + .12, hdr(1.9, 1.9, 1.9));
+  sign(texSign('讓每個好點子都可以落地', 2048, 256, { font: '500 132px ' + CJK, color: '#d6f6ff', blur: 14 }),
+       6.0, .75, 3.4, F + 4.55, FZ + 2.9, hdr(1.4, 1.4, 1.4));
+  /* the station name on the viaduct, the way the MRT signs its own bridge */
+  sign(texSign('圓山 YUANSHAN', 2048, 256, { font: '500 120px ' + CJK, color: '#d6f6ff', blur: 12 }),
+       9, 1.1, 30, 12.6, -60.5, hdr(1.2, 1.2, 1.2));
+  WORLD.signs = signs;
+
+  /* ---- the floodlight masts, one each side of the pitch ------------------- */
   [-1, 1].forEach(s => {
-    const fr = facade(31 + s, 9, 12), sd = facade(41 + s, 6, 12);
-    const w = new THREE.Mesh(new THREE.BoxGeometry(7.6, 5.6, 5.2), [sd, sd, dark, dark, fr, fr]);
-    w.position.set(s * 11.6, F + 2.8, TEMPLE_Z + 1.4); w.castShadow = true; g.add(w);
-    strip(7.9, .10, .10, s * 11.6, F + 5.65, TEMPLE_Z + 4.08, neonC);
-    strip(.10, .10, 5.5, s * (11.6 + (s > 0 ? 3.88 : -3.88)) , F + 5.65, TEMPLE_Z + 1.4, neonC);
-    strip(7.9, .36, 5.5, s * 11.6, F + 5.78, TEMPLE_Z + 1.4, dark);
+    const m = new THREE.Mesh(new THREE.CylinderGeometry(.30, .55, 30, 10), steel);
+    m.position.set(s * 30, 15, -13); m.castShadow = true; g.add(m);
+    const head = new THREE.Mesh(new THREE.BoxGeometry(5.2, 2.4, .5), dark);
+    head.position.set(s * 30, 29.4, -12.7); head.rotation.x = .5; g.add(head);
+    const panel = new THREE.Mesh(new THREE.PlaneGeometry(4.8, 2.0), paper);
+    panel.position.set(s * 30, 29.4, -12.42); panel.rotation.x = .5; g.add(panel);
+    strip(.06, 30, .06, s * 30 + .4, 15, -13, s > 0 ? neonC : neonO);
+  });
+
+  /* ---- the MRT viaduct behind the stand, and a train crossing it ---------- */
+  const VY = 10.4, VZ = -61;
+  const beam = new THREE.Mesh(new THREE.BoxGeometry(150, 1.7, 6), conc);
+  beam.position.set(0, VY, VZ); g.add(beam);
+  strip(150, .07, .07, 0, VY - .85, VZ + 3.05, neonC);
+  for (let x = -72; x <= 72; x += 16) {
+    const p = new THREE.Mesh(new THREE.CylinderGeometry(.9, 1.1, VY, 12), conc);
+    p.position.set(x, VY / 2, VZ); g.add(p);
+  }
+  const rail = new THREE.Mesh(new THREE.BoxGeometry(150, .9, .12), steel);
+  rail.position.set(0, VY + 1.3, VZ + 3); g.add(rail);
+  const trainF = facade(51, 48, 1);
+  const train = new THREE.Mesh(new THREE.BoxGeometry(44, 3.2, 2.8), [dark, dark, dark, dark, trainF, trainF]);
+  train.position.set(-90, VY + 2.45, VZ + .3); g.add(train);
+  const lamp = new THREE.Mesh(new THREE.BoxGeometry(.3, .3, .3), neonO); lamp.position.set(22.2, -.6, 0); train.add(lamp);
+  const lamp2 = lamp.clone(); lamp2.position.x = -22.2; train.add(lamp2);
+  WORLD.train = train;
+
+  /* ---- the towers behind: Yuanshan's skyline brought in closer ------------ */
+  [[-44, -84, 12, 48], [-27, -92, 9, 34], [-10, -98, 14, 58], [14, -90, 10, 40], [36, -86, 12, 52], [56, -94, 9, 30]].forEach((t, i) => {
+    const fr = facade(61 + i, Math.round(t[2] * 1.1), Math.round(t[3] * 1.4));
+    const m = new THREE.Mesh(new THREE.BoxGeometry(t[2], t[3], t[2] * .8), [fr, fr, dark, dark, fr, fr]);
+    m.position.set(t[0], t[3] / 2, t[1]); g.add(m);
+    strip(t[2] + .3, .12, .12, t[0], t[3] + .05, t[1] + t[2] * .4 + .1, i % 2 ? neonO : neonC);
+    if (t[3] > 45) {
+      const b = new THREE.Mesh(new THREE.SphereGeometry(.4, 8, 6), beaconMat);
+      b.position.set(t[0], t[3] + 2.4, t[1]); g.add(b);
+      const mm = new THREE.Mesh(new THREE.CylinderGeometry(.08, .16, 4.4, 6), steel);
+      mm.position.set(t[0], t[3] + 2.2, t[1]); g.add(mm);
+    }
   });
 
   scene.add(g); WORLD.temple = g;
 
-  /* the glow the lobby pushes out over its own steps */
+  /* the glow the lobby pushes out over the top of the flight */
   const spill = new THREE.Mesh(new THREE.PlaneGeometry(30, 16),
     new THREE.MeshBasicMaterial({ map: tx(texGlow('rgba(130,235,255,.80)', 'rgba(40,170,210,.24)')),
       transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, fog: false, opacity: .30 }));
   spill.position.set(0, F + 3.0, FZ + 1.2); spill.renderOrder = 2;
   scene.add(spill); WORLD.hallHalo = spill;
 
-  /* the band of mist that separates the tower from the skyline behind it */
+  /* the band of mist between the stand and the towers behind it */
   const mist = new THREE.Mesh(new THREE.PlaneGeometry(64, 20),
     new THREE.MeshBasicMaterial({ map: tx(texGlow('rgba(150,170,220,.62)', 'rgba(100,120,190,.20)')),
       transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, fog: false, opacity: .17 }));
@@ -3087,7 +3075,7 @@ function buildTemple() {
    Hung well behind the hall so the roof crosses its lower left — near
    enough to the ridge to sit in the mist, far enough that it never moves
    against the buildings when the rig drifts.                             */
-const MOON = { x: 17.9, y: 31.9, z: -72, r: 8.6 };
+const MOON = { x: 22.5, y: 38.5, z: -72, r: 8.6 };
 function buildMoon() {
   const disc = new THREE.Mesh(new THREE.PlaneGeometry(MOON.r * 2, MOON.r * 2),
     /* The whole blood-moon grade lives here, on a near-neutral albedo. The
@@ -4422,9 +4410,8 @@ const CAM = [
   { p: [ -5.6, 2.35, 11.6 ], t: [  1.2, 6.20, -14.0 ], fov: 48 },  /* 1 about       */
   { p: [  1.2, 3.60,  2.2 ], t: [ -0.6, 8.50, -22.0 ], fov: 40 },  /* 2 work        */
   { p: [  5.2, 2.10, -3.4 ], t: [ -2.6, 8.00, -20.0 ], fov: 46 },  /* 3 services    */
-  { p: [ -4.4, 5.40, -9.0 ], t: [  1.6, 14.0, -36.0 ], fov: 44 },  /* 4 engine      */
-  { p: [  0.0, 7.60, -16.0 ], t: [  0.0, 15.0, -40.0 ], fov: 42 }, /* 5 contact     */
-  { p: [  0.0, 10.5, -20.0 ], t: [  0.0, 4.00, -34.0 ], fov: 46 }  /* 6 footer      */
+  { p: [  0.0, 7.60, -16.0 ], t: [  0.0, 15.0, -40.0 ], fov: 42 }, /* 4 contact     */
+  { p: [  0.0, 10.5, -20.0 ], t: [  0.0, 4.00, -34.0 ], fov: 46 }  /* 5 footer      */
 ];
 const RIG = { prog: 0, smooth: 0, mx: 0, my: 0, tmx: 0, tmy: 0, intro: 0, focus: -1, focusAmt: 0 };
 let curveP, curveT, tmpCam;
@@ -4623,32 +4610,6 @@ function wireHud() {
   tick(); setInterval(tick, 1000);
 }
 
-/* the engine matrix: cells light one after another while the section is on
-   screen, so the grid reads as a production line rather than a table */
-function wireMatrix() {
-  const box = $('#matrix'); if (!box) return;
-  const cells = $$('#matrix .cell'), status = $('#mx-status');
-  if (!cells.length || REDUCE) return;
-  let i = -1, timer = null, run = 0;
-  const step = () => {
-    cells.forEach(c => c.classList.remove('lit'));
-    i = (i + 1) % (cells.length + 4);
-    if (i < cells.length) {
-      cells[i].classList.add('lit', 'was');
-      if (status) status.textContent = 'ENGINE · RENDERING ' + String(i + 1).padStart(2, '0') + ' / 15';
-    } else if (i === cells.length) {
-      if (status) status.textContent = 'ENGINE · 15 組完成 · 48H';
-    } else if (i === cells.length + 3) {
-      cells.forEach(c => c.classList.remove('was'));
-      run++;
-    }
-  };
-  const io = new IntersectionObserver(es => es.forEach(e => {
-    if (e.isIntersecting && !timer) { timer = setInterval(step, 260); step(); }
-    else if (!e.isIntersecting && timer) { clearInterval(timer); timer = null; if (status) status.textContent = 'ENGINE · STANDBY'; }
-  }), { threshold: .2 });
-  io.observe(box);
-}
 
 /* Foreground PNGs are section-owned until their chapter is called. At that
    point the active stage becomes a fixed lower viewport plane; its predecessor
@@ -4786,7 +4747,7 @@ function wireHeroExit() {
 function wireNav() {
   let last = 0;
   const rail = $('#rail');
-  const names = ['首頁', '我們怎麼想', '案例', '服務', 'AI 素材引擎', '聯絡', '頁尾'];
+  const names = ['首頁', '我們怎麼想', '案例', '服務', '聯絡', '頁尾'];
   SECS.forEach((s, i) => {
     const b = document.createElement('button');
     b.innerHTML = '<i></i>'; b.title = names[i] || '';
@@ -5073,7 +5034,16 @@ function updateWorld(dt) {
     const drop = Math.sin(t) * Math.sin(t * 2.31) * Math.sin(t * .37 + i) > .80 ? .45 : 1;
     s.material.opacity = drop * (.90 + .10 * Math.sin(clock * 1.3 + i * 1.7));
   });
-  /* the aviation beacon on the spire */
+  /* the MRT: forty seconds a lap, a pause at the platform off to the right */
+  if (WORLD.train) {
+    const T = clock % 40, run = 26;
+    let x;
+    if (T < run) x = -110 + (T / run) * 160;              /* crossing left to right */
+    else if (T < run + 6) x = 50;                           /* held at Yuanshan */
+    else x = 50 + ((T - run - 6) / 8) * 70;                 /* off toward Jiantan */
+    WORLD.train.position.x = x;
+  }
+  /* the aviation beacon on the press box */
   if (WORLD.beacon) {
     const on = (clock % 1.6) < .18;
     WORLD.beacon.mesh.visible = on;
@@ -5176,7 +5146,7 @@ const JOBS = [
   ['Reading the type', () => document.fonts && Promise.all([document.fonts.load('900 320px Orbitron'), document.fonts.load('700 156px "Noto Sans TC"')])],
   ['Pouring the ground', () => { initGL(); WORLD.uT = { value: 0 }; buildRig(); buildLights(); }],
   ['Laying the plaza', () => buildShell()],
-  ['Raising the tower', () => buildTemple()],
+  ['Raising the stand', () => buildTemple()],
   ['Hanging the moon', () => buildMoon()],
   ['Wiring the gate', () => buildTorii()],
   ['Standing the pillars', () => {
@@ -5221,7 +5191,7 @@ const JOBS = [
 
 function boot() {
   makeGrain();
-  wireReveals(); wireForegroundStages(); wireNav(); wireHeroExit(); wireFocus(); wireCursor(); wireHud(); wireMatrix();
+  wireReveals(); wireForegroundStages(); wireNav(); wireHeroExit(); wireFocus(); wireCursor(); wireHud();
   document.body.classList.add('is-locked');
   let i = 0;
   const step = () => {
