@@ -55,6 +55,12 @@
 - 建議在 WordPress 端加上 `<link rel="preload">` 給 `three.min.js`，並用 Cache-Control 長快取靜態資源。
 - 減少動態偏好（`prefers-reduced-motion`）已處理：所有入場動畫、跑馬燈、掃光都會關閉。
 
+## 中英雙語
+
+- 英文版是獨立網址（`/en/`、`/en/engine.html`），不是前端切換：Google 與 AI 搜尋會各自收錄兩種語言，中英頁面互加 `hreflang`（`zh-Hant-TW`、`en`、`x-default` 指向中文），各自有 canonical。
+- 英文頁由 `node build-en.mjs` 從中文頁與字典 `secret-pathways-assets/i18n.js` 產生，不要手改 `en/` 底下的檔案；改文案的流程是「改中文 HTML → 改字典 → 重新建置」。
+- 上線到 WordPress 時，`en/` 可以直接放在子主題的 `hq/en/`，或用 WPML / Polylang 的網址結構對應；`hreflang` 目前寫的是 `https://simples.com.tw/` 與 `https://simples.com.tw/en/`，若英文版網址不同，改 `build-en.mjs` 頂端的 `SITE` 與 canonical 規則即可。
+
 ## SEO / GEO 注意事項
 
 - 所有文字都在 DOM 裡（不是畫在 canvas 上），Google 與 AI 搜尋都讀得到；標題用真正的 `h1/h2`。

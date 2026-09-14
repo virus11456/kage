@@ -1,13 +1,15 @@
-/* ============================================================ 中 / EN
-   The pages are written in Traditional Chinese. This swaps every text node
-   under the nav, the page and the preloader against a dictionary, both
-   ways, re-splits the display headings for the reveal, and remembers the
-   choice. Nothing here touches the 3D scene: the signs on the stand stay
-   in the language of the street. */
-(function () {
-  'use strict';
-  const KEY = 'simples-lang';
-  const ZH2EN = {
+/* ============================================================ 中 → EN
+   The pages are written in Traditional Chinese; the English pages under
+   en/ are generated from them at build time (node build-en.mjs) with this
+   dictionary, so both languages are real, indexable documents. Keep the
+   Chinese copy in index.html / engine.html and the English here, then run
+   the build. Nothing touches the 3D scene: the signs on the stand stay in
+   the language of the street. */
+(function (root, factory) {
+  if (typeof module !== 'undefined' && module.exports) module.exports = factory();
+  else root.SIMPLES_DICT = factory();
+})(typeof self !== 'undefined' ? self : this, function () {
+  return {
     /* ---- nav, hero, chapter index */
     '簡單行銷 · GROWTH INTELLIGENCE STUDIO': 'TAIPEI · GROWTH INTELLIGENCE STUDIO',
     '我們怎麼想': 'How we think', '案例': 'Work', '服務': 'Services', '素材引擎': 'Creative Engine', '聯絡': 'Contact',
@@ -163,80 +165,4 @@
     '提交第一批需求': 'Submit the first brief',
     '五個切角乘以三個版本，十五組素材': 'Five angles by three versions, fifteen sets'
   };
-  const EN2ZH = {};
-  Object.keys(ZH2EN).forEach(k => { EN2ZH[ZH2EN[k].trim()] = k; });
-  const TITLES = { zh: { 'index': '簡單行銷 Simples｜讓每個好點子都可以落地', 'engine': 'AI 素材引擎｜簡單行銷 Simples' },
-                   en: { 'index': 'Simples | Every good idea deserves to land', 'engine': 'AI Creative Engine | Simples' } };
-  const RAIL = { zh: ['首頁', '我們怎麼想', '案例', '服務', '聯絡', '頁尾'], en: ['Top', 'How we think', 'Work', 'Services', 'Contact', 'Colophon'] };
-
-  const page = /engine\.html/.test(location.pathname) ? 'engine' : 'index';
-  const ROOTS = () => [].slice.call(document.querySelectorAll('.nav, .page, #pre'));
-
-  function swapNodes(root, dict) {
-    const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
-      acceptNode: n => (n.parentNode && /^(SCRIPT|STYLE)$/.test(n.parentNode.nodeName)) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT
-    });
-    const nodes = [];
-    while (w.nextNode()) nodes.push(w.currentNode);
-    nodes.forEach(n => {
-      const raw = n.nodeValue, key = raw.replace(/\s+/g, ' ').trim();
-      if (!key || !dict[key]) return;
-      const lead = raw.match(/^\s*/)[0], tail = raw.match(/\s*$/)[0];
-      n.nodeValue = lead + dict[key] + tail;
-    });
-    /* attributes that carry copy */
-    root.querySelectorAll('[aria-label],[alt],[title]').forEach(el => {
-      ['aria-label', 'alt', 'title'].forEach(a => {
-        const v = el.getAttribute(a); if (v && dict[v]) el.setAttribute(a, dict[v]);
-      });
-    });
-  }
-
-  /* the split headings: put the phrase back as plain text first, translate,
-     then let the page split it again */
-  function unsplit() {
-    document.querySelectorAll('.word-reveal').forEach(t => {
-      const phrase = t.getAttribute('aria-label') || t.textContent;
-      t.textContent = phrase;
-      t.classList.remove('word-reveal'); delete t.dataset.wordReady;
-    });
-  }
-
-  function apply(lang, first) {
-    const dict = lang === 'en' ? ZH2EN : EN2ZH;
-    const cur = document.documentElement.getAttribute('data-lang') || 'zh';
-    if (!first && cur === lang) return;
-    /* always translate from the page's current language, so a zh→en→zh trip lands where it started */
-    const from = cur, d = (from === 'zh' && lang === 'en') ? ZH2EN : (from === 'en' && lang === 'zh') ? EN2ZH : null;
-    if (d) { unsplit(); ROOTS().forEach(r => swapNodes(r, d)); if (window.__simplesResplit) window.__simplesResplit(); }
-    /* the two taglines mirror each other: whichever language the page is
-       in, the small line under it carries the other */
-    const mirror = lang === 'en' ? '讓每個好點子都可以落地。' : 'Every good idea deserves to land.';
-    document.querySelectorAll('.hero-en, .foot-en').forEach(el => { el.textContent = mirror; });
-    /* the nav's hover line shows the other language */
-    document.querySelectorAll('.nav-link').forEach(l => {
-      const main = l.querySelector('span:not(.alt)'), alt = l.querySelector('.alt'); if (!main || !alt) return;
-      const t = main.textContent.trim();
-      alt.textContent = lang === 'en' ? (EN2ZH[t] || alt.textContent) : (ZH2EN[t] || alt.textContent);
-    });
-    document.documentElement.lang = lang === 'en' ? 'en' : 'zh-TW';
-    document.documentElement.setAttribute('data-lang', lang);
-    document.title = TITLES[lang][page];
-    document.querySelectorAll('#rail button').forEach((b, i) => { b.title = RAIL[lang][i] || ''; b.setAttribute('aria-label', RAIL[lang][i] || ''); });
-    document.querySelectorAll('.lang [data-l]').forEach(s => s.classList.toggle('on', s.dataset.l === lang));
-    try { localStorage.setItem(KEY, lang); } catch (e) {}
-  }
-
-  function init() {
-    let lang = 'zh';
-    try { lang = new URLSearchParams(location.search).get('lang') || localStorage.getItem(KEY) || 'zh'; } catch (e) {}
-    if (lang !== 'en') lang = 'zh';
-    document.documentElement.setAttribute('data-lang', 'zh');
-    apply(lang, true);
-    document.querySelectorAll('.lang').forEach(btn => btn.addEventListener('click', () => {
-      apply(document.documentElement.getAttribute('data-lang') === 'en' ? 'zh' : 'en');
-    }));
-  }
-  window.SIMPLES_LANG = { apply: apply, dict: ZH2EN };
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
-})();
+});

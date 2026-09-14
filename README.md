@@ -17,7 +17,7 @@
   - 04 聯絡：30 分鐘對話的三個步驟與 CTA。
 - **素材引擎獨立頁**（`engine.html`）：以產品的角度介紹 AI 素材生產線——5 切角 × 3 版本矩陣（會逐格點亮）、成效數字、六項能力、六步流程、FAQ；不放價格。這一頁也是內頁的範本：共用 `secret-pathways-assets/inner.css`，同一套配色、字型與元件，不跑 3D。
 - **賽博朋克後製**：掃描線、色差、泛光、紫色暗部與珊瑚色亮部的調色、雜訊顆粒、一道慢速掃過畫面的光帶。
-- **中／EN 雙語切換**：導覽列右側的「中 / EN」開關，整頁文字即時切換（含標題逐字揭示、導覽、頁尾、素材引擎頁），選擇記在瀏覽器裡，兩頁共用；`?lang=en` 可直接開英文版。字典在 `secret-pathways-assets/i18n.js`，3D 場景裡的招牌維持中文。
+- **中／EN 雙語**：英文版是獨立的頁面（`en/index.html`、`en/engine.html`），由字典 `secret-pathways-assets/i18n.js` 在建置時自動產生（`node build-en.mjs`），中英互加 `hreflang`、各自有 canonical，兩種語言都能被搜尋引擎與 AI 搜尋獨立收錄。導覽列右側的「中 / EN」連到對應頁面；英文標題用大寫無襯線排版，3D 場景裡的招牌維持中文。改文案的流程：改中文 HTML 與字典，再跑一次建置。
 - **HUD**：首頁右上角顯示台北座標與即時時間（GMT+8）。
 - **中文標題逐字揭示**：依中文標點切句，句內不斷行。
 - 保留原本的章節導覽、手機版選單、進度軌、自訂游標、減少動態模式與無 WebGL 時的靜態備援。
@@ -46,6 +46,10 @@ python3 -m http.server 4173 --bind 127.0.0.1
 kage/
 ├── index.html                 首頁（3D 場景）
 ├── engine.html                AI 素材引擎（內頁範本）
+├── en/                        英文版（由 build-en.mjs 產生，勿手改）
+│   ├── index.html
+│   └── engine.html
+├── build-en.mjs               產生英文頁的建置腳本
 ├── INTEGRATION.md             與 simples.com.tw 現有 WordPress 站的整合計畫
 ├── PROMPT.md                  可移植的建置說明（重建或再詮釋這個體驗）
 ├── README.md
@@ -54,7 +58,7 @@ kage/
 └── secret-pathways-assets/
     ├── fonts.css              Onest 子集
     ├── inner.css              內頁共用樣式
-    ├── i18n.js                中英字典與切換
+    ├── i18n.js                中英字典
     ├── three.min.js           Three.js r149
     ├── cases/                 案例卡片與預覽視窗的照片（Unsplash）
     └── foreground/png/        前景剪影圖層
