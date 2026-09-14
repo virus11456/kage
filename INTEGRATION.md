@@ -59,6 +59,12 @@
 
 - 英文版是獨立網址（`/en/`、`/en/engine.html`），不是前端切換：Google 與 AI 搜尋會各自收錄兩種語言，中英頁面互加 `hreflang`（`zh-Hant-TW`、`en`、`x-default` 指向中文），各自有 canonical。
 - 英文頁由 `node build-en.mjs` 從中文頁與字典 `secret-pathways-assets/i18n.js` 產生，不要手改 `en/` 底下的檔案；改文案的流程是「改中文 HTML → 改字典 → 重新建置」。
+- **新增任何一頁都照同一套做**：
+  1. 中文頁放在根目錄（例如 `services.html`），`<head>` 內照 `engine.html` 的寫法放 canonical 與三條 `hreflang`，導覽列放 `<a class="lang" href="en/services.html">` 開關。
+  2. 新文案的中英對照加進 `secret-pathways-assets/i18n.js`。
+  3. 在 `build-en.mjs` 的 `META` 表加一行英文 title / description（漏了也會建置，只是 title 會直接走字典）。
+  4. 跑 `node build-en.mjs`，`en/services.html` 自動產生；腳本會列出還沒翻到的中文字串。
+  5. 兩個檔案一起提交。`en/` 底下永遠不要手改。
 - 上線到 WordPress 時，`en/` 可以直接放在子主題的 `hq/en/`，或用 WPML / Polylang 的網址結構對應；`hreflang` 目前寫的是 `https://simples.com.tw/` 與 `https://simples.com.tw/en/`，若英文版網址不同，改 `build-en.mjs` 頂端的 `SITE` 與 canonical 規則即可。
 
 ## SEO / GEO 注意事項

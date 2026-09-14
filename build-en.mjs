@@ -15,7 +15,10 @@ const ROOT = path.dirname(new URL(import.meta.url).pathname);
 const DICT = require(path.join(ROOT, 'secret-pathways-assets', 'i18n.js'));
 const SITE = 'https://simples.com.tw/';
 
-const PAGES = [
+/* Every *.html at the root is a page. Give each one its English title and
+   description here; a page missing from this table is still built, with its
+   Chinese title and description passed through the dictionary. */
+const META = [
   { src: 'index.html', title: 'Simples | Every good idea deserves to land',
     description: 'Simples is a Taipei marketing consultancy that works with AI and systems thinking. Strategy, search, media, reputation, AI deployment — turning "why customers buy" into a system that can be understood, repeated and scaled.',
     ogTitle: 'Simples | Every good idea deserves to land', ogDesc: 'A marketing consultancy that works with AI and systems thinking. Strategy, search, media, reputation, AI deployment.' },
@@ -23,6 +26,14 @@ const PAGES = [
     description: "Simples' AI creative production line: brand system first, angles × versions, every format at once, live in 48 hours, results fed back.",
     ogTitle: 'AI Creative Engine | Simples', ogDesc: "Simples' AI creative production line: brand system first, angles × versions, every format, live in 48 hours." }
 ];
+const PAGES = fs.readdirSync(ROOT).filter(f => /\.html$/.test(f)).sort().map(src => {
+  const m = META.find(x => x.src === src);
+  if (m) return m;
+  console.warn('no English meta for ' + src + ' — add it to META in build-en.mjs; using the dictionary for its title');
+  const html = fs.readFileSync(path.join(ROOT, src), 'utf8');
+  const t = (html.match(/<title>([^<]*)<\/title>/) || [, src])[1], d = (html.match(/<meta name="description" content="([^"]*)"/) || [, ''])[1];
+  return { src, title: DICT[t] || t, description: DICT[d] || d, ogTitle: DICT[t] || t, ogDesc: DICT[d] || d };
+});
 const NAV_ALT = { About: '我們怎麼想', Work: '案例', Services: '服務', Engine: '素材引擎', Contact: '聯絡' };
 const RAIL_EN = "['Top', 'How we think', 'Work', 'Services', 'Contact', 'Colophon']";
 const RAIL_ZH = "['首頁', '我們怎麼想', '案例', '服務', '聯絡', '頁尾']";
