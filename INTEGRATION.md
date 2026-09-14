@@ -25,6 +25,8 @@
 
 ### 方案 A：靜態首頁 + WordPress 子頁（最快，建議先上）
 
+可直接執行的版本在 `COWORK-DEPLOY.md`：整段貼給 Cowork，含頁面模板 `template-hq.php` 的完整程式碼、`functions.php` 片段、四個頁面的建法與驗收清單。
+
 1. 把 `index.html` 與 `secret-pathways-assets/` 放進子主題，例如 `wp-content/themes/simples-child/hq/`。
 2. 在子主題新增頁面模板 `template-hq.php`，內容只做一件事：`readfile` 這個 `index.html`（或直接 `include`），並把資源路徑改成 `get_stylesheet_directory_uri() . '/hq/…'`。
 3. 新增一個頁面套用這個模板，設定為靜態首頁；舊的 `/home-2/` 保留當備援。

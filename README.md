@@ -51,6 +51,7 @@ kage/
 │   └── engine.html
 ├── build-en.mjs               產生英文頁的建置腳本
 ├── INTEGRATION.md             與 simples.com.tw 現有 WordPress 站的整合計畫
+├── COWORK-DEPLOY.md           貼給 Cowork 的 WordPress 部署 prompt
 ├── PROMPT.md                  可移植的建置說明（重建或再詮釋這個體驗）
 ├── README.md
 ├── assets/
